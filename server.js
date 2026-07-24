@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = 'P:/AI/WorkBuddy/black/yilana';   // 工作区（index.html / effects-repo.js / ...）
-const REPO = 'P:/github/javaScript';           // 本地 javaScript 仓库克隆
+const REPO = 'P:/AI/WorkBuddy/black/yilana/repo'; // 仓库 demo 原始文件（已复制到项目内，便于线上部署）
 const PORT = 8777;
 
 const MIME = {

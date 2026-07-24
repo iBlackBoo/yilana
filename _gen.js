@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const REPO = 'P:/github/javaScript';
+const REPO = './repo';
 
 // 分类映射：dir(相对仓库路径) | file(主HTML,可空则递归找首个html) | group | icon | title | desc
 const MAP = [

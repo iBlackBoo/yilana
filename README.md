@@ -1,8 +1,8 @@
 # 特效实验室 · YILANA.CN
 
-一个纯前端视觉特效与交互组件展示单页站点。整合了**原生手写特效**与本地 `iBlackBoo/javaScript` 仓库（现位于 `P:/github/javaScript`）的 70+ 个 JS 特效 / 组件 demo。开箱即用，可一键复制源码、全屏运行。
+一个纯前端视觉特效与交互组件展示单页站点。整合了**原生手写特效**与 `iBlackBoo/javaScript` 仓库的 70+ 个 JS 特效 / 组件 demo。开箱即用，可一键复制源码、全屏运行。
 
-> 项目主题：深色霓虹风格；原生文字类特效统一使用 **YILANA.CN**。
+> 项目主题：深色霓虹风格；原生文字类特效统一使用 **YILANA.CN**。仓库 demo 的原始文件已纳入本项目的 `repo/` 目录，可直接部署到 GitHub Pages 等静态托管服务。
 
 ---
 
@@ -37,9 +37,10 @@
 | --- | --- |
 | 结构 | `index.html`（主页面）+ `effects-repo.js`（仓库特效数据） |
 | 原生特效 | 数据驱动卡片网格；Canvas 2D / DOM / Clipboard API / 模态弹窗 |
-| 仓库特效 | 通过 `iframe` 内嵌 `P:/github/javaScript` 下的原始 HTML（保留 jQuery / echarts / 图片等依赖） |
+| 仓库特效 | 通过 `iframe` 内嵌 `repo/` 目录下的原始 HTML（保留 jQuery / echarts / 图片等依赖） |
 | 渲染 | `EFFECTS = BASE_EFFECTS.concat(window.REPO_EFFECTS || [])` |
-| 兼容 | 现代浏览器；**须通过 `server.js` 以 http 方式打开**（仓库 iframe 走同源 `/repo/` 路径，避免 `file://` 跨协议被浏览器拦截）|
+| 部署 | 纯静态，可直接部署到 GitHub Pages / Cloudflare Pages / Vercel 等；仓库文件已随 `repo/` 一起提交 |
+| 兼容 | 现代浏览器；**本地开发建议通过 `server.js` 以 http 方式打开**（避免 `file://` 跨协议被浏览器拦截）|
 
 ---
 
@@ -50,13 +51,16 @@ P:\AI\WorkBuddy\black\yilana\
 ├── index.html          # 主页面（原生 58 特效 + 加载 effects-repo.js）
 ├── effects-repo.js     # 仓库 73 个特效数据（由 _gen.js 自动生成）
 ├── _gen.js             # 生成 effects-repo.js 的脚本（仓库更新后可重跑）
-├── server.js           # 本地静态服务器：同源托管工作区 + /repo 映射仓库目录
+├── server.js           # 本地静态服务器（本地开发用）
+├── repo/               # 仓库 demo 原始文件（已复制自 P:/github/javaScript，约 36MB / 590 个文件）
 ├── grassland.html      # 草原主题备份（早期版本）
 ├── 内蒙古大草原资料.md   # 草原素材库（早期主题资料）
 └── README.md           # 本说明文档
 ```
 
-> 仓库原始文件通过 `iframe` 内嵌：页面以 **http（本地服务器）** 打开时走同源 `/repo/...` 路径（`server.js` 将 `/repo` 映射到 `P:/github/javaScript`）；若直接以 **`file://`** 打开页面，则回退为绝对路径 `file:///P:/github/javaScript/...`。中文与逗号等字符经 `encodeURI` 编码以确保精确匹配磁盘目录名。
+> 仓库原始文件已复制到 `repo/` 目录并随项目一起部署。页面通过 `/repo/...` 路径加载 iframe，中文与逗号等字符经 `encodeURI` 编码以确保 URL 正确。
+> 
+> 本地开发时，也可继续使用 `server.js`（它会额外把 `/repo` 映射到 `P:/github/javaScript`，方便你修改源仓库后实时生效）。线上部署则直接读取项目内的 `repo/` 目录。
 
 ---
 
@@ -153,14 +157,26 @@ P:\AI\WorkBuddy\black\yilana\
 
 ## 🚀 使用方法
 
-1. **启动本地服务器**（仓库类特效通过同源 http 加载，避免 `file://` 跨协议被浏览器拦截）：
-   ```bash
-   node server.js
-   ```
-   然后浏览器打开 **http://localhost:8777/index.html**。
-   > 若直接以 `file://` 打开 `index.html` 也能运行（此时仓库 iframe 回退为绝对 `file://` 路径）；但 WorkBuddy 预览面板以 http 提供页面，必须用上面的服务器方式，仓库 demo 才能正常加载。
-2. 顶部按类别筛选，搜索框按关键词检索特效。
-3. 卡片「▶ 运行」全屏演示；「📋 复制代码」复制源码。
+### 本地开发
+
+```bash
+node server.js
+```
+
+浏览器打开 **http://localhost:8777/index.html**。
+
+`server.js` 会把 `/repo` 映射到本地 `P:/github/javaScript`，方便你修改源仓库后实时生效。
+
+### 线上部署（GitHub Pages / Vercel / Cloudflare Pages）
+
+直接推送本项目即可。仓库 demo 的原始文件已复制到 `repo/` 目录，线上会随站点一起发布，iframe 通过 `/repo/...` 同源路径加载，无需额外服务器映射。
+
+> 注意：`repo/` 目录约 36MB / 590 个文件，首次 push 可能较大；若不需要全部仓库 demo，可在 `_gen.js` 的 `MAP` 中删减后重新生成 `effects-repo.js` 与 `repo/` 目录。
+
+### 浏览特效
+
+1. 顶部按类别筛选，搜索框按关键词检索特效。
+2. 卡片「▶ 运行」全屏演示；「📋 复制代码」复制源码。
    - **原生特效**：复制出的片段可独立粘贴运行。
    - **仓库特效**：复制的是该 demo 的主 HTML 源码；部分依赖 jQuery / 图片的多文件 demo，需连同原目录资源才能独立运行。
 
@@ -197,7 +213,7 @@ node _gen.js
 ## 📌 待办 / 已知项
 
 - **移动端导航**：在视口宽度 ≤ 768px 时，顶部 `.nav-links` 为 `display:none`，手机端暂无汉堡菜单入口（功能不受影响，仅导航入口在窄屏隐藏）。
-- **本地路径依赖（已缓解）**：仓库类特效需访问 `P:/github/javaScript`；已通过 `server.js` 将 `/repo` 同源映射解决 http 预览下的跨协议拦截。若移动仓库目录，请同步修改 `server.js` 的 `REPO` 常量与 `repoUrl()` 中的 `file://` 基准路径。
+- **仓库文件体积**：`repo/` 目录约 36MB / 590 个文件，首次 push 到 GitHub 会较大；若只想要部分 demo，可在 `_gen.js` 的 `MAP` 中删减后重跑 `node _gen.js`，再同步清理 `repo/` 目录。
 
 ---
 
@@ -209,3 +225,4 @@ node _gen.js
 - **v2.y**：特效扩充至 **58 个**（粒子15 / 互动12 / 视觉18 / 文字13）。
 - **v3（当前）**：整合本地 `iBlackBoo/javaScript` 仓库 73 个 demo，总数 **131**；新增「组件 / 游戏」分类；仓库项以 `iframe` 内嵌原始文件（保留 jQuery / echarts 依赖）；新增 `effects-repo.js` 与生成脚本 `_gen.js`。
 - **v3.1（修复黑屏）**：根因为 WorkBuddy 预览面板以 http 提供页面，而仓库 iframe 用 `file://` 源被浏览器跨协议拦截，导致"点击运行全黑"。新增 `server.js` 同源托管 + `/repo` 映射，并把 `repoUrl()` 改为 http 同源路径（`file://` 直开时回退绝对路径），实测 73/73 仓库特效经 `/repo/` 均返回 200。
+- **v3.2（部署到 GitHub Pages 404 修复）**：将 `P:/github/javaScript` 的原始文件复制到项目 `repo/` 目录并随站部署；`repoUrl()` 在线上继续走 `/repo/...` 同源路径，因此 GitHub Pages / 自定义域名 `yilana.cn` 可直接访问所有仓库 demo。
