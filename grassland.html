@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>依拉娜草原 · 内蒙古大草原 | yilana.cn</title>
+    <meta name="description" content="探索内蒙古大草原的壮美风光与蒙古族文化，依拉娜草原 yilana.cn 为您呈现辽阔天地的诗意与自由。">
+    <style>
+        :root {
+            --cream: #faf7f2;
+            --white: #ffffff;
+            --green-dark: #3a5a28;
+            --green-mid: #5d7e3f;
+            --green-light: #e8f0e0;
+            --gold: #c9984a;
+            --gold-light: #f1e3c9;
+            --brown: #4a3728;
+            --brown-light: #8b7355;
+            --sky-blue: #a3c9e6;
+            --sky-light: #dceefb;
+            --text-dark: #2c2416;
+            --text-soft: #5a4e3c;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            --radius: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+            background-color: var(--cream);
+            color: var(--text-dark);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(250, 247, 242, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(139, 115, 85, 0.15);
+            padding: 0 2rem;
+            transition: background 0.3s;
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+        }
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--green-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.03em;
+        }
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #5d7e3f, #3a5a28);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        .logo-domain {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: var(--gold);
+            letter-spacing: 0.06em;
+            margin-left: 2px;
+            opacity: 0.9;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.3rem;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--brown);
+            padding: 0.5rem 1.2rem;
+            border-radius: 24px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.25s;
+            letter-spacing: 0.02em;
+        }
+        .nav-links a:hover {
+            background: rgba(90, 120, 50, 0.08);
+            color: var(--green-dark);
+        }
+        .btn-nav {
+            background: var(--green-dark);
+            color: white !important;
+            padding: 0.5rem 1.6rem !important;
+            font-weight: 600;
+        }
+        .btn-nav:hover {
+            background: #2e4a1e !important;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #c7dff5 0%, #e3f0fa 25%, #f4f9fd 45%, #edf6e8 60%, #d6e8c8 75%, #c3ddb0 90%, #b5d49e 100%);
+            overflow: hidden;
+            padding: 6rem 2rem 4rem;
+        }
+        /* 抽象的山丘与云朵装饰 */
+        .hero-bg-shapes {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hill {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(180, 200, 150, 0.3);
+            box-shadow: 0 0 40px rgba(0,0,0,0.02);
+        }
+        .hill-1 {
+            width: 600px;
+            height: 300px;
+            bottom: -80px;
+            left: -100px;
+            background: rgba(190, 210, 160, 0.25);
+        }
+        .hill-2 {
+            width: 500px;
+            height: 250px;
+            bottom: -60px;
+            right: -80px;
+            background: rgba(170, 190, 140, 0.25);
+        }
+        .cloud-abstract {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 100px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+        }
+        .cloud-1 {
+            width: 180px;
+            height: 60px;
+            top: 12%;
+            left: 10%;
+        }
+        .cloud-2 {
+            width: 220px;
+            height: 70px;
+            top: 20%;
+            right: 12%;
+        }
+        .cloud-3 {
+            width: 140px;
+            height: 50px;
+            top: 15%;
+            left: 55%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 700px;
+        }
+        .hero-content h1 {
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            font-weight: 800;
+            color: #2c3e1f;
+            line-height: 1.2;
+            letter-spacing: 0.04em;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 15px rgba(255,255,255,0.5);
+        }
+        .hero-content .subtitle {
+            font-size: 1.3rem;
+            color: #5a4e3c;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.8rem;
+            opacity: 0.85;
+        }
+        .hero-domain {
+            display: inline-block;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 2rem;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #4a6e30;
+            letter-spacing: 0.08em;
+            border: 1px solid rgba(100, 130, 70, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            color: #7a8e60;
+            animation: float 2.5s ease-in-out infinite;
+            cursor: pointer;
+        }
+        @keyframes float {
+            0%,100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(12px); }
+        }
+
+        /* 通用区块 */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e1f;
+            margin-bottom: 1rem;
+            letter-spacing: 0.03em;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #7a6a50;
+            margin-bottom: 3.5rem;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 3px;
+            background: var(--gold);
+            margin: 0.8rem auto 0;
+            border-radius: 3px;
+        }
+        /* 分隔装饰线 */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4c4a8, transparent);
+            opacity: 0.5;
+        }
+
+        /* 关于 */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .about-text h3 {
+            font-size: 1.6rem;
+            color: var(--green-dark);
+            margin-bottom: 1rem;
+        }
+        .about-text p {
+            color: var(--text-soft);
+            margin-bottom: 1rem;
+        }
+        .about-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-circle {
+            width: 200px;
+            height: 200px;
+            background: var(--green-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4.5rem;
+            box-shadow: 0 25px 45px rgba(60, 90, 40, 0.12);
+            border: 3px solid rgba(139, 115, 85, 0.2);
+        }
+
+        /* 卡片网格 */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2.2rem 1.8rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.35s, box-shadow 0.35s;
+            border: 1px solid rgba(180, 160, 120, 0.15);
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .card-icon {
+            font-size: 2.8rem;
+            margin-bottom: 1.2rem;
+        }
+        .card h3 {
+            font-size: 1.2rem;
+            color: #3a5a28;
+            margin-bottom: 0.7rem;
+            font-weight: 700;
+        }
+        .card p {
+            color: #6b5c40;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* CTA */
+        .cta {
+            background: linear-gradient(135deg, #3d5e2a, #2b4218);
+            color: white;
+            text-align: center;
+            padding: 4.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: var(--cream);
+            border-radius: 0 0 50% 50%;
+        }
+        .cta-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.04em;
+        }
+        .cta p {
+            opacity: 0.9;
+            margin-bottom: 2.2rem;
+            font-size: 1.05rem;
+        }
+        .btn-cta {
+            display: inline-block;
+            background: var(--gold);
+            color: #2c3e1f;
+            padding: 0.9rem 2.8rem;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .btn-cta:hover {
+            background: #e0b560;
+            transform: translateY(-3px);
+            box-shadow: 0 14px 35px rgba(0,0,0,0.2);
+        }
+
+        /* 页脚 */
+        .footer {
+            background: #1e1810;
+            color: #c4b89a;
+            text-align: center;
+            padding: 3rem 2rem 2rem;
+            font-size: 0.95rem;
+        }
+        .footer .domain {
+            font-weight: 700;
+            color: #e8d5a0;
+            font-size: 1.2rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.8rem;
+        }
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1.2rem 0;
+        }
+        .footer-links a {
+            color: #b8a880;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: #e8d5a0;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+            .nav-links {
+                display: none; /* 简化处理，可自行添加移动端菜单 */
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .icon-circle {
+                width: 150px;
+                height: 150px;
+                font-size: 3.5rem;
+            }
+            .section {
+                padding: 3rem 1.2rem;
+            }
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            .hero-content .subtitle {
+                font-size: 1rem;
+            }
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <span class="logo-icon">🏔️</span>
+                依拉娜草原
+                <span class="logo-domain">yilana.cn</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#about">关于草原</a></li>
+                <li><a href="#culture">文化传承</a></li>
+                <li><a href="#travel">旅游指南</a></li>
+                <li><a href="#contact" class="btn-nav">探访草原</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 英雄区 -->
+    <section class="hero" id="home">
+        <div class="hero-bg-shapes">
+            <div class="hill hill-1"></div>
+            <div class="hill hill-2"></div>
+            <div class="cloud-abstract cloud-1"></div>
+            <div class="cloud-abstract cloud-2"></div>
+            <div class="cloud-abstract cloud-3"></div>
+        </div>
+        <div class="hero-content">
+            <h1>内蒙古大草原</h1>
+            <p class="subtitle">天苍苍 · 野茫茫 · 风吹草低见牛羊</p>
+            <span class="hero-domain">🌿 yilana.cn</span>
+        </div>
+        <div class="scroll-hint" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">↓ 向下探索 ↓</div>
+    </section>
+
+    <!-- 关于草原 -->
+    <div class="divider"></div>
+    <section class="section" id="about">
+        <h2 class="section-title">关于内蒙古大草原</h2>
+        <p class="section-subtitle">中国最大的草原牧区，蓝天与绿草交织的壮美画卷</p>
+        <div class="about-grid">
+            <div class="about-text">
+                <h3>🌾 辽阔天地 · 心灵归处</h3>
+                <p>内蒙古草原位于中国北部，是世界著名的天然牧场之一。呼伦贝尔、锡林郭勒、科尔沁……每一片草原都承载着千年的游牧文明与自然之美。</p>
+                <p>这里天空湛蓝如洗，白云朵朵飘荡；这里绿草如茵绵延千里，羊群如珍珠般散落其间。蒙古包升起袅袅炊烟，马头琴声在风中悠扬回荡。</p>
+            </div>
+            <div class="about-icon">
+                <div class="icon-circle">🐎</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 文化传承 -->
+    <div class="divider"></div>
+    <section class="section" id="culture">
+        <h2 class="section-title">蒙古族文化传承</h2>
+        <p class="section-subtitle">千年游牧文明，草原上的璀璨瑰宝</p>
+        <div class="cards">
+            <div class="card">
+                <div class="card-icon">🎪</div>
+                <h3>那达慕大会</h3>
+                <p>蒙古族最盛大的传统节日，赛马、摔跤、射箭三项竞技，展现草原儿女的豪迈与力量。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🎵</div>
+                <h3>马头琴声</h3>
+                <p>国家级非物质文化遗产，琴声悠扬如万马奔腾，又如草原上的风声低语，诉说着古老的故事。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🏕️</div>
+                <h3>蒙古包</h3>
+                <p>游牧民族的智慧结晶，可拆卸移动的圆形居所，冬暖夏凉，与草原自然环境完美融合。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🍖</div>
+                <h3>草原美食</h3>
+                <p>手把肉、奶茶、奶豆腐、烤全羊……草原上的风味美食，凝聚着蒙古族人民的热情与好客。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🧣</div>
+                <h3>哈达文化</h3>
+                <p>洁白的哈达象征纯洁与祝福，是蒙古族迎接贵客、表达敬意的重要礼仪之物。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🌅</div>
+                <h3>游牧智慧</h3>
+                <p>逐水草而居的生活方式延续千年，人与自然和谐相处的生态智慧，在草原上代代相传。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 旅游指南 -->
+    <div class="divider"></div>
+    <section class="section" id="travel">
+        <h2 class="section-title">草原旅游指南</h2>
+        <p class="section-subtitle">走进草原深处，体验最纯粹的自然与人文之旅</p>
+        <div class="cards">
+            <div class="card">
+                <div class="card-icon">📍</div>
+                <h3>呼伦贝尔草原</h3>
+                <p>世界四大草原之一，被誉为“北国碧玉”。夏季绿波千里，冬季银装素裹，四季皆美。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📍</div>
+                <h3>锡林郭勒草原</h3>
+                <p>中国最具代表性的温带草原，保存着最完整的草原生态系统和浓郁的蒙古族风情。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📍</div>
+                <h3>科尔沁草原</h3>
+                <p>孝庄文皇后的故乡，历史悠久，水草丰美，是体验蒙古族传统文化的最佳目的地之一。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta" id="contact">
+        <div class="cta-inner">
+            <h2>踏上草原之旅</h2>
+            <p>感受内蒙古大草原的辽阔与壮美，体验蒙古族文化的深厚与温暖。依拉娜草原欢迎您的到来。</p>
+            <a href="https://yilana.cn" class="btn-cta">🌿 访问 yilana.cn</a>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p class="domain">🌾 依拉娜草原 · yilana.cn</p>
+        <div class="footer-links">
+            <a href="#home">首页</a>
+            <a href="#about">关于草原</a>
+            <a href="#culture">文化传承</a>
+            <a href="#travel">旅游指南</a>
+            <a href="#contact">联系我们</a>
+        </div>
+        <p style="margin-top:1rem; opacity:0.5; font-size:0.85rem;">© 2026 依拉娜草原 Yilana.cn — 内蒙古大草原主题网站</p>
+    </footer>
+</body>
+</html>
