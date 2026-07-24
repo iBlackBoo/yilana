@@ -802,7 +802,7 @@ window.onload=function()
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>妙味课堂-www.miaov.com</title>
+<title>特效实验室-yilana.cn</title>
 <style>
 body,ul,ol{margin:0;padding:0;}
 li{ list-style:none;}
@@ -3947,8 +3947,8 @@ $('.aniview').AniView(options);</pre>
 <body>
 <p>
     <span>
-        妙味课堂是一支独具特色的IT培训团队，妙味反对传统IT教育枯燥乏味的教学模式，妙味提供一种全新的快乐学习方法！
-        2013年底，妙味课堂最新推出"远程培训"服务，受到很多朋友们的喜爱与追捧，我们必将更加努力的帮助远程学习的朋友实现技术提升……
+        特效实验室是一支独具特色的IT培训团队，特效实验室反对传统IT教育枯燥乏味的教学模式，特效实验室提供一种全新的快乐学习方法！
+        2013年底，特效实验室最新推出"远程培训"服务，受到很多朋友们的喜爱与追捧，我们必将更加努力的帮助远程学习的朋友实现技术提升……
     </span>
     <a href="javascript:;">>>收缩</a>
 </p>
@@ -6482,13 +6482,13 @@ $(function(){
 </html>`
   },
   {
-    id:'repo70', icon:'🎞️', title:"韩雪冬轮播", desc:"妙味课堂轮播 demo", group:'visual',
+    id:'repo70', icon:'🎞️', title:"韩雪冬轮播", desc:"韩雪冬轮播 demo", group:'visual',
     repo:{ dir:"韩雪冬", file:"miaov_demo.html", rel:'%E9%9F%A9%E9%9B%AA%E5%86%AC/miaov_demo.html' },
     code:`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>韩雪冬网站效果 - 妙味课堂 - www.miaov.com</title>
+<title>韩雪冬网站效果 - 特效实验室 - yilana.cn</title>
 <!--[if lte IE 6]>
 <script src="js/DD_belatedPNG_0.0.8a.js" type="text/javascript"><\/script>
     <script type="text/javascript">
@@ -6520,24 +6520,24 @@ $(function(){
 	<div class="line"></div>
 
     <ul>
-        <li class="pos_0"><a href="http://www.miaov.com"><img src="images/8.jpg" width="100" alt="妙味课堂 www.miaov.com" longdesc="http://www.miaov.com" /></a></li>
-        <li class="pos_1"><a href="http://www.miaov.com"><img src="images/1.jpg" width="270" alt="妙味课堂 www.miaov.com" longdesc="http://www.miaov.com" /></a></li>
-        <li class="pos_2"><a href="http://www.miaov.com"><img src="images/2.jpg" width="510" alt="妙味课堂 www.miaov.com" longdesc="http://www.miaov.com" /></a></li>
-        <li class="pos_3"><a href="http://www.miaov.com"><img src="images/3.jpg" width="680" alt="妙味课堂 www.miaov.com" longdesc="http://www.miaov.com" /></a></li>
-        <li class="pos_4"><a href="http://www.miaov.com"><img src="images/4.jpg" width="510" alt="妙味课堂 www.miaov.com" longdesc="http://www.miaov.com" /></a></li>
-        <li class="pos_5"><a href="http://www.miaov.com"><img src="images/5.jpg" width="270" alt="妙味课堂 www.miaov.com" longdesc="http://www.miaov.com" /></a></li>
-        <li class="pos_6"><a href="http://www.miaov.com"><img src="images/6.jpg" width="270" alt="妙味课堂 www.miaov.com" longdesc="http://www.miaov.com" /></a></li>
-        <li class="pos_6"><a href="http://www.miaov.com"><img src="images/7.jpg" width="270" alt="妙味课堂 www.miaov.com" longdesc="http://www.miaov.com" /></a></li>
+        <li class="pos_0"><a href="http://yilana.cn"><img src="images/8.jpg" width="100" alt="特效实验室 - yilana.cn" longdesc="http://yilana.cn" /></a></li>
+        <li class="pos_1"><a href="http://yilana.cn"><img src="images/1.jpg" width="270" alt="特效实验室 - yilana.cn" longdesc="http://yilana.cn" /></a></li>
+        <li class="pos_2"><a href="http://yilana.cn"><img src="images/2.jpg" width="510" alt="特效实验室 - yilana.cn" longdesc="http://yilana.cn" /></a></li>
+        <li class="pos_3"><a href="http://yilana.cn"><img src="images/3.jpg" width="680" alt="特效实验室 - yilana.cn" longdesc="http://yilana.cn" /></a></li>
+        <li class="pos_4"><a href="http://yilana.cn"><img src="images/4.jpg" width="510" alt="特效实验室 - yilana.cn" longdesc="http://yilana.cn" /></a></li>
+        <li class="pos_5"><a href="http://yilana.cn"><img src="images/5.jpg" width="270" alt="特效实验室 - yilana.cn" longdesc="http://yilana.cn" /></a></li>
+        <li class="pos_6"><a href="http://yilana.cn"><img src="images/6.jpg" width="270" alt="特效实验室 - yilana.cn" longdesc="http://yilana.cn" /></a></li>
+        <li class="pos_6"><a href="http://yilana.cn"><img src="images/7.jpg" width="270" alt="特效实验室 - yilana.cn" longdesc="http://yilana.cn" /></a></li>
     </ul>
 
 </div>
-<p id="footer"><a href="http://www.miaov.com">妙味课堂 - www.miaov.com</a></p>
+<p id="footer"><a href="http://yilana.cn">特效实验室 - yilana.cn</a></p>
 </body>
 </html>
 `
   },
   {
-    id:'repo71', icon:'🎞️', title:"韩雪冬 jQuery 轮播", desc:"妙味 jQuery 轮播", group:'visual',
+    id:'repo71', icon:'🎞️', title:"韩雪冬 jQuery 轮播", desc:"韩雪冬 jQuery 轮播", group:'visual',
     repo:{ dir:"韩雪冬jQuery", file:"韩雪冬轮播.html", rel:'%E9%9F%A9%E9%9B%AA%E5%86%ACjQuery/%E9%9F%A9%E9%9B%AA%E5%86%AC%E8%BD%AE%E6%92%AD.html' },
     code:`<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">

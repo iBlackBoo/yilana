@@ -78,8 +78,8 @@ const MAP = [
   { dir:'轮播(自己写出来的,第一次,值得纪念)', file:'1.html', group:'visual', icon:'🎞️', title:'手写轮播', desc:'手写图片轮播' },
   { dir:'轮播神器', file:'index.html', group:'visual', icon:'🎞️', title:'轮播神器', desc:'轮播插件演示' },
   { dir:'输入框烟花', file:'输入框烟花.html', group:'interact', icon:'🎆', title:'输入框烟花', desc:'输入框输入烟花特效' },
-  { dir:'韩雪冬', file:'miaov_demo.html', group:'visual', icon:'🎞️', title:'韩雪冬轮播', desc:'妙味课堂轮播 demo' },
-  { dir:'韩雪冬jQuery', file:'韩雪冬轮播.html', group:'visual', icon:'🎞️', title:'韩雪冬 jQuery 轮播', desc:'妙味 jQuery 轮播' },
+  { dir:'韩雪冬', file:'miaov_demo.html', group:'visual', icon:'🎞️', title:'韩雪冬轮播', desc:'韩雪冬轮播 demo' },
+  { dir:'韩雪冬jQuery', file:'韩雪冬轮播.html', group:'visual', icon:'🎞️', title:'韩雪冬 jQuery 轮播', desc:'韩雪冬 jQuery 轮播' },
   { dir:'鼠标滚轮', file:'鼠标滚轮.html', group:'interact', icon:'🖱️', title:'鼠标滚轮', desc:'滚轮缩放 / 切换' },
   { dir:'鼠标移动滑块', file:'index.html', group:'interact', icon:'🎚️', title:'鼠标滑块', desc:'鼠标移动控制滑块' },
 ];
