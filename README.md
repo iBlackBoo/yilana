@@ -47,14 +47,12 @@
 ## 📁 文件结构
 
 ```
-P:\AI\WorkBuddy\black\yilana\
+yilana\
 ├── index.html          # 主页面（原生 58 特效 + 加载 effects-repo.js）
 ├── effects-repo.js     # 仓库 73 个特效数据（由 _gen.js 自动生成）
 ├── _gen.js             # 生成 effects-repo.js 的脚本（仓库更新后可重跑）
 ├── server.js           # 本地静态服务器（本地开发用）
 ├── repo/               # 仓库 demo 原始文件（已复制自 P:/github/javaScript，约 36MB / 590 个文件）
-├── grassland.html      # 草原主题备份（早期版本）
-├── 内蒙古大草原资料.md   # 草原素材库（早期主题资料）
 └── README.md           # 本说明文档
 ```
 
