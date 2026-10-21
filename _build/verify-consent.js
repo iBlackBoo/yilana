@@ -1,4 +1,4 @@
-// 通过真实 Chrome (CDP) 验证 Cookie 同意流程与 Consent Mode 信号
+// 通过真实 Chrome (CDP) 验证：分地区 Consent Mode + Google 认证 CMP 接管 + 兜底横幅
 const { spawn } = require('child_process');
 const fs = require('fs');
 const os = require('os');
@@ -18,7 +18,6 @@ function check(name, ok, extra) {
 }
 
 (async () => {
-    // 干净 profile：模拟首次访问
     try { fs.rmSync(PROFILE, { recursive: true, force: true }); } catch (e) {}
 
     const chrome = spawn(CHROME, [
@@ -56,9 +55,9 @@ function check(name, ok, extra) {
     await send('Page.enable');
     await send('Runtime.enable');
 
-    async function nav(url) {
+    async function nav(url, wait) {
         await send('Page.navigate', { url });
-        await sleep(2200);
+        await sleep(wait === undefined ? 2200 : wait);
     }
     async function ev(expr) {
         const r = await send('Runtime.evaluate', { expression: expr, returnByValue: true, awaitPromise: true });
@@ -67,25 +66,56 @@ function check(name, ok, extra) {
     }
     const q = s => `document.querySelector(${JSON.stringify(s)})`;
 
-    /* ---------- 1. 首次访问：横幅出现，同意默认 denied ---------- */
-    console.log('\n[1] 首次访问 index.html');
-    await nav(BASE + '/index.html?lang=en');
-    check('横幅已渲染', await ev(`!!${q('.ylc-banner')}`));
+    async function waitFor(expr, timeout) {
+        const end = Date.now() + (timeout || 6000);
+        while (Date.now() < end) {
+            if (await ev(expr)) return true;
+            await sleep(150);
+        }
+        return false;
+    }
+    const setTz = tz => send('Emulation.setTimezoneOverride', { timezoneId: tz });
+    const readDefaults = `(function(){
+        var d=(window.dataLayer||[]).filter(function(x){return x[0]==='consent'&&x[1]==='default';});
+        return d.map(function(x){var c=x[2]||{};return {
+            region: c.region||null, ad_storage: c.ad_storage,
+            ad_user_data: c.ad_user_data, ad_personalization: c.ad_personalization,
+            wait: c.wait_for_update
+        };});
+    })()`;
+
+    /* ---------- 0. head 里的分地区默认值 ---------- */
+    console.log('\n[0] 分地区 Consent Mode 默认值');
+    await setTz('Europe/Berlin');
+    await nav(BASE + '/index.html?lang=en', 900);
+    const defs = await ev(readDefaults);
+    check('存在两个 default（地区拒绝 + 全局放行）', Array.isArray(defs) && defs.length === 2, JSON.stringify(defs && defs.length));
+    const dRegion = defs && defs[0] || {};
+    const dRest = defs && defs[1] || {};
+    check('第一个 default 带 region 且为 denied',
+        dRegion.ad_storage === 'denied' && dRegion.ad_user_data === 'denied' && dRegion.ad_personalization === 'denied' && Array.isArray(dRegion.region),
+        JSON.stringify(dRegion));
+    check('region 覆盖 EU 27 + EEA 其余 + 英国 + 瑞士（32 个）', dRegion.region && dRegion.region.length === 32, dRegion.region && dRegion.region.length);
+    check('region 含 DE / GB / CH / IS / NO',
+        dRegion.region && ['DE', 'GB', 'CH', 'IS', 'NO'].every(c => dRegion.region.indexOf(c) >= 0));
+    check('第二个 default 无 region 且为 granted',
+        !dRest.region && dRest.ad_storage === 'granted' && dRest.ad_user_data === 'granted' && dRest.ad_personalization === 'granted',
+        JSON.stringify(dRest));
+    check('wait_for_update 挂在地区 default 上', dRegion.wait === 500, dRegion.wait);
+
+    /* ---------- 1. 欧洲访客：无 Google CMP 时走兜底 ---------- */
+    console.log('\n[1] 欧洲访客（Europe/Berlin），无 Google CMP');
+    check('时区识别为同意地区', (await ev(`window.ylConsent.inConsentRegion()`)) === true);
+    check('等待期内不抢在 Google 前面弹窗', await ev(`!${q('.ylc-banner')}`));
+    check('兜底横幅随后出现', await waitFor(`!!${q('.ylc-banner')}`, 6000));
     check('横幅可见（opacity=1）', await ev(`(function(){var b=${q('.ylc-banner')};return !!b && getComputedStyle(b).opacity==='1';})()`));
     check('未写入同意记录', await ev(`localStorage.getItem('yilana.consent')===null`));
-    const defaults = await ev(`(function(){
-        var d=(window.dataLayer||[]).filter(function(x){return x[0]==='consent'&&x[1]==='default';});
-        if(!d.length) return null;
-        var c=d[0][2]||{};
-        return {ad_storage:c.ad_storage, ad_user_data:c.ad_user_data, analytics_storage:c.analytics_storage};
-    })()`);
-    check('Consent Mode 默认 denied', defaults && defaults.ad_storage === 'denied' && defaults.ad_user_data === 'denied', JSON.stringify(defaults));
+    check('模式为 google', (await ev(`window.ylConsent && window.ylConsent.mode`)) === 'google');
+    check('检测不到 Google CMP', (await ev(`window.ylConsent.hasGoogleCmp()`)) === false);
     check('广告脚本已加载', await ev(`!!document.querySelector('script[src*="adsbygoogle.js"]')`));
     check('文案为英文（Accept all）', (await ev(`${q('.ylc-btn-primary')} && ${q('.ylc-btn-primary')}.textContent`)) === 'Accept all');
-    const href = await ev(`(function(){var a=${q('.ylc-body a')};return a?a.getAttribute('href'):null;})()`);
-    check('隐私政策链接指向 privacy.html', /privacy\.html$/.test(href || ''), href);
 
-    /* ---------- 2. 点击「全部接受」 ---------- */
+    /* ---------- 2. 接受 ---------- */
     console.log('\n[2] 点击 Accept all');
     await ev(`${q('.ylc-btn-primary')}.click()`);
     await sleep(700);
@@ -99,24 +129,47 @@ function check(name, ok, extra) {
     })()`);
     check('Consent Mode 已 update 为 granted', updates && updates.ad_storage === 'granted' && updates.ad_personalization === 'granted', JSON.stringify(updates));
 
-    /* ---------- 3. 刷新不再打扰 ---------- */
+    /* ---------- 3. 回访不打扰 ---------- */
     console.log('\n[3] 刷新页面');
-    await nav(BASE + '/index.html?lang=en');
-    check('刷新后不再弹横幅', await ev(`!${q('.ylc-banner')}`));
-    const defAfter = await ev(`(function(){
-        var d=(window.dataLayer||[]).filter(function(x){return x[0]==='consent'&&x[1]==='default';});
-        return d.length ? (d[0][2]||{}).ad_storage : null;
-    })()`);
-    check('回访时默认值随记忆变为 granted', defAfter === 'granted', defAfter);
+    await nav(BASE + '/index.html?lang=en', 4200);
+    check('回访不再弹横幅', await ev(`!${q('.ylc-banner')}`));
+    check('已存选择被重新应用', await ev(`(function(){
+        var u=(window.dataLayer||[]).filter(function(x){return x[0]==='consent'&&x[1]==='update';});
+        return u.length>0 && (u[u.length-1][2]||{}).ad_storage==='granted';
+    })()`));
 
-    /* ---------- 4. 中文页面 ---------- */
-    console.log('\n[4] 中文界面 + 详情页');
+    /* ---------- 4. 非欧洲访客：默认放行、不弹窗 ---------- */
+    console.log('\n[4] 非欧洲访客（Asia/Shanghai）');
     await ev(`localStorage.clear()`);
-    await nav(BASE + '/effects/matrix.html?lang=zh');
-    check('详情页也出现横幅', await ev(`!!${q('.ylc-banner')}`));
+    await setTz('Asia/Shanghai');
+    await nav(BASE + '/index.html?lang=zh', 4000);
+    check('时区识别为非同意地区', (await ev(`window.ylConsent.inConsentRegion()`)) === false);
+    check('不自动弹兜底横幅', await ev(`!${q('.ylc-banner')}`));
+    check('没有多余的 consent update', await ev(`(window.dataLayer||[]).filter(function(x){return x[0]==='consent'&&x[1]==='update';}).length===0`));
+    check('地区默认值仍然下发', await ev(`${readDefaults}.length===2`));
+    check('页脚 Cookie 设置按钮存在', await ev(`!!document.querySelector('.footer-links button')`));
+    await ev(`document.querySelector('.footer-links button').click()`);
+    check('手动点击仍可打开横幅', await waitFor(`!!${q('.ylc-banner')}`, 3000));
+    check('手动打开后文案为中文', (await ev(`${q('.ylc-btn-primary')}&&${q('.ylc-btn-primary')}.textContent`)) === '全部接受');
+
+    /* ---------- 5. 语言地区信号兜底（时区不在欧洲但 locale 是 de-DE） ---------- */
+    console.log('\n[5] 时区非欧洲 + locale de-DE');
+    await ev(`localStorage.clear()`);
+    await send('Emulation.setLocaleOverride', { locale: 'de-DE' });
+    await nav(BASE + '/index.html?lang=en', 4000);
+    check('locale 命中同意地区即视为欧洲', (await ev(`window.ylConsent.inConsentRegion()`)) === true);
+    check('仍会弹出兜底横幅', await waitFor(`!!${q('.ylc-banner')}`, 5000));
+    await send('Emulation.setLocaleOverride', { locale: 'en-US' });
+    await setTz('Europe/Berlin');
+
+    /* ---------- 6. 中文详情页 ---------- */
+    console.log('\n[6] 中文界面 + 详情页');
+    await ev(`localStorage.clear()`);
+    await nav(BASE + '/effects/matrix.html?lang=zh', 900);
+    check('详情页出现兜底横幅', await waitFor(`!!${q('.ylc-banner')}`, 6000));
     check('文案为中文（全部接受）', (await ev(`${q('.ylc-btn-primary')}&&${q('.ylc-btn-primary')}.textContent`)) === '全部接受');
     const dHref = await ev(`(function(){var a=${q('.ylc-body a')};return a?a.href:null;})()`);
-    check('详情页隐私链接解析为根目录', /\/privacy\.html$/.test(dHref || ''), dHref);
+    check('详情页隐私链接解析到根目录', /\/privacy\.html$/.test(dHref || ''), dHref);
     await ev(`${q('.ylc-btn-ghost')}.click()`);
     await sleep(600);
     check('选择「仅必要」记录为 necessary', (await ev(`localStorage.getItem('yilana.consent')`)) === 'necessary');
@@ -126,20 +179,22 @@ function check(name, ok, extra) {
     })()`);
     check('拒绝时不会置为 granted', g !== 'granted', g);
 
-    /* ---------- 5. 页脚可重新打开 ---------- */
-    console.log('\n[5] 页脚 Cookie 设置入口');
+    /* ---------- 7. 页脚入口可重开 ---------- */
+    console.log('\n[7] 页脚 Cookie 设置');
     await ev(`localStorage.removeItem('yilana.consent')`);
-    await nav(BASE + '/index.html?lang=en');
-    await ev(`(function(){var b=document.querySelector('.footer-links button'); if(b) b.click();})()`);
-    await sleep(600);
-    check('可重新唤起横幅', await ev(`!!${q('.ylc-banner')}`));
+    await nav(BASE + '/index.html?lang=en', 900);
+    check('页脚按钮存在', await ev(`!!document.querySelector('.footer-links button')`));
+    await ev(`document.querySelector('.footer-links button').click()`);
+    check('无 CMP 时可展开兜底横幅', await waitFor(`!!${q('.ylc-banner')}`, 3000));
 
-    /* ---------- 6. 隐私政策页 ---------- */
-    console.log('\n[6] privacy.html');
-    await nav(BASE + '/privacy.html?lang=en');
+    /* ---------- 8. 隐私政策页 ---------- */
+    console.log('\n[8] privacy.html');
+    await nav(BASE + '/privacy.html?lang=en', 4200);
     check('英文标题正确', (await ev(`document.title`)) === 'Privacy Policy & Cookies | Effect Lab');
-    check('横幅语言与页面一致（英文）', (await ev(`(function(){var b=${q('.ylc-btn-primary')};return b?b.textContent:null;})()`)) === 'Accept all');
-    check('页面含 AdSense 披露', await ev(`document.body.innerText.includes('DoubleClick')||document.body.innerText.includes('third-party vendors')||document.body.innerText.includes('Third-party vendors')`));
+    check('已声明使用 Google 认证 CMP', await ev(`document.querySelector('article[data-lang="en"]').innerText.includes("Google's own consent management platform")`));
+    check('不再声明「非认证 CMP」', await ev(`!document.querySelector('article[data-lang="en"]').innerText.includes('rather than a certified CMP')`));
+    check('已说明分地区默认值', await ev(`document.querySelector('article[data-lang="en"]').innerText.includes('per region')`));
+    check('含撤回同意入口', await ev(`!!document.querySelector('article[data-lang="en"] .cookie-btn')`));
     check('section 数量 ≥ 12（英文版）', (await ev(`document.querySelectorAll('article[data-lang="en"] h2').length`)) >= 12);
     await ev(`${q('#langSwitch')}.click()`);
     await sleep(400);
@@ -148,16 +203,49 @@ function check(name, ok, extra) {
     check('英文正文已隐藏', await ev(`(function(){var a=document.querySelector('article[data-lang="en"]');return a && getComputedStyle(a).display==='none';})()`));
     check('中文标题正确', (await ev(`document.title`)).indexOf('隐私政策') >= 0);
     check('URL 带 lang=zh', (await ev(`location.search`)) === '?lang=zh');
+    check('中文版也说明分地区默认值', await ev(`document.querySelector('article[data-lang="zh"]').innerText.includes('按地区设置')`));
 
-    /* ---------- 7. 窄屏不溢出 ---------- */
-    console.log('\n[7] 移动端 390px');
+    /* ---------- 9. 移动端 ---------- */
+    console.log('\n[9] 移动端 390px（欧洲）');
     await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
     await ev(`localStorage.clear()`);
-    await nav(BASE + '/index.html?lang=en');
+    await nav(BASE + '/index.html?lang=zh', 900);
     const sw = await ev(`document.documentElement.scrollWidth`);
     check('无横向溢出', sw === 390, 'scrollWidth=' + sw);
+    await waitFor(`!!${q('.ylc-banner')}`, 6000);
     const box = await ev(`(function(){var b=${q('.ylc-banner')}; if(!b) return null; var r=b.getBoundingClientRect(); return {w:Math.round(r.width), bottom:Math.round(innerHeight-r.bottom)};})()`);
     check('窄屏横幅贴底且满宽', box && box.w === 390 && box.bottom === 0, JSON.stringify(box));
+    await send('Emulation.clearDeviceMetricsOverride');
+
+    /* ---------- 10. 存在 Google CMP：自己绝不弹窗 ---------- */
+    console.log('\n[10] 模拟 Google CMP 已下发');
+    await ev(`localStorage.clear()`);
+    const injected = await send('Page.addScriptToEvaluateOnNewDocument', {
+        source: [
+            'window.__fcPushed = [];',
+            'window.__fcRevoked = false;',
+            'window.googlefc = {',
+            '  callbackQueue: { push: function (x) { window.__fcPushed.push(x); } },',
+            '  showRevocationMessage: function () { window.__fcRevoked = true; }',
+            '};'
+        ].join('\n')
+    });
+    await nav(BASE + '/index.html?lang=en', 5000);
+    check('识别到 Google CMP', (await ev(`window.ylConsent.hasGoogleCmp()`)) === true);
+    check('自建横幅完全不出现', await ev(`!${q('.ylc-banner')}`));
+    check('未向自建横幅写入记录', await ev(`localStorage.getItem('yilana.consent')===null`));
+    await ev(`document.querySelector('.footer-links button').click()`);
+    await sleep(400);
+    const pushed = await ev(`(function(){
+        var p = window.__fcPushed || [];
+        return { len: p.length, isFn: p.length ? typeof p[0] === 'function' : false,
+                 key: (p.length && p[0] && typeof p[0] === 'object') ? Object.keys(p[0]).join(',') : '' };
+    })()`);
+    check('Cookie 设置走 Google 撤回流程', pushed && pushed.len >= 1 && (pushed.isFn || pushed.key === 'CONSENT_API_READY'), JSON.stringify(pushed));
+    check('点击后仍不弹自建横幅', await ev(`!${q('.ylc-banner')}`));
+    if (injected && injected.identifier) {
+        await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: injected.identifier });
+    }
 
     console.log('\n通过 ' + pass + ' 项，失败 ' + fail + ' 项');
 

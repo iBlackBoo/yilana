@@ -3,24 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Consent Mode v2：必须在 AdSense 脚本之前执行 -->
+    <!-- Google Consent Mode v2：EEA / 英国 / 瑞士默认拒绝，其他地区默认放行；用户选择后由 Google 认证 CMP 更新 -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){ dataLayer.push(arguments); }
-        (function () {
-            var c = null;
-            try { c = localStorage.getItem('yilana.consent'); } catch (e) {}
-            var ads = c === 'all' ? 'granted' : 'denied';
-            gtag('consent', 'default', {
-                ad_storage: ads,
-                ad_user_data: ads,
-                ad_personalization: ads,
-                analytics_storage: 'denied',
-                functionality_storage: 'granted',
-                security_storage: 'granted',
-                wait_for_update: 500
-            });
-        })();
+        // 1) 需要事先取得同意的地区：EEA（EU 27 + 冰岛 / 列支敦士登 / 挪威）+ 英国 + 瑞士 → 全部拒绝
+        //    注意：region 由 Google 按访问者 IP 判定，与浏览器时区无关
+        gtag('consent', 'default', {
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            analytics_storage: 'denied',
+            functionality_storage: 'granted',
+            security_storage: 'granted',
+            wait_for_update: 500,
+            region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']
+        });
+        // 2) 其他地区：默认放行（Google 仍按当地法规做受限数据处理；本站不接入分析工具，analytics 保持关闭）
+        gtag('consent', 'default', {
+            ad_storage: 'granted',
+            ad_user_data: 'granted',
+            ad_personalization: 'granted',
+            analytics_storage: 'denied',
+            functionality_storage: 'granted',
+            security_storage: 'granted'
+        });
     </script>
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6465192362290250"
@@ -248,10 +255,11 @@
         <p>For more information about how Google uses data on partner sites, see <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites that use our services</a>.</p>
 
         <h2 id="consent">7. Your consent choices</h2>
-        <p>On your first visit a banner asks whether advertising cookies may be used. Advertising cookies stay <strong>off by default</strong> until you accept. We implement this with Google Consent Mode v2: before any advertising script runs, the consent state is set to <code>denied</code>, and it is only switched to <code>granted</code> after you accept.</p>
-        <p>You may withdraw or change your choice at any time — it is as easy as giving it:</p>
+        <p>Consent is collected and stored by <strong>Google's own consent management platform</strong>, delivered through AdSense Privacy &amp; Messaging. It is on Google's list of certified CMPs, and it records your choice through the IAB Transparency and Consent Framework (TCF v2) as well as Google Consent Mode v2. This site does not run a second, competing banner — two banners asking the same question would be both confusing and non-compliant.</p>
+        <p>Consent Mode defaults are set per region. Visitors in the EEA, the United Kingdom and Switzerland start with advertising storage <code>denied</code> — ads are non-personalised until they make a choice in the Google message. Elsewhere advertising storage starts <code>granted</code>, so personalised ads may be served without a banner, and you can opt out at any time using the button below or Google Ads Settings.</p>
+        <p>You may change or withdraw your choice at any time — it is as easy as giving it:</p>
         <button class="cookie-btn" type="button" onclick="window.ylConsent&&window.ylConsent.open()">Cookie settings</button>
-        <p>If you are in the EEA, the United Kingdom or Switzerland and require a Google-certified CMP for your own compliance review, note that this site uses a lightweight first-party consent banner rather than a certified CMP.</p>
+        <p>The Google message is shown to visitors covered by European regulations (EEA, the United Kingdom and Switzerland). If no Google message can be served in those regions — for example because it has not been published yet for this site, or an ad blocker prevented the script from loading — a lightweight fallback banner is shown instead, so that no advertising cookie is ever set there without a recorded choice. Outside those regions the fallback banner stays out of the way.</p>
 
         <h2 id="thirdparty">8. Third-party demo code</h2>
         <p>Part of the gallery showcases demos originally written by other developers, kept intact under the <code>/repo/</code> path and displayed inside an embedded frame. Those demos remain the work of their respective authors, and attribution links back to the original source are included in the code where available.</p>
@@ -365,10 +373,11 @@
         <p>关于 Google 如何在合作方站点使用数据，请参阅 <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Google 的相关说明</a>。</p>
 
         <h2 id="consent-cn">7. 你的同意选择</h2>
-        <p>首次访问时会弹出横幅询问是否允许使用广告 Cookie。<strong>在你接受之前，广告 Cookie 默认处于关闭状态</strong>。本站使用 Google Consent Mode v2 实现：在任何广告脚本执行之前，同意状态即被设为 <code>denied</code>，只有在你点击接受后才切换为 <code>granted</code>。</p>
-        <p>你可以随时撤回或更改选择——撤回和给予同样容易：</p>
+        <p>同意由 <strong>Google 自家的同意管理平台（CMP）</strong>收集与保存，通过 AdSense「隐私权和消息」下发。它在 Google 的认证 CMP 名单内，会同时通过 IAB 透明度与同意框架（TCF v2）和 Google Consent Mode v2 记录你的选择。本站不再运行第二个与之竞争的横幅——两个问同一件事的弹窗既让访客困惑，也不符合规范。</p>
+        <p>Consent Mode 的默认值按地区设置。欧洲经济区、英国和瑞士的访客，广告存储初始为 <code>denied</code>——在 Google 消息中做出选择之前只投放非个性化广告；其他地区初始为 <code>granted</code>，即无需弹窗即可投放个性化广告，你仍可随时通过下方按钮或 Google 广告设置关闭。</p>
+        <p>你可以随时更改或撤回选择——撤回和给予同样容易：</p>
         <button class="cookie-btn" type="button" onclick="window.ylConsent&&window.ylConsent.open()">Cookie 设置</button>
-        <p>需要说明的是：如果你位于欧洲经济区、英国或瑞士，且出于自身合规审查需要 Google 认证的 CMP，请注意本站使用的是轻量自建同意横幅，而非经 Google 认证的 CMP。</p>
+        <p>Google 的消息面向受欧洲法规约束的地区（欧洲经济区、英国、瑞士）的访客。如果这些地区无法下发 Google 消息——例如本站尚未发布该消息，或广告拦截插件阻止了脚本加载——则改由轻量兜底横幅接管，确保在那里不会在没有记录选择的情况下设置任何广告 Cookie；其他地区不会出现这个兜底横幅。</p>
 
         <h2 id="thirdparty-cn">8. 第三方演示代码</h2>
         <p>展厅中有一部分演示由其他开发者原始编写，以原样保留在 <code>/repo/</code> 路径下并通过内嵌框架展示。这些演示的著作权归各自作者所有，代码中保留了可用的原作者链接标注。</p>

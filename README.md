@@ -139,6 +139,8 @@ node _build/verify-detail.js   # 全量校验（需本地服务在跑，依赖 C
 | `index.html` / `grassland.html` / `effects/*.html` 的 `<head>` | AdSense 验证 + Auto ads 脚本（`async` + `crossorigin="anonymous"`） |
 | `ads.txt` | 授权卖方声明，防止「收益受损」告警；内容为 `google.com, pub-6465192362290250, DIRECT, f08c47fec0942fa0` |
 
+核查脚本：`node _build/check-ads.js` —— 遍历全部站点页面，校验脚本是否在 `<head>` 内、`async` 与 `crossorigin="anonymous"` 是否齐全、Consent Mode 默认值是否位于其之前。
+
 **刻意没有做的事**：`repo/` 下 553 个第三方 demo 文件**没有**插入广告代码。它们是原作者的原样产物、通过 iframe 展示，在上面投放广告既无授权也违反 AdSense 的内容政策。
 
 ---
@@ -148,29 +150,85 @@ node _build/verify-detail.js   # 全量校验（需本地服务在跑，依赖 C
 | 文件 | 作用 |
 | --- | --- |
 | `privacy.html` | 双语隐私政策（12 节），英文默认 + `?lang=zh` 切换；覆盖服务器日志、本地存储、AdSense Cookie、退订入口、GDPR/CCPA 权利 |
-| `consent.js` | 自建轻量同意横幅，自动注入 DOM 与 `consent.css`，页脚「Cookie 设置」可随时重新唤起 |
-| `consent.css` | 横幅样式，与站点同一套深色霓虹配色；≤560px 变为贴底满宽 |
+| `consent.js` | CMP 接管层：识别 Google 认证 CMP，缺失时用自建横幅兜底，并统一「Cookie 设置」入口 |
+| `consent.css` | 兜底横幅样式，与站点同一套深色霓虹配色；≤560px 变为贴底满宽 |
 
-### Consent Mode v2
+### 同意由 Google 认证 CMP 负责
 
-所有页面的 `<head>` 里，AdSense 脚本**之前**有一段默认同意状态脚本：
+EEA / 英国 / 瑞士的同意由 **Google 自家的 CMP**（AdSense →「隐私权和消息」→ 欧洲法规消息）收集，它本身就是 Google 认证的 CMP，并通过 IAB TCF v2 与 Consent Mode v2 传递选择。
+
+其他地区不弹这条消息，Consent Mode 默认即为 `granted`（见下节），访客仍可通过页脚「Cookie 设置」随时关闭个性化广告。
+
+站点**不再显示自己的横幅**——两个问同一件事的弹窗既困惑访客也不合规。`consent.js` 只做三件事：
+
+1. 探测 `window.googlefc`（Privacy & Messaging API）是否已就绪
+2. 就绪 → 完全退让，不写 `localStorage`、不发 `consent update`
+3. 未就绪（未发布消息 / 被广告拦截器屏蔽）→ 2.5s 后用自建横幅兜底；若 CMP 迟到，自动撤掉自己的横幅避免双弹窗
+
+### 三种模式
+
+`consent.js` 顶部：
 
 ```js
-gtag('consent','default',{ ad_storage:…, ad_user_data:…, ad_personalization:…, analytics_storage:'denied' });
+var DEFAULTS = { mode: 'google', fallback: true, waitMs: 2500, regionGate: true };
 ```
 
-首次访问默认 `denied`（非个性化广告）；用户点「全部接受」后 `gtag('consent','update',…)` 切为 `granted`。选择存在 `localStorage.yilana.consent`（`all` / `necessary`），刷新不再打扰。
+| 模式 | 行为 |
+| --- | --- |
+| `google`（默认） | Google CMP 优先，自建横幅仅兜底 |
+| `self` | 只用自建横幅（v3.6 的旧行为，留作回退） |
+| `off` | 两者都不启用 |
+
+页面里可以在引入 `consent.js` **之前**覆盖：`<script>window.YL_CMP = { mode: 'self' };</script>`。
+
+`regionGate: true` 表示兜底横幅**只在需要事先同意的地区自动弹出**，其他地区不打扰访客（页脚「Cookie 设置」仍随时可手动打开）。
+
+### Consent Mode v2（分地区）
+
+所有页面 `<head>` 里、AdSense 脚本**之前**写入两条默认值 —— 带 `region` 的写在前面，因为 Google 的规则是「地区默认值优先于全局默认值」：
+
+```js
+// 1) EEA（EU 27 + IS/LI/NO）+ 英国 + 瑞士 → 拒绝
+gtag('consent','default', {
+  ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied',
+  analytics_storage:'denied', functionality_storage:'granted', security_storage:'granted',
+  wait_for_update: 500,
+  region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT',
+           'LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']
+});
+// 2) 其他地区 → 放行（analytics 保持关闭：本站没有分析工具）
+gtag('consent','default', {
+  ad_storage:'granted', ad_user_data:'granted', ad_personalization:'granted',
+  analytics_storage:'denied', functionality_storage:'granted', security_storage:'granted'
+});
+```
+
+Google CMP 在用户做出选择后自行升级为 `granted`；走兜底横幅时则由 `consent.js` 发 `update`。
+
+> **`region` 由 Google 按访问者 IP 在服务端判定**，浏览器端拿不到这个结果。所以兜底横幅是否自动弹出，`consent.js` 另用「语言里的地区 + 时区」做近似判断，偏保守：判不准就当欧洲处理。判错的代价只是多弹或少弹一次横幅，**不影响 Consent Mode 的实际生效值**。
+>
+> 校验：`node _build/check-ads.js` 会逐页核对 region 是否齐全（32 个，无缺无重）、两个 default 的先后与状态、以及是否位于广告脚本之前。
+
+### 撤回同意
+
+页脚「Cookie 设置」→ `ylConsent.open()` → 有 Google CMP 时调用官方 `googlefc.callbackQueue.push(googlefc.showRevocationMessage)` 重新弹出官方消息；没有 CMP 时才展开兜底横幅。
 
 ### 两个实现细节
 
 - **横幅语言以页面 `html[lang]` 为准**，而不是 URL 的 `?lang`。因为站点切英文时会 `replaceState` 清掉 `?lang`，若按 URL 判定会出现「中文横幅 + 英文正文」的错配。
 - **`privacy.html` 在 `<head>` 里预写 `html[lang]`**，避免中文访客先看到一瞬英文正文。详情页生成器同样加了这段。
 
-### 已知边界
+### 上线前必须在 AdSense 后台做的设置
 
-自建横幅满足「告知 + 同意 + 可撤回」，但**不是 Google 认证的 CMP**。若要覆盖 EEA / 英国流量的完整合规要求，需换成 Google 认证 CMP（Google 自家 CMP 或 OneTrust / Cookiebot 这类）。
+代码侧已就绪，但 Google 的消息必须在后台发布，否则只会走兜底横幅：
+
+1. AdSense → **隐私权和消息** → **欧洲法规** → 创建/编辑消息，填写隐私政策 URL（`https://yilana.cn/privacy.html`）、语言、Logo、配色
+2. 进入消息设置，勾选 **「Consent mode for advertising purposes」**（否则 CMP 不会把同意结果写进 Consent Mode，广告会一直是非个性化）
+3. 检查 **「Maximize message coverage」**：账户级开关，默认开启；保持开启可让 Google 在检测不到 TC 字符串时补发兜底消息
+4. 发布后用 `?fc=alwaysshow&fctype=gdpr` 预览：`https://yilana.cn/?fc=alwaysshow&fctype=gdpr`
 
 ---
+
 
 ## 📁 文件结构
 
@@ -178,7 +236,7 @@ gtag('consent','default',{ ad_storage:…, ad_user_data:…, ad_personalization:
 yilana\
 ├── index.html          # 主页面（原生 58 特效 + 加载 effects-repo.js / i18n.js）
 ├── privacy.html        # 双语隐私政策与 Cookie 说明
-├── consent.js          # Cookie 同意横幅（自动注入样式与 DOM）
+├── consent.js          # CMP 接管层（Google 认证 CMP 优先，自建横幅兜底）
 ├── consent.css         # 横幅样式
 ├── effects/            # 58 个特效详解页 + detail.css（由 _gen-detail.js 生成）
 ├── _content/           # 详解页的双语讲解文案（手工撰写）
@@ -349,7 +407,7 @@ node _gen.js
 
 - **移动端导航**：在视口宽度 ≤ 768px 时，顶部 `.nav-links` 为 `display:none`，手机端暂无汉堡菜单入口（功能不受影响，仅导航入口在窄屏隐藏）。
 - **仓库文件体积**：`repo/` 目录约 36MB / 590 个文件，首次 push 到 GitHub 会较大；若只想要部分 demo，可在 `_gen.js` 的 `MAP` 中删减后重跑 `node _gen.js`，再同步清理 `repo/` 目录。
-- **EEA / 英国合规**：当前同意横幅是自建的轻量实现，若要满足 Google 对 EEA/英国流量的 CMP 认证要求，需替换为 Google 认证 CMP。
+- **EEA / 英国合规**：代码侧已切到 Google 认证 CMP（`mode: 'google'`），但**必须在 AdSense 后台发布欧洲法规消息并勾选 Consent mode for advertising purposes**，否则只会走兜底横幅，TC 字符串也不会产生。
 - **联系邮箱**：`privacy.html` 使用 `fan20081218@qq.com`（中英各一处显示 + 一处 `mailto:`，共 4 处）；如需更换，全局替换该字符串即可。
 
 ---
@@ -367,3 +425,5 @@ node _gen.js
 - **v3.4（接入 Google AdSense）**：站点与全部页面 `<head>` 加入 `ca-pub-6465192362290250` 的 Auto ads 脚本；新增 `ads.txt`；`server.js` 补 `.txt` 的 MIME，避免以 octet-stream 返回。
 - **v3.5（58 篇特效详解）**：新增 `effects/` 目录，58 个原生特效各有独立详情页（英文优先 + 中文切换），含实时演示、原理拆解、可调参数、源码、上下篇内链、`TechArticle` 结构化数据；首页卡片加「📖 详解」入口；新增 `sitemap.xml`；修复 `starfield` 半径为负导致 `arc()` 抛异常的老 bug。
 - **v3.6（隐私政策 + Cookie 同意）**：新增双语 `privacy.html`（12 节，含 AdSense / DoubleClick Cookie 披露与退订入口）；新增 `consent.js` + `consent.css` 自建同意横幅，与 Google Consent Mode v2 打通（默认 `denied`，接受后 `granted`）；全部页面 `<head>` 前置同意默认值脚本；页脚「提交创意」空链接替换为「隐私政策 + Cookie 设置」；`privacy.html` 与详情页加入预渲染语言判定，消除中文访客的英文闪烁；`sitemap.xml` 增至 61 条。
+- **v3.7（改用 Google 认证 CMP）**：`consent.js` 重写为 CMP 接管层——优先让 Google 自家认证 CMP（AdSense 隐私权和消息）负责同意收集，自建横幅降级为「检测不到 `googlefc` 时」的兜底并支持 2.5s 延迟探测与迟到自动撤除，避免双弹窗；「Cookie 设置」改走官方 `googlefc.showRevocationMessage()`；`<head>` 的 Consent Mode 默认值简化为静态 `denied`（不再读 localStorage，避免旧记录把 EEA 默认值顶成 `granted`）；`privacy.html` 第 7 节改写为 Google 认证 CMP 说明。
+- **v3.8（Consent Mode 分地区）**：`<head>` 改为两条默认值——带 `region`（EU 27 + IS/LI/NO + GB + CH，共 32 个）的 `denied` 在前，不带 region 的 `granted` 在后，即「仅欧洲拒绝、其他地区放行」，跨区访客不再被无谓限制；`consent.js` 新增 `regionGate`，兜底横幅只在同意地区自动弹出（用 `navigator.languages` / `Intl` / 时区近似判断，判不准按欧洲处理），其他地区手动点「Cookie 设置」仍可打开；`privacy.html` 第 7 节中英双语改写为分地区说明；`_build/check-ads.js` 增加 region 完整性校验；`_build/verify-consent.js` 扩到 55 项（含 `Emulation.setTimezoneOverride` 分别模拟柏林与上海访客）。

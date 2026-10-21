@@ -3,24 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Consent Mode v2：必须在 AdSense 脚本之前执行 -->
+    <!-- Google Consent Mode v2：EEA / 英国 / 瑞士默认拒绝，其他地区默认放行；用户选择后由 Google 认证 CMP 更新 -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){ dataLayer.push(arguments); }
-        (function () {
-            var c = null;
-            try { c = localStorage.getItem('yilana.consent'); } catch (e) {}
-            var ads = c === 'all' ? 'granted' : 'denied';
-            gtag('consent', 'default', {
-                ad_storage: ads,
-                ad_user_data: ads,
-                ad_personalization: ads,
-                analytics_storage: 'denied',
-                functionality_storage: 'granted',
-                security_storage: 'granted',
-                wait_for_update: 500
-            });
-        })();
+        // 1) 需要事先取得同意的地区：EEA（EU 27 + 冰岛 / 列支敦士登 / 挪威）+ 英国 + 瑞士 → 全部拒绝
+        //    注意：region 由 Google 按访问者 IP 判定，与浏览器时区无关
+        gtag('consent', 'default', {
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            analytics_storage: 'denied',
+            functionality_storage: 'granted',
+            security_storage: 'granted',
+            wait_for_update: 500,
+            region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']
+        });
+        // 2) 其他地区：默认放行（Google 仍按当地法规做受限数据处理；本站不接入分析工具，analytics 保持关闭）
+        gtag('consent', 'default', {
+            ad_storage: 'granted',
+            ad_user_data: 'granted',
+            ad_personalization: 'granted',
+            analytics_storage: 'denied',
+            functionality_storage: 'granted',
+            security_storage: 'granted'
+        });
     </script>
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6465192362290250"
