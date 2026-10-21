@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" data-slug="scratch">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Consent Mode v2：必须在 AdSense 脚本之前执行 -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        (function () {
+            var c = null;
+            try { c = localStorage.getItem('yilana.consent'); } catch (e) {}
+            var ads = c === 'all' ? 'granted' : 'denied';
+            gtag('consent', 'default', {
+                ad_storage: ads,
+                ad_user_data: ads,
+                ad_personalization: ads,
+                analytics_storage: 'denied',
+                functionality_storage: 'granted',
+                security_storage: 'granted',
+                wait_for_update: 500
+            });
+        })();
+    </script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6465192362290250"
+        crossorigin="anonymous"></script>
+    <title>Scratch Card — a interactive effect built with plain Canvas | Effect Lab</title>
+    <meta id="metaDesc" name="description" content="The grey coating is a canvas painted on top of the reward, and dragging erases it with a composite mode.">
+    <link rel="canonical" href="https://yilana.cn/effects/scratch.html">
+    <link rel="alternate" hreflang="en" href="https://yilana.cn/effects/scratch.html">
+    <link rel="alternate" hreflang="zh-CN" href="https://yilana.cn/effects/scratch.html?lang=zh">
+    <link rel="alternate" hreflang="x-default" href="https://yilana.cn/effects/scratch.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="yilana.cn">
+    <meta property="og:title" content="Scratch Card — The grey coating is a canvas painted on top of the reward, and dragging erases it with a c">
+    <meta property="og:description" content="The grey coating is a canvas painted on top of the reward, and dragging erases it with a composite mode.">
+    <meta property="og:url" content="https://yilana.cn/effects/scratch.html">
+    <meta property="og:locale" content="en_US">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+    <link rel="stylesheet" href="detail.css">
+    <!-- 语言先定：在 body 解析前写入 html[lang]，避免中文访客看到一瞬英文 -->
+    <script>
+        (function () {
+            var q = null;
+            try { q = new URLSearchParams(location.search).get('lang'); } catch (e) {}
+            var L = (q === 'en' || q === 'zh') ? q : (function () {
+                try {
+                    var s = localStorage.getItem('yilana.lang');
+                    if (s === 'en' || s === 'zh') return s;
+                } catch (e) {}
+                return /^zh\b/i.test(navigator.language || '') ? 'zh' : 'en';
+            })();
+            document.documentElement.lang = L === 'en' ? 'en' : 'zh-CN';
+        })();
+    </script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Scratch Card — how it works","description":"The grey coating is a canvas painted on top of the reward, and dragging erases it with a composite mode.","inLanguage":["en","zh-CN"],"url":"https://yilana.cn/effects/scratch.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://yilana.cn/effects/scratch.html"},"about":{"@type":"Thing","name":"Web visual effects, Canvas 2D, destination-out, Composite mode"},"isPartOf":{"@type":"WebSite","name":"Effect Lab","url":"https://yilana.cn/"},"publisher":{"@type":"Organization","name":"Effect Lab","url":"https://yilana.cn/"},"isAccessibleForFree":true}</script>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" href="../index.html"><span class="brand-icon">✨</span><span>Effect Lab</span></a>
+        <nav class="topnav">
+            <a href="../index.html#lab"><span data-lang="en">All 131 effects</span><span data-lang="zh">全部 131 个特效</span></a>
+        </nav>
+        <button class="lang-switch" id="langSwitch" type="button" aria-label="Switch language">中文</button>
+    </div>
+</header>
+
+<main class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">Effect Lab</a><span class="sep">/</span>
+        <a href="../index.html#lab"><span data-lang="en">Interactive</span><span data-lang="zh">互动</span></a><span class="sep">/</span>
+        <span class="here"><span data-lang="en">Scratch Card</span><span data-lang="zh">刮刮乐</span></span>
+    </nav>
+
+    <article>
+        <header class="head">
+            <div class="icon">🪙</div>
+            <h1>
+                <span data-lang="en">Scratch Card</span>
+                <span data-lang="zh">刮刮乐</span>
+            </h1>
+            <p class="lead">
+                <span data-lang="en">The grey coating is a canvas painted on top of the reward, and dragging erases it with a composite mode.</span>
+                <span data-lang="zh">灰色涂层是盖在答案上面的一块 canvas，拖动时用混合模式把它擦掉。</span>
+            </p>
+            <div class="tags"><span class="tag">Canvas 2D</span><span class="tag">destination-out</span><span class="tag">Composite mode</span></div>
+        </header>
+
+        <section class="stage-box" aria-label="Live demo">
+            <div class="stage-bar">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                <span class="stage-label"><span data-lang="en">Live demo</span><span data-lang="zh">实时演示</span></span>
+                <button class="restart" id="restart" type="button">
+                    <span data-lang="en">↻ Restart</span><span data-lang="zh">↻ 重新播放</span>
+                </button>
+            </div>
+            <div class="stage" id="stage"></div>
+            <p class="stage-hint">
+                <span data-lang="en">Runs live on this page. Move the pointer, click, or drag — whichever the effect listens for.</span>
+                <span data-lang="zh">就在本页实时运行。移动鼠标、点击或拖拽——看它响应哪一种。</span>
+            </p>
+        </section>
+
+        <section class="block">
+            <h2><span data-lang="en">How it works</span><span data-lang="zh">原理拆解</span></h2>
+            <p>
+                <span data-lang="en">Setting globalCompositeOperation = destination-out makes every brush stroke subtract from what is already there instead of drawing on top. The canvas therefore works as a mask, and the hidden content underneath is just normal DOM. mouseleave also clears the drag flag, which prevents the classic bug of erasing after the pointer has left the box.</span>
+                <span data-lang="zh">把 globalCompositeOperation 设成 destination-out，每一笔就在「减去已有内容」，而不是往上画。于是这块 canvas 变成了遮罩，底下藏的东西就是普通 DOM。mouseleave 里也清掉拖拽标志，避免手移出框外还在擦这个经典 bug。</span>
+            </p>
+        </section>
+
+        <section class="block">
+            <h2><span data-lang="en">What to change</span><span data-lang="zh">可以改的地方</span></h2>
+            <ul class="tweaks" data-lang="en"><li><span class="num">1</span><span>Enlarge the brush radius for a coarse scratch, shrink it for a coin-scratch feel.</span></li>
+            <li><span class="num">2</span><span>Track how much alpha remains and auto-reveal the rest past 60% removed.</span></li></ul>
+            <ul class="tweaks" data-lang="zh"><li><span class="num">1</span><span>笔刷半径调大是粗暴地刮，调小就有硬币刮涂层的手感。</span></li>
+            <li><span class="num">2</span><span>统计剩余不透明度，擦掉 60% 就自动露出剩下的部分。</span></li></ul>
+        </section>
+
+        <section class="block">
+            <h2><span data-lang="en">Source code</span><span data-lang="zh">源码</span></h2>
+            <p class="block-note">
+                <span data-lang="en">Self-contained — paste it into any HTML file and it runs. No libraries.</span>
+                <span data-lang="zh">完全独立——粘进任意 HTML 文件就能跑，不需要任何库。</span>
+            </p>
+            <div class="code-wrap">
+                <div class="code-bar">
+                    <span>scratch.html</span>
+                    <button id="copyCode" type="button"><span data-lang="en">📋 Copy</span><span data-lang="zh">📋 复制</span></button>
+                </div>
+                <pre class="code-block" id="codeBlock"></pre>
+            </div>
+        </section>
+
+        <nav class="pager">
+            <a class="pn prev" href="spotlight.html"><span class="dir">← Previous</span><strong>Spotlight</strong></a>
+            <a class="pn next" href="draggable.html"><span class="dir">Next →</span><strong>Jelly Drag</strong></a>
+        </nav>
+
+        <aside class="cta">
+            <p>
+                <span data-lang="en">This is one of 131 effects in the lab — particles, text shaders, UI components and small games.</span>
+                <span data-lang="zh">这只是实验室里 131 个特效中的一个——粒子、文字、UI 组件和小游戏都有。</span>
+            </p>
+            <a class="btn" href="../index.html#lab"><span data-lang="en">Browse the full gallery →</span><span data-lang="zh">浏览全部特效 →</span></a>
+        </aside>
+    </article>
+</main>
+
+<footer class="foot">
+    <p><span data-lang="en">Effect Lab · yilana.cn — built with plain Canvas 2D and CSS, no libraries.</span><span data-lang="zh">Effect Lab · yilana.cn —— 纯 Canvas 2D 与 CSS，不依赖任何库。</span></p>
+    <p class="foot-links">
+        <a href="../index.html"><span data-lang="en">Gallery</span><span data-lang="zh">特效大厅</span></a>
+        <a href="../privacy.html"><span data-lang="en">Privacy</span><span data-lang="zh">隐私政策</span></a>
+        <button class="foot-btn" type="button" onclick="window.ylConsent&&window.ylConsent.open()"><span data-lang="en">Cookie settings</span><span data-lang="zh">Cookie 设置</span></button>
+    </p>
+</footer>
+
+<script>
+/* ===== 当前特效 ===== */
+const EFFECT_ID = "scratch";
+const CODE = "<div id='b' style='position:relative;width:100%;height:300px;overflow:hidden'><div style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#4ecdc4;letter-spacing:2px'>YILANA.CN<\/div><canvas id='c' style='position:absolute;inset:0'><\/canvas><\/div><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nx.fillStyle='#9aa';x.fillRect(0,0,c.width,c.height);x.fillStyle='#555';x.font='16px sans-serif';x.textAlign='center';x.fillText('刮开看看 🎁',c.width/2,c.height/2);\nlet d=false;x.globalCompositeOperation='destination-out';\nc.onmousedown=()=>d=true;c.onmouseup=()=>d=false;c.onmouseleave=()=>d=false;\nc.onmousemove=e=>{if(!d)return;x.beginPath();x.arc(e.offsetX,e.offsetY,20,0,7);x.fill();};\n<\/script>";
+const DEMO = function demo(el){ el.style.position='relative';el.style.overflow='hidden';el.style.background='#0a0a18';
+          el.innerHTML="<div style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#4ecdc4;letter-spacing:2px'>YILANA.CN<\/div><canvas id='scr' style='position:absolute;inset:0'><\/canvas>";
+          const c=el.querySelector('#scr'),x=c.getContext('2d'); c.width=el.clientWidth;c.height=el.clientHeight;
+          x.fillStyle='#9aa';x.fillRect(0,0,c.width,c.height); x.fillStyle='#555';x.font='16px sans-serif';x.textAlign='center';x.fillText('刮开看看 🎁',c.width/2,c.height/2);
+          let d=false; x.globalCompositeOperation='destination-out';
+          c.onmousedown=()=>d=true; c.onmouseup=()=>d=false; c.onmouseleave=()=>d=false;
+          c.ontouchstart=()=>d=true; c.ontouchend=()=>d=false;
+          c.onmousemove=e=>{ if(!d)return; const r=c.getBoundingClientRect(); x.beginPath();x.arc(e.clientX-r.left,e.clientY-r.top,20,0,7);x.fill(); };
+          c.ontouchmove=e=>{ if(!d)return; const r=c.getBoundingClientRect(); x.beginPath();x.arc(e.touches[0].clientX-r.left,e.touches[0].clientY-r.top,20,0,7);x.fill(); };
+          return ()=>{ c.onmousedown=c.onmouseup=c.onmouseleave=c.ontouchstart=c.ontouchend=c.onmousemove=c.ontouchmove=null; };
+        };
+const META = {
+  en: { title: "Scratch Card — a interactive effect built with plain Canvas | Effect Lab", desc: "The grey coating is a canvas painted on top of the reward, and dragging erases it with a composite mode." },
+  zh: { title: "刮刮乐 · 原理与源码 | Effect Lab", desc: "灰色涂层是盖在答案上面的一块 canvas，拖动时用混合模式把它擦掉。" }
+};
+
+/* ===== 与首页一致的 helper（部分 demo 依赖）===== */
+function makeCanvas(el){ const c=document.createElement('canvas'); c.width=el.clientWidth||800; c.height=el.clientHeight||380; c.style.width='100%'; c.style.height='100%'; el.appendChild(c); return c; }
+function clearEl(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+
+/* ===== 语言 ===== */
+const LANG_KEY = 'yilana.lang';
+let LANG = 'en';
+function detectLang(){
+  let q = null;
+  try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+  if(q === 'en' || q === 'zh') return q;
+  try{ const s = localStorage.getItem(LANG_KEY); if(s === 'en' || s === 'zh') return s; }catch(e){}
+  return /^zh\b/i.test(navigator.language || '') ? 'zh' : 'en';
+}
+function applyLang(){
+  document.documentElement.lang = LANG === 'en' ? 'en' : 'zh-CN';
+  const m = META[LANG];
+  document.title = m.title;
+  const md = document.getElementById('metaDesc'); if(md) md.setAttribute('content', m.desc);
+  const ogt = document.querySelector('meta[property="og:title"]'); if(ogt) ogt.setAttribute('content', m.title);
+  const ogd = document.querySelector('meta[property="og:description"]'); if(ogd) ogd.setAttribute('content', m.desc);
+  const ogl = document.querySelector('meta[property="og:locale"]'); if(ogl) ogl.setAttribute('content', LANG === 'en' ? 'en_US' : 'zh_CN');
+  const sw = document.getElementById('langSwitch'); if(sw) sw.textContent = LANG === 'en' ? '中文' : 'EN';
+  try{
+    const u = new URL(location.href);
+    if(LANG === 'zh') u.searchParams.set('lang','zh'); else u.searchParams.delete('lang');
+    history.replaceState(null, '', u.pathname + (u.search || '') + u.hash);
+  }catch(e){}
+}
+document.getElementById('langSwitch').onclick = function(){
+  LANG = LANG === 'en' ? 'zh' : 'en';
+  try{ localStorage.setItem(LANG_KEY, LANG); }catch(e){}
+  applyLang();
+};
+
+/* ===== 源码 ===== */
+document.getElementById('codeBlock').textContent = CODE;
+document.getElementById('copyCode').onclick = async function(){
+  const btn = this;
+  try{ await navigator.clipboard.writeText(CODE); }
+  catch(e){
+    const ta = document.createElement('textarea'); ta.value = CODE;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+  }
+  const old = btn.innerHTML;
+  btn.innerHTML = LANG === 'en' ? '✓ Copied' : '✓ 已复制';
+  setTimeout(() => { btn.innerHTML = old; }, 1600);
+};
+
+/* ===== 运行 demo ===== */
+const stage = document.getElementById('stage');
+let cleanup = null, pokeTimer = null;
+
+// 点击/鼠标类特效初始是空的，主动在舞台中心模拟一次鼠标事件，避免访客看到空框
+function autoPoke(){
+  const target = stage.querySelector('canvas') || stage.firstElementChild || stage;
+  const r = stage.getBoundingClientRect();
+  const x = r.left + r.width / 2, y = r.top + r.height / 2;
+  const opts = { clientX: x, clientY: y, bubbles: true, cancelable: true, view: window };
+  try{
+    target.dispatchEvent(new MouseEvent('mousemove', opts));
+    target.dispatchEvent(new MouseEvent('click', opts));
+  }catch(e){}
+}
+
+function runDemo(){
+  if(cleanup){ try{ cleanup(); }catch(e){} cleanup = null; }
+  clearTimeout(pokeTimer);
+  clearEl(stage);
+  stage.removeAttribute('style');
+  try{
+    cleanup = DEMO(stage) || null;
+    pokeTimer = setTimeout(autoPoke, 650);
+  }catch(err){
+    stage.innerHTML = '<p style="padding:2rem;color:#ff9aa2">Demo error: ' + err.message + '</p>';
+  }
+}
+document.getElementById('restart').onclick = runDemo;
+
+/* ===== 初始化 ===== */
+LANG = detectLang();
+applyLang();
+runDemo();
+</script>
+<script src="../consent.js" defer></script>
+</body>
+</html>

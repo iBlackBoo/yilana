@@ -4,8 +4,8 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = 'P:/AI/WorkBuddy/black/yilana';   // 工作区（index.html / effects-repo.js / ...）
-const REPO = 'P:/AI/WorkBuddy/black/yilana/repo'; // 仓库 demo 原始文件（已复制到项目内，便于线上部署）
+const ROOT = __dirname;                 // 工作区（index.html / effects-repo.js / ...）
+const REPO = path.join(__dirname, 'repo'); // 仓库 demo 原始文件（已复制到项目内，便于线上部署）
 const PORT = 8777;
 
 const MIME = {
@@ -13,6 +13,7 @@ const MIME = {
   '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8',
   '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
   '.gif': 'image/gif', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
   '.mp3': 'audio/mpeg', '.mp4': 'video/mp4', '.webm': 'video/webm',

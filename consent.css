@@ -1,0 +1,164 @@
+/* ==========================================================================
+ * consent.css — Cookie 同意横幅（与站点同一套深色霓虹配色）
+ * 由 consent.js 自动加载，页面无需手动引入
+ * ========================================================================== */
+
+.ylc-banner {
+    position: fixed;
+    left: 50%;
+    bottom: 1.25rem;
+    transform: translateX(-50%) translateY(140%);
+    width: calc(100% - 2.5rem);
+    max-width: 700px;
+    z-index: 9998;
+    background: linear-gradient(180deg, #1a1a30 0%, #12121f 100%);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 16px;
+    padding: 1.1rem 1.25rem 1.15rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(78, 205, 196, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: #e8e8f5;
+    font-family: 'Segoe UI', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-size: 0.86rem;
+    line-height: 1.65;
+    transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+    opacity: 0;
+}
+
+.ylc-banner.ylc-show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.ylc-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.45rem;
+    font-weight: 700;
+    font-size: 0.94rem;
+    letter-spacing: 0.01em;
+    color: #fff;
+}
+
+.ylc-head .ylc-icon {
+    font-size: 1.05rem;
+    line-height: 1;
+}
+
+.ylc-body {
+    color: #a0a0c0;
+    margin-bottom: 0.9rem;
+}
+
+.ylc-body a {
+    color: #4ecdc4;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.ylc-body a:hover {
+    color: #7ee0d9;
+}
+
+.ylc-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.ylc-btn {
+    appearance: none;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 22px;
+    padding: 0.5rem 1.15rem;
+    font-size: 0.84rem;
+    font-weight: 650;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    white-space: nowrap;
+    line-height: 1.4;
+}
+
+.ylc-btn-primary {
+    background: linear-gradient(135deg, #4ecdc4, #3aa8a1);
+    color: #05221f;
+    border-color: transparent;
+    box-shadow: 0 4px 18px rgba(78, 205, 196, 0.28);
+}
+
+.ylc-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px rgba(78, 205, 196, 0.42);
+}
+
+.ylc-btn-ghost {
+    background: rgba(255, 255, 255, 0.05);
+    color: #cfcfe6;
+}
+
+.ylc-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.ylc-btn:focus-visible {
+    outline: 2px solid #ffe66d;
+    outline-offset: 2px;
+}
+
+/* 页脚 / 正文里的「Cookie 设置」入口 */
+.ylc-open-link {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    opacity: 0.85;
+}
+
+.ylc-open-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+@media (max-width: 560px) {
+    .ylc-banner {
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        max-width: none;
+        transform: translateY(110%);
+        border-radius: 16px 16px 0 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        padding: 1rem 1.1rem 1.15rem;
+    }
+
+    .ylc-banner.ylc-show {
+        transform: translateY(0);
+    }
+
+    .ylc-actions {
+        gap: 0.5rem;
+    }
+
+    .ylc-btn {
+        flex: 1 1 auto;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ylc-banner,
+    .ylc-btn {
+        transition: none;
+    }
+}

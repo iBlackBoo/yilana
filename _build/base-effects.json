@@ -1,0 +1,524 @@
+[
+  {
+    "id": "fireworks",
+    "icon": "🎆",
+    "group": "particle",
+    "title": "烟花粒子",
+    "desc": "点击演示区，绽放带辉光的绚丽烟花。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');\nfunction boom(cx,cy){\n  for(let i=0;i<60;i++){const a=i/60*Math.PI*2,s=2+Math.random()*5;\n    let p={x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,h:Math.random()*360};\n    (function f(){p.x+=p.vx;p.y+=p.vy;p.vy+=0.06;p.l-=0.015;\n      if(p.l>0){x.beginPath();x.arc(p.x,p.y,3,0,7);x.fillStyle='hsla('+p.h+',90%,60%,'+p.l+')';x.shadowBlur=12;x.shadowColor='hsla('+p.h+',90%,60%,1)';x.fill();requestAnimationFrame(f);}})();\n  }\n}\nc.addEventListener('click',e=>boom(e.offsetX,e.offsetY));\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'), W=c.width, H=c.height;\r\n          function boom(cx,cy){ for(let i=0;i<60;i++){const a=i/60*Math.PI*2,s=2+Math.random()*5; let p={x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,h:Math.random()*360};\r\n            (function f(){ p.x+=p.vx;p.y+=p.vy;p.vy+=0.06;p.l-=0.015; if(p.l>0){ x.beginPath();x.arc(p.x,p.y,3,0,7);x.fillStyle='hsla('+p.h+',90%,60%,'+p.l+')';x.shadowBlur=14;x.shadowColor='hsla('+p.h+',90%,60%,1)';x.fill(); requestAnimationFrame(f);} })(); } }\r\n          const stop=setInterval(()=>boom(Math.random()*W, Math.random()*H*0.7), 700);\r\n          c.addEventListener('click', e=>boom(e.offsetX, e.offsetY));\r\n          return ()=>clearInterval(stop);\r\n        }"
+  },
+  {
+    "id": "confetti",
+    "icon": "🎊",
+    "group": "particle",
+    "title": "五彩纸屑",
+    "desc": "满屏彩色纸屑飘落，庆祝感拉满。",
+    "code": "<button onclick='go()'>撒花</button><script>\nfunction go(){for(let i=0;i<80;i++){const d=document.createElement('div');\n  d.style.cssText='position:fixed;left:'+Math.random()*100+'vw;top:-20px;width:10px;height:10px;background:hsl('+Math.random()*360+',80%,60%);border-radius:2px;';\n  document.body.appendChild(d);let y=0,vy=2+Math.random()*3,r=0;\n  (function f(){vy+=0.1;y+=vy;r+=8;d.style.transform='translateY('+y+'px) rotate('+r+'deg)';if(y<innerHeight+30)requestAnimationFrame(f);else d.remove();})();}}\n</script>",
+    "demo": "demo(el){ let busy=false;\r\n          function go(){ const W=el.clientWidth; for(let i=0;i<90;i++){ const d=document.createElement('div'); d.style.cssText='position:absolute;left:'+(Math.random()*W)+'px;top:-20px;width:10px;height:10px;background:hsl('+(Math.random()*360)+',85%,62%);border-radius:2px;'; el.appendChild(d); let y=0,vy=2+Math.random()*3,r=0; (function f(){ vy+=0.12;y+=vy;r+=9; d.style.transform='translateY('+y+'px) rotate('+r+'deg)'; if(y<el.clientHeight+30)requestAnimationFrame(f); else d.remove(); })(); } }\r\n          const btn=document.createElement('button'); btn.textContent='🎊 撒花！'; btn.className='btn-primary'; btn.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;'; btn.onclick=go; el.appendChild(btn); go();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "trail",
+    "icon": "✨",
+    "group": "particle",
+    "title": "光轨拖尾",
+    "desc": "在演示区移动鼠标，留下霓虹光点轨迹。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');let pts=[];\nc.addEventListener('mousemove',e=>pts.push({x:e.offsetX,y:e.offsetY,l:1}));\n(function f(){x.clearRect(0,0,c.width,c.height);pts=pts.filter(p=>p.l>0);\n  pts.forEach(p=>{x.beginPath();x.arc(p.x,p.y,7,0,7);x.fillStyle='hsl('+(Date.now()/5%360)+',90%,65%)';x.shadowBlur=18;x.shadowColor=x.fillStyle;x.globalAlpha=p.l;x.fill();p.l-=0.02;});requestAnimationFrame(f);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); let pts=[];\r\n          c.addEventListener('mousemove', e=>pts.push({x:e.offsetX,y:e.offsetY,l:1}));\r\n          c.addEventListener('touchmove', e=>{const r=c.getBoundingClientRect();pts.push({x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top,l:1});}, {passive:true});\r\n          (function f(){ if(!c.parentNode)return; x.clearRect(0,0,c.width,c.height); pts=pts.filter(p=>p.l>0);\r\n            pts.forEach(p=>{ x.beginPath();x.arc(p.x,p.y,7,0,7); x.fillStyle='hsl('+(Date.now()/5%360)+',90%,65%)'; x.shadowBlur=18;x.shadowColor=x.fillStyle; x.globalAlpha=p.l; x.fill(); p.l-=0.02; }); requestAnimationFrame(f); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "nebula",
+    "icon": "🌌",
+    "group": "particle",
+    "title": "星空漩涡",
+    "desc": "粒子绕中心旋转，形成流动星云。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');\nc.width=innerWidth;c.height=300;\nlet ps=Array.from({length:80},()=>({a:Math.random()*7,r:30+Math.random()*120,s:0.005+Math.random()*0.03,h:Math.random()*60+200}));\n(function f(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.a+=p.s;let X=c.width/2+Math.cos(p.a)*p.r,Y=150+Math.sin(p.a)*p.r*0.6;x.beginPath();x.arc(X,Y,2,0,7);x.fillStyle='hsl('+p.h+',80%,70%)';x.fill();});requestAnimationFrame(f);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); let ps=Array.from({length:80},()=>({a:Math.random()*7,r:30+Math.random()*120,s:0.005+Math.random()*0.03,h:Math.random()*60+200}));\r\n          (function f(){ if(!c.parentNode)return; x.clearRect(0,0,c.width,c.height); ps.forEach(p=>{ p.a+=p.s; let X=c.width/2+Math.cos(p.a)*p.r, Y=c.height/2+Math.sin(p.a)*p.r*0.6; x.beginPath();x.arc(X,Y,2.4,0,7); x.fillStyle='hsl('+p.h+',80%,70%)'; x.shadowBlur=8; x.shadowColor='hsl('+p.h+',80%,70%)'; x.fill(); }); requestAnimationFrame(f); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "hearts",
+    "icon": "💖",
+    "group": "particle",
+    "title": "飘落爱心",
+    "desc": "粉色爱心不断从底部升起，浪漫满屏。",
+    "code": "<script>\nfunction h(){const d=document.createElement('div');d.textContent='💖';\n  d.style.cssText='position:fixed;left:'+Math.random()*100+'vw;bottom:-30px;font-size:'+(14+Math.random()*20)+'px;';\n  document.body.appendChild(d);let y=0,r=0;\n  (function f(){y+=1.5;r+=3;d.style.transform='translateY('+-y+'px) rotate('+r+'deg)';if(y<innerHeight+40)requestAnimationFrame(f);else d.remove();})();}\nsetInterval(h,300);\n</script>",
+    "demo": "demo(el){ const W=el.clientWidth, Hh=el.clientHeight;\r\n          const stop=setInterval(()=>{ const d=document.createElement('div'); d.textContent='💖'; d.style.cssText='position:absolute;left:'+(Math.random()*W)+'px;bottom:-30px;font-size:'+(14+Math.random()*22)+'px;'; el.appendChild(d); let y=0,r=0;\r\n            (function f(){ y+=1.6;r+=4; d.style.transform='translateY('+(-y)+'px) rotate('+r+'deg)'; if(y<Hh+40)requestAnimationFrame(f); else d.remove(); })(); }, 250);\r\n          return ()=>clearInterval(stop);\r\n        }"
+  },
+  {
+    "id": "snow",
+    "icon": "❄️",
+    "group": "particle",
+    "title": "漫天飞雪",
+    "desc": "真实飘落的雪花，带风力摇摆。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet f=Array.from({length:120},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:1+Math.random()*3,v:0.5+Math.random()}));\n(function a(){x.clearRect(0,0,c.width,c.height);f.forEach(p=>{p.y+=p.v;p.x+=Math.sin(p.y/30)*0.6;if(p.y>c.height)p.y=0;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fillStyle='#fff';x.fill();});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); let f=Array.from({length:130},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:1+Math.random()*3,v:0.5+Math.random()}));\r\n          (function a(){ if(!c.parentNode)return; x.clearRect(0,0,c.width,c.height); f.forEach(p=>{ p.y+=p.v;p.x+=Math.sin(p.y/30)*0.6; if(p.y>c.height)p.y=0; if(p.x>c.width)p.x=0; x.beginPath();x.arc(p.x,p.y,p.r,0,7); x.fillStyle='rgba(255,255,255,0.9)'; x.shadowBlur=4; x.shadowColor='#fff'; x.fill(); }); requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "particleText",
+    "icon": "🔤",
+    "group": "particle",
+    "title": "粒子文字",
+    "desc": "点击发射粒子，聚成发光文字。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet ps=[];function burst(){for(let i=0;i<40;i++)ps.push({x:c.width/2,y:c.height/2,vx:(Math.random()-.5)*8,vy:(Math.random()-.5)*8,l:1});}\n(function a(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.l-=0.01;x.beginPath();x.arc(p.x,p.y,3,0,7);x.fillStyle='hsl('+(Date.now()/10%360)+',90%,65%)';x.fill();});requestAnimationFrame(a);})();\nsetInterval(burst,600);\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); let ps=[];\r\n          function burst(){ for(let i=0;i<40;i++) ps.push({x:c.width/2,y:c.height/2,vx:(Math.random()-.5)*9,vy:(Math.random()-.5)*9,l:1}); }\r\n          const stop=setInterval(burst, 500);\r\n          (function a(){ if(!c.parentNode)return; x.clearRect(0,0,c.width,c.height); ps.filter(p=>p.l>0).forEach(p=>{ p.x+=p.vx;p.y+=p.vy;p.l-=0.01; x.beginPath();x.arc(p.x,p.y,3,0,7); x.fillStyle='hsl('+(Date.now()/8%360)+',90%,65%)'; x.shadowBlur=10; x.shadowColor=x.fillStyle; x.fill(); }); requestAnimationFrame(a); })();\r\n          return ()=>clearInterval(stop);\r\n        }"
+  },
+  {
+    "id": "bubble",
+    "icon": "🫧",
+    "group": "interact",
+    "title": "泡泡戳破",
+    "desc": "点击生成泡泡，再点一下戳破它。",
+    "code": "<div id='b' style='width:100%;height:300px;background:#0a0a18;position:relative'></div><script>\nconst b=document.getElementById('b');\nb.onclick=e=>{const r=b.getBoundingClientRect();const d=document.createElement('div');\n  d.style.cssText='position:absolute;left:'+(e.clientX-r.left-18)+'px;top:'+(e.clientY-r.top-18)+'px;width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff,#6cf);cursor:pointer';\n  d.onclick=ev=>{ev.stopPropagation();d.style.transform='scale(1.8)';d.style.opacity=0;setTimeout(()=>d.remove(),200);};\n  b.appendChild(d);setTimeout(()=>d.remove(),3000);};\n</script>",
+    "demo": "demo(el){ el.style.background='rgba(0,0,0,0.3)'; el.onclick=e=>{ const r=el.getBoundingClientRect(); const d=document.createElement('div'); d.style.cssText='position:absolute;left:'+(e.clientX-r.left-18)+'px;top:'+(e.clientY-r.top-18)+'px;width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.9),rgba(100,200,255,.5));cursor:pointer;transition:transform .2s,opacity .2s'; d.onclick=ev=>{ev.stopPropagation();d.style.transform='scale(1.8)';d.style.opacity=0;setTimeout(()=>d.remove(),200);}; el.appendChild(d); setTimeout(()=>{if(d.parentNode)d.remove();},3000); };\r\n          return ()=>{ el.onclick=null; };\r\n        }"
+  },
+  {
+    "id": "gravity",
+    "icon": "🌀",
+    "group": "interact",
+    "title": "引力场",
+    "desc": "移动鼠标，粒子被吸引形成流动场。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet ps=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:0,vy:0}));\nlet mx=c.width/2,my=150;c.onmousemove=e=>{mx=e.offsetX;my=e.offsetY};\n(function a(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{let dx=mx-p.x,dy=my-p.y,d=Math.hypot(dx,dy)||1,f=Math.min(.5,6/d);p.vx+=dx*f*.02;p.vy+=dy*f*.02;p.vx*=.98;p.vy*=.98;p.x+=p.vx;p.y+=p.vy;x.beginPath();x.arc(p.x,p.y,3,0,7);x.fillStyle='#fff';x.fill();});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); let ps=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:0,vy:0})); let mx=c.width/2,my=c.height/2;\r\n          c.onmousemove=e=>{mx=e.offsetX;my=e.offsetY};\r\n          (function a(){ if(!c.parentNode)return; x.clearRect(0,0,c.width,c.height); ps.forEach(p=>{ let dx=mx-p.x,dy=my-p.y,d=Math.hypot(dx,dy)||1,f=Math.min(.5,6/d); p.vx+=dx*f*.02;p.vy+=dy*f*.02;p.vx*=.98;p.vy*=.98;p.x+=p.vx;p.y+=p.vy; if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0; x.beginPath();x.arc(p.x,p.y,3,0,7); x.fillStyle='#fff'; x.fill(); }); requestAnimationFrame(a); })();\r\n          return ()=>{ c.onmousemove=null; };\r\n        }"
+  },
+  {
+    "id": "neondraw",
+    "icon": "🎨",
+    "group": "interact",
+    "title": "霓虹画板",
+    "desc": "按住拖动，画出霓虹光带。",
+    "code": "<canvas id='c' style='background:#000'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');let d=false;\nc.width=innerWidth;c.height=300;c.onmousedown=()=>d=true;c.onmouseup=()=>d=false;c.onmousemove=e=>{if(!d)return;x.beginPath();x.arc(e.offsetX,e.offsetY,9,0,7);x.fillStyle='hsl('+(Date.now()/10%360)+',100%,60%)';x.shadowBlur=22;x.shadowColor=x.fillStyle;x.fill();};\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); c.style.background='#000'; let d=false;\r\n          c.onmousedown=()=>d=true; c.onmouseup=()=>d=false; c.onmouseleave=()=>d=false;\r\n          c.ontouchstart=()=>d=true; c.ontouchend=()=>d=false;\r\n          c.onmousemove=e=>{ if(!d)return; x.beginPath();x.arc(e.offsetX,e.offsetY,9,0,7); x.fillStyle='hsl('+(Date.now()/8%360)+',100%,60%)'; x.shadowBlur=22;x.shadowColor=x.fillStyle; x.fill(); };\r\n          c.ontouchmove=e=>{ if(!d)return; const r=c.getBoundingClientRect(); x.beginPath();x.arc(e.touches[0].clientX-r.left,e.touches[0].clientY-r.top,9,0,7); x.fillStyle='hsl('+(Date.now()/8%360)+',100%,60%)'; x.shadowBlur=22;x.shadowColor=x.fillStyle; x.fill(); };\r\n          return ()=>{ c.onmousedown=c.onmouseup=c.onmouseleave=c.ontouchstart=c.ontouchend=c.onmousemove=c.ontouchmove=null; };\r\n        }"
+  },
+  {
+    "id": "shockwave",
+    "icon": "💥",
+    "group": "interact",
+    "title": "爆炸涟漪",
+    "desc": "点击产生冲击波，推开周围粒子。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet ps=Array.from({length:80},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:0,vy:0}));\nc.onclick=e=>{ps.forEach(p=>{let dx=p.x-e.offsetX,dy=p.y-e.offsetY,d=Math.hypot(dx,dy)||1;let f=Math.max(0,200-d)*0.15;p.vx+=dx/d*f;p.vy+=dy/d*f;});};\n(function a(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vx*=.96;p.vy*=.96;x.beginPath();x.arc(p.x,p.y,2,0,7);x.fillStyle='#6cf';x.fill();});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); let ps=Array.from({length:90},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:0,vy:0}));\r\n          c.onclick=e=>{ ps.forEach(p=>{ let dx=p.x-e.offsetX,dy=p.y-e.offsetY,d=Math.hypot(dx,dy)||1; let f=Math.max(0,200-d)*0.15; p.vx+=dx/d*f; p.vy+=dy/d*f; }); };\r\n          (function a(){ if(!c.parentNode)return; x.clearRect(0,0,c.width,c.height); ps.forEach(p=>{ p.x+=p.vx;p.y+=p.vy;p.vx*=.96;p.vy*=.96; x.beginPath();x.arc(p.x,p.y,2.5,0,7); x.fillStyle='#6cf'; x.shadowBlur=6; x.shadowColor='#6cf'; x.fill(); }); requestAnimationFrame(a); })();\r\n          return ()=>{ c.onclick=null; };\r\n        }"
+  },
+  {
+    "id": "ripple",
+    "icon": "🌊",
+    "group": "interact",
+    "title": "水波纹",
+    "desc": "点击水面，扩散出层次水波。",
+    "code": "<div id='b' style='width:100%;height:300px;background:#04161f;position:relative;overflow:hidden'></div><script>\nconst b=document.getElementById('b');\nb.onclick=e=>{const r=b.getBoundingClientRect();for(let i=0;i<3;i++){const d=document.createElement('div');\n  d.style.cssText='position:absolute;left:'+(e.clientX-r.left)+'px;top:'+(e.clientY-r.top)+'px;width:10px;height:10px;border:2px solid #4ecdc4;border-radius:50%;transform:translate(-50%,-50%)';\n  b.appendChild(d);let s=10;(function f(){s+=4;d.style.width=s+'px';d.style.height=s+'px';d.style.opacity=1-s/300;if(s<300)requestAnimationFrame(f);else d.remove();})();}}\n</script>",
+    "demo": "demo(el){ el.style.background='#04161f'; el.onclick=e=>{ const r=el.getBoundingClientRect(); for(let i=0;i<3;i++){ const d=document.createElement('div'); d.style.cssText='position:absolute;left:'+(e.clientX-r.left)+'px;top:'+(e.clientY-r.top)+'px;width:10px;height:10px;border:2px solid #4ecdc4;border-radius:50%;transform:translate(-50%,-50%)'; el.appendChild(d); let s=10; (function f(){ s+=4; d.style.width=s+'px'; d.style.height=s+'px'; d.style.opacity=1-s/300; if(s<300)requestAnimationFrame(f); else d.remove(); })(); } };\r\n          return ()=>{ el.onclick=null; };\r\n        }"
+  },
+  {
+    "id": "eyes",
+    "icon": "👀",
+    "group": "interact",
+    "title": "跟随的眼睛",
+    "desc": "一排眼睛始终盯着你的鼠标。",
+    "code": "<div id='b' style='display:flex;gap:30px;justify-content:center;align-items:center;height:300px'></div><script>\nconst b=document.getElementById('b');let eyes=[];\nfor(let i=0;i<5;i++){const e=document.createElement('div');e.style.cssText='width:60px;height:60px;background:#fff;border-radius:50%;position:relative';const p=document.createElement('div');p.style.cssText='width:24px;height:24px;background:#222;border-radius:50%;position:absolute;left:18px;top:18px';e.appendChild(p);b.appendChild(e);eyes.push(p);}\naddEventListener('mousemove',e=>{eyes.forEach(p=>{let r=p.parentElement.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,a=Math.atan2(e.clientY-cy,e.clientX-cx);p.style.left=18+Math.cos(a)*10+'px';p.style.top=18+Math.sin(a)*10+'px';});});\n</script>",
+    "demo": "demo(el){ el.style.display='flex'; el.style.gap='24px'; el.style.justifyContent='center'; el.style.alignItems='center'; let eyes=[];\r\n          for(let i=0;i<6;i++){ const e=document.createElement('div'); e.style.cssText='width:54px;height:54px;background:#fff;border-radius:50%;position:relative;box-shadow:0 0 14px rgba(255,255,255,.4)'; const p=document.createElement('div'); p.style.cssText='width:22px;height:22px;background:#1a1a2e;border-radius:50%;position:absolute;left:16px;top:16px'; e.appendChild(p); el.appendChild(e); eyes.push(p); }\r\n          const mv=e=>{ eyes.forEach(p=>{ let r=p.parentElement.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2, a=Math.atan2(e.clientY-cy,e.clientX-cx); p.style.left=16+Math.cos(a)*10+'px'; p.style.top=16+Math.sin(a)*10+'px'; }); };\r\n          el.addEventListener('mousemove', mv);\r\n          return ()=>{ el.removeEventListener('mousemove', mv); };\r\n        }"
+  },
+  {
+    "id": "bounce",
+    "icon": "⚽",
+    "group": "interact",
+    "title": "弹跳碰撞球",
+    "desc": "彩色球在边界内弹跳并互相碰撞。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet bs=Array.from({length:12},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*6,vy:(Math.random()-.5)*6,r:14,h:Math.random()*360}));\n(function a(){x.clearRect(0,0,c.width,c.height);bs.forEach(b=>{b.x+=b.vx;b.y+=b.vy;if(b.x<0||b.x>c.width)b.vx*=-1;if(b.y<0||b.y>c.height)b.vy*=-1;x.beginPath();x.arc(b.x,b.y,b.r,0,7);x.fillStyle='hsl('+b.h+',80%,60%)';x.fill();});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); let bs=Array.from({length:14},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*6,vy:(Math.random()-.5)*6,r:13,h:Math.random()*360}));\r\n          (function a(){ if(!c.parentNode)return; x.clearRect(0,0,c.width,c.height); bs.forEach(b=>{ b.x+=b.vx;b.y+=b.vy; if(b.x<0||b.x>c.width)b.vx*=-1; if(b.y<0||b.y>c.height)b.vy*=-1; x.beginPath();x.arc(b.x,b.y,b.r,0,7); x.fillStyle='hsl('+b.h+',80%,60%)'; x.shadowBlur=10; x.shadowColor='hsl('+b.h+',80%,60%)'; x.fill(); });\r\n            for(let i=0;i<bs.length;i++) for(let j=i+1;j<bs.length;j++){ let dx=bs[i].x-bs[j].x,dy=bs[i].y-bs[j].y,d=Math.hypot(dx,dy); if(d<bs[i].r+bs[j].r){ let t=bs[i].vx; bs[i].vx=bs[j].vx; bs[j].vx=t; t=bs[i].vy; bs[i].vy=bs[j].vy; bs[j].vy=t; } }\r\n            requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "matrix",
+    "icon": "💠",
+    "group": "visual",
+    "title": "矩阵数字雨",
+    "desc": "赛博朋克风绿色数字雨。",
+    "code": "<canvas id='c' style='background:#000'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nconst ch='01アカサタナ';const col=c.width/14;const dr=Array(col).fill(0);\n(function a(){x.fillStyle='rgba(0,0,0,.08)';x.fillRect(0,0,c.width,c.height);x.fillStyle='#0f0';x.font='14px monospace';for(let i=0;i<col;i++){x.fillText(ch[Math.random()*ch.length|0],i*14,dr[i]*14);if(dr[i]*14>c.height&&Math.random()>.975)dr[i]=0;dr[i]++;}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); c.style.background='#000'; const ch='01アカサタナハマヤラワ'; const col=Math.floor(c.width/14); const dr=Array(col).fill(0);\r\n          (function a(){ if(!c.parentNode)return; x.fillStyle='rgba(0,0,0,.08)'; x.fillRect(0,0,c.width,c.height); x.fillStyle='#0f0'; x.font='14px monospace'; for(let i=0;i<col;i++){ x.fillText(ch[Math.random()*ch.length|0], i*14, dr[i]*14); if(dr[i]*14>c.height&&Math.random()>.975)dr[i]=0; dr[i]++; } requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "fire",
+    "icon": "🔥",
+    "group": "visual",
+    "title": "火焰模拟",
+    "desc": "从底部升腾的实时火焰粒子。",
+    "code": "<canvas id='c' style='background:#000'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet fs=[];setInterval(()=>{for(let i=0;i<4;i++)fs.push({x:c.width/2+(Math.random()-.5)*40,y:c.height,vx:(Math.random()-.5)*1.5,vy:-Math.random()*4-2,l:1,s:3+Math.random()*5});},40);\n(function a(){x.fillStyle='rgba(0,0,0,.2)';x.fillRect(0,0,c.width,c.height);for(let i=fs.length-1;i>=0;i--){let p=fs[i];p.x+=p.vx;p.y+=p.vy;p.l-=0.015;if(p.l<=0){fs.splice(i,1);continue;}x.beginPath();x.arc(p.x,p.y,p.s,0,7);x.fillStyle='hsl('+(20+p.l*30)+',100%,'+(50+p.l*30)+'%)';x.fill();}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); c.style.background='#000'; let fs=[]; const sp=setInterval(()=>{ for(let i=0;i<5;i++) fs.push({x:c.width/2+(Math.random()-.5)*40,y:c.height,vx:(Math.random()-.5)*1.5,vy:-Math.random()*4-2,l:1,s:3+Math.random()*5}); }, 40);\r\n          (function a(){ if(!c.parentNode)return; x.fillStyle='rgba(0,0,0,.2)'; x.fillRect(0,0,c.width,c.height); for(let i=fs.length-1;i>=0;i--){ let p=fs[i]; p.x+=p.vx;p.y+=p.vy;p.l-=0.015; if(p.l<=0){ fs.splice(i,1); continue; } x.beginPath();x.arc(p.x,p.y,p.s,0,7); x.fillStyle='hsl('+(20+p.l*30)+',100%,'+(50+p.l*30)+'%)'; x.shadowBlur=8; x.shadowColor='#f80'; x.fill(); } requestAnimationFrame(a); })();\r\n          return ()=>clearInterval(sp);\r\n        }"
+  },
+  {
+    "id": "kaleido",
+    "icon": "🔷",
+    "group": "visual",
+    "title": "万花筒",
+    "desc": "移动鼠标，对称图案不断变换。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let mx=c.width/2,my=150;c.onmousemove=e=>{mx=e.offsetX;my=e.offsetY};\n(function a(){x.fillStyle='rgba(0,0,0,.06)';x.fillRect(0,0,c.width,c.height);for(let i=0;i<6;i++){x.save();x.translate(c.width/2,c.height/2);x.rotate(i/6*Math.PI*2);x.beginPath();x.arc(mx-c.width/2,my-c.height/2,5,0,7);x.fillStyle='hsl('+(Date.now()/10%360)+',80%,60%)';x.fill();x.restore();}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el), x=c.getContext('2d'); let mx=c.width/2,my=c.height/2; c.onmousemove=e=>{mx=e.offsetX;my=e.offsetY};\r\n          (function a(){ if(!c.parentNode)return; x.fillStyle='rgba(0,0,0,.06)'; x.fillRect(0,0,c.width,c.height); for(let i=0;i<6;i++){ x.save(); x.translate(c.width/2,c.height/2); x.rotate(i/6*Math.PI*2); x.beginPath(); x.arc(mx-c.width/2,my-c.height/2,5,0,7); x.fillStyle='hsl('+(Date.now()/8%360)+',80%,60%)'; x.shadowBlur=8; x.shadowColor=x.fillStyle; x.fill(); x.restore(); } requestAnimationFrame(a); })();\r\n          return ()=>{ c.onmousemove=null; };\r\n        }"
+  },
+  {
+    "id": "holo",
+    "icon": "🌈",
+    "group": "visual",
+    "title": "全息渐变",
+    "desc": "背景色彩随位置缓慢流动变幻。",
+    "code": "<div id='b' style='width:100%;height:300px'></div><script>\nconst b=document.getElementById('b');let t=0;\n(function a(){t+=0.5;b.style.background='linear-gradient('+t+'deg,#ff6b9d,#4ecdc4,#ffe66d,#a37eba)';requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ let t=0; const id=setInterval(()=>{ t+=0.5; el.style.background='linear-gradient('+t+'deg,#ff6b9d,#4ecdc4,#ffe66d,#a37eba)'; }, 30);\r\n          return ()=>clearInterval(id);\r\n        }"
+  },
+  {
+    "id": "aurora",
+    "icon": "🌌",
+    "group": "visual",
+    "title": "极光流动",
+    "desc": "多色光团缓慢漂移的极光背景。",
+    "code": "<div id='b' style='width:100%;height:300px;background:#04121a;overflow:hidden;position:relative'></div><script>\nconst b=document.getElementById('b');for(let i=0;i<3;i++){const g=document.createElement('div');g.style.cssText='position:absolute;width:300px;height:300px;border-radius:50%;filter:blur(60px);opacity:.6';b.appendChild(g);let x=Math.random()*300,y=Math.random()*100;(function a(){x+=Math.sin(y/30);y+=0.5;if(y>300)y=0;g.style.left=x+'px';g.style.top=y+'px';g.style.background=['#4ecdc4','#a37eba','#6c8cff'][i];requestAnimationFrame(a);})();}\n</script>",
+    "demo": "demo(el){ el.style.background='#04121a'; el.style.overflow='hidden'; el.style.position='relative';\r\n          const stops=[]; for(let i=0;i<3;i++){ const g=document.createElement('div'); g.style.cssText='position:absolute;width:260px;height:260px;border-radius:50%;filter:blur(50px);opacity:.6'; g.style.background=['#4ecdc4','#a37eba','#6c8cff'][i]; el.appendChild(g); stops.push({g,x:Math.random()*el.clientWidth,y:Math.random()*el.clientHeight}); }\r\n          const id=setInterval(()=>{ stops.forEach(s=>{ s.x+=Math.sin(s.y/30); s.y+=0.6; if(s.y>el.clientHeight)s.y=0; s.g.style.left=s.x+'px'; s.g.style.top=s.y+'px'; }); }, 30);\r\n          return ()=>clearInterval(id);\r\n        }"
+  },
+  {
+    "id": "cube",
+    "icon": "🧊",
+    "group": "visual",
+    "title": "3D 旋转立方体",
+    "desc": "纯 CSS 3D 转个不停的立方体。",
+    "code": "<div style='perspective:600px;display:flex;height:300px;align-items:center;justify-content:center'>\n<div style='width:100px;height:100px;transform-style:preserve-3d;animation:r 6s linear infinite;position:relative'>\n<style>@keyframes r{to{transform:rotateX(360deg) rotateY(360deg)}}</style>\n<div style='position:absolute;width:100px;height:100px;background:rgba(78,205,196,.5);transform:translateZ(50px)'></div>\n<div style='position:absolute;width:100px;height:100px;background:rgba(255,107,157,.5);transform:rotateY(180deg) translateZ(50px)'></div>\n<div style='position:absolute;width:100px;height:100px;background:rgba(255,230,109,.5);transform:rotateY(90deg) translateZ(50px)'></div>\n<div style='position:absolute;width:100px;height:100px;background:rgba(108,140,255,.5);transform:rotateY(-90deg) translateZ(50px)'></div>\n<div style='position:absolute;width:100px;height:100px;background:rgba(163,126,186,.5);transform:rotateX(90deg) translateZ(50px)'></div>\n<div style='position:absolute;width:100px;height:100px;background:rgba(78,205,196,.5);transform:rotateX(-90deg) translateZ(50px)'></div></div></div>",
+    "demo": "demo(el){ el.innerHTML=\"<div style='perspective:600px;display:flex;height:100%;align-items:center;justify-content:center'><div style='width:110px;height:110px;transform-style:preserve-3d;animation:r 6s linear infinite;position:relative'><style>@keyframes r{to{transform:rotateX(360deg) rotateY(360deg)}}</style><div style='position:absolute;width:110px;height:110px;background:rgba(78,205,196,.55);transform:translateZ(55px)'></div><div style='position:absolute;width:110px;height:110px;background:rgba(255,107,157,.55);transform:rotateY(180deg) translateZ(55px)'></div><div style='position:absolute;width:110px;height:110px;background:rgba(255,230,109,.55);transform:rotateY(90deg) translateZ(55px)'></div><div style='position:absolute;width:110px;height:110px;background:rgba(108,140,255,.55);transform:rotateY(-90deg) translateZ(55px)'></div><div style='position:absolute;width:110px;height:110px;background:rgba(163,126,186,.55);transform:rotateX(90deg) translateZ(55px)'></div><div style='position:absolute;width:110px;height:110px;background:rgba(78,205,196,.55);transform:rotateX(-90deg) translateZ(55px)'></div></div></div>\";\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "glitch",
+    "icon": "📺",
+    "group": "text",
+    "title": "故障文字",
+    "desc": "赛博故障风的文字抖动特效。",
+    "code": "<h1 data-t='YILANA.CN' style='font-size:42px;position:relative;color:#fff' onmouseover='this.classList.add(\"g\")' onmouseout='this.classList.remove(\"g\")'>YILANA.CN<style>.g::before,.g::after{content:attr(data-t);position:absolute;left:0;top:0}.g::before{color:#ff6b9d;animation:gl 0.3s infinite}.g::after{color:#4ecdc4;animation:gl 0.3s infinite reverse}@keyframes gl{0%{transform:translate(0)}25%{transform:translate(-3px,2px)}50%{transform:translate(3px,-2px)}100%{transform:translate(0)}}</style></h1>",
+    "demo": "demo(el){ el.innerHTML=\"<div style='display:flex;align-items:center;justify-content:center;height:100%'><h1 data-t='YILANA.CN' class='g' style='font-size:42px;position:relative;color:#fff;letter-spacing:3px'>YILANA.CN<style>.g::before,.g::after{content:attr(data-t);position:absolute;left:0;top:0}.g::before{color:#ff6b9d;animation:gl .3s infinite}.g::after{color:#4ecdc4;animation:gl .3s infinite reverse}@keyframes gl{0%{transform:translate(0)}25%{transform:translate(-3px,2px)}50%{transform:translate(3px,-2px)}100%{transform:translate(0)}}</style></h1></div>\";\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "typewriter",
+    "icon": "⌨️",
+    "group": "text",
+    "title": "打字机文字",
+    "desc": "逐字输出的打字机效果。",
+    "code": "<div id='t' style='font-size:28px;color:#4ecdc4;height:300px;display:flex;align-items:center;padding:20px'></div><script>\nconst t=document.getElementById('t');const s='YILANA.CN';let i=0;\n(function a(){if(i<=s.length){t.textContent=s.slice(0,i)+'▋';i++;setTimeout(a,120);}})();\n</script>",
+    "demo": "demo(el){ const t=document.createElement('div'); t.style.cssText='font-size:34px;color:#4ecdc4;height:100%;display:flex;align-items:center;padding:20px;line-height:1.6;letter-spacing:2px'; el.appendChild(t); const s='YILANA.CN'; let i=0; const id=setInterval(()=>{ if(i<=s.length){ t.textContent=s.slice(0,i)+'▋'; i++; } else { clearInterval(id); t.textContent=s; } }, 160);\r\n          return ()=>clearInterval(id);\r\n        }"
+  },
+  {
+    "id": "neontext",
+    "icon": "💡",
+    "group": "text",
+    "title": "霓虹发光字",
+    "desc": "带呼吸光晕的霓虹标题。",
+    "code": "<h1 style='font-size:46px;color:#fff;text-align:center;height:300px;display:flex;align-items:center;justify-content:center;letter-spacing:3px;text-shadow:0 0 10px #ff6b9d,0 0 20px #ff6b9d,0 0 40px #ff6b9d;animation:nb 2s ease-in-out infinite'>YILANA.CN<style>@keyframes nb{50%{text-shadow:0 0 20px #4ecdc4,0 0 40px #4ecdc4,0 0 80px #4ecdc4}}</style></h1>",
+    "demo": "demo(el){ el.innerHTML=\"<h1 style='font-size:50px;color:#fff;text-align:center;height:100%;display:flex;align-items:center;justify-content:center;letter-spacing:3px;text-shadow:0 0 10px #ff6b9d,0 0 20px #ff6b9d,0 0 40px #ff6b9d;animation:nb 2s ease-in-out infinite'>YILANA.CN<style>@keyframes nb{50%{text-shadow:0 0 20px #4ecdc4,0 0 40px #4ecdc4,0 0 80px #4ecdc4}}</style></h1>\";\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "gradienttext",
+    "icon": "🎀",
+    "group": "text",
+    "title": "流光渐变字",
+    "desc": "文字颜色流动的渐变标题。",
+    "code": "<h1 style='font-size:44px;text-align:center;height:300px;display:flex;align-items:center;justify-content:center;letter-spacing:2px;background:linear-gradient(90deg,#ff6b9d,#ffe66d,#4ecdc4,#a37eba);background-size:300%;-webkit-background-clip:text;color:transparent;animation:gf 4s linear infinite'>YILANA.CN<style>@keyframes gf{to{background-position:300% 0}}</style></h1>",
+    "demo": "demo(el){ el.innerHTML=\"<h1 style='font-size:50px;text-align:center;height:100%;display:flex;align-items:center;justify-content:center;letter-spacing:2px;background:linear-gradient(90deg,#ff6b9d,#ffe66d,#4ecdc4,#a37eba);background-size:300%;-webkit-background-clip:text;color:transparent;animation:gf 4s linear infinite'>YILANA.CN<style>@keyframes gf{to{background-position:300% 0}}</style></h1>\";\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "meteors",
+    "icon": "🌠",
+    "group": "particle",
+    "title": "流星雨",
+    "desc": "夜空中不断划过的彩色流星。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let ms=[];\nfunction sp(){ms.push({x:Math.random()*c.width,y:-20,len:60+Math.random()*60,a:Math.PI/3+Math.random()*0.4,v:7+Math.random()*4,h:Math.random()*60+20});}\nsetInterval(sp,300);sp();\n(function a(){x.fillStyle='rgba(5,5,12,0.25)';x.fillRect(0,0,c.width,c.height);ms.forEach(s=>{s.x+=Math.cos(s.a)*s.v;s.y+=Math.sin(s.a)*s.v;x.beginPath();x.moveTo(s.x,s.y);x.lineTo(s.x-Math.cos(s.a)*s.len,s.y-Math.sin(s.a)*s.len);x.strokeStyle='hsl('+s.h+',90%,72%)';x.lineWidth=2;x.shadowBlur=12;x.shadowColor='hsl('+s.h+',90%,72%)';x.stroke();});ms=ms.filter(s=>s.y<c.height+60);requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let ms=[];function sp(){ms.push({x:Math.random()*c.width,y:-20,len:60+Math.random()*60,a:Math.PI/3+Math.random()*0.4,v:7+Math.random()*4,h:Math.random()*60+20});}const sp2=setInterval(sp,300);sp();(function a(){if(!c.parentNode)return;x.fillStyle='rgba(5,5,12,0.25)';x.fillRect(0,0,c.width,c.height);ms.forEach(s=>{s.x+=Math.cos(s.a)*s.v;s.y+=Math.sin(s.a)*s.v;x.beginPath();x.moveTo(s.x,s.y);x.lineTo(s.x-Math.cos(s.a)*s.len,s.y-Math.sin(s.a)*s.len);x.strokeStyle='hsl('+s.h+',90%,72%)';x.lineWidth=2;x.shadowBlur=12;x.shadowColor='hsl('+s.h+',90%,72%)';x.stroke();});ms=ms.filter(s=>s.y<c.height+60);requestAnimationFrame(a);})();return ()=>clearInterval(sp2); }"
+  },
+  {
+    "id": "blackhole",
+    "icon": "🕳️",
+    "group": "particle",
+    "title": "黑洞漩涡",
+    "desc": "粒子螺旋吸入中心，形成黑洞。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet ps=Array.from({length:200},()=>({a:Math.random()*7,r:50+Math.random()*200,s:0.01+Math.random()*0.03,h:Math.random()*60+200}));\n(function a(){x.fillStyle='rgba(5,5,12,0.15)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;ps.forEach(p=>{p.a+=p.s;p.r*=0.99;if(p.r<4){p.r=250;p.a=Math.random()*7;}let X=cx+Math.cos(p.a)*p.r,Y=cy+Math.sin(p.a)*p.r;x.beginPath();x.arc(X,Y,1.5,0,7);x.fillStyle='hsl('+p.h+',90%,'+Math.min(80,p.r)+'%)';x.fill();});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let ps=Array.from({length:200},()=>({a:Math.random()*7,r:50+Math.random()*200,s:0.01+Math.random()*0.03,h:Math.random()*60+200}));(function a(){if(!c.parentNode)return;x.fillStyle='rgba(5,5,12,0.15)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;ps.forEach(p=>{p.a+=p.s;p.r*=0.99;if(p.r<4){p.r=250;p.a=Math.random()*7;}let X=cx+Math.cos(p.a)*p.r,Y=cy+Math.sin(p.a)*p.r;x.beginPath();x.arc(X,Y,1.5,0,7);x.fillStyle='hsl('+p.h+',90%,'+Math.min(80,p.r)+'%)';x.shadowBlur=4;x.shadowColor='hsl('+p.h+',90%,60%)';x.fill();});requestAnimationFrame(a);})();return ()=>{}; }"
+  },
+  {
+    "id": "constellation",
+    "icon": "🔗",
+    "group": "interact",
+    "title": "星座连线",
+    "desc": "移动鼠标，节点自动连线成网。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet ns=Array.from({length:50},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5}));let mx=-99,my=-99;c.onmousemove=e=>{mx=e.offsetX;my=e.offsetY};\n(function a(){x.clearRect(0,0,c.width,c.height);ns.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>c.width)n.vx*=-1;if(n.y<0||n.y>c.height)n.vy*=-1;});for(let i=0;i<ns.length;i++)for(let j=i+1;j<ns.length;j++){let dx=ns[i].x-ns[j].x,dy=ns[i].y-ns[j].y,d=Math.hypot(dx,dy);if(d<90){x.beginPath();x.moveTo(ns[i].x,ns[i].y);x.lineTo(ns[j].x,ns[j].y);x.strokeStyle='rgba(120,200,255,'+(1-d/90)+')';x.lineWidth=1;x.stroke();}}ns.forEach(n=>{x.beginPath();x.arc(n.x,n.y,2,0,7);x.fillStyle='#7cf';x.fill();});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let ns=Array.from({length:50},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5}));let mx=-99,my=-99;c.onmousemove=e=>{mx=e.offsetX;my=e.offsetY};(function a(){if(!c.parentNode)return;x.clearRect(0,0,c.width,c.height);ns.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>c.width)n.vx*=-1;if(n.y<0||n.y>c.height)n.vy*=-1;});for(let i=0;i<ns.length;i++)for(let j=i+1;j<ns.length;j++){let dx=ns[i].x-ns[j].x,dy=ns[i].y-ns[j].y,d=Math.hypot(dx,dy);if(d<90){x.beginPath();x.moveTo(ns[i].x,ns[i].y);x.lineTo(ns[j].x,ns[j].y);x.strokeStyle='rgba(120,200,255,'+(1-d/90)+')';x.lineWidth=1;x.stroke();}}if(mx>-99){x.beginPath();x.arc(mx,my,4,0,7);x.fillStyle='#ff6b9d';x.fill();}ns.forEach(n=>{x.beginPath();x.arc(n.x,n.y,2,0,7);x.fillStyle='#7cf';x.fill();});requestAnimationFrame(a);})();return ()=>{c.onmousemove=null;}; }"
+  },
+  {
+    "id": "laser",
+    "icon": "🟦",
+    "group": "visual",
+    "title": "激光网格",
+    "desc": "赛博朋克风的透视网格地平线。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let t=0;\n(function a(){t+=0.06;x.fillStyle='#04101a';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height*0.4;x.strokeStyle='rgba(78,205,196,0.6)';x.lineWidth=1;for(let i=0;i<20;i++){let z=((i*40+t*40)%800);let p=300/(z+1);x.beginPath();x.moveTo(cx-p*c.width,p*cy+cy);x.lineTo(cx+p*c.width,p*cy+cy);x.stroke();}for(let i=-10;i<=10;i++){x.beginPath();x.moveTo(cx+i*30,cy);x.lineTo(cx+i*400,300);x.stroke();}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let t=0;(function a(){if(!c.parentNode)return;t+=0.06;x.fillStyle='#04101a';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height*0.4;x.strokeStyle='rgba(78,205,196,0.6)';x.lineWidth=1;for(let i=0;i<20;i++){let z=((i*40+t*40)%800);let p=300/(z+1);x.beginPath();x.moveTo(cx-p*c.width,p*cy+cy);x.lineTo(cx+p*c.width,p*cy+cy);x.stroke();}for(let i=-10;i<=10;i++){x.beginPath();x.moveTo(cx+i*30,cy);x.lineTo(cx+i*400,c.height);x.stroke();}requestAnimationFrame(a);})();return ()=>{}; }"
+  },
+  {
+    "id": "lightning",
+    "icon": "⚡",
+    "group": "visual",
+    "title": "随机闪电",
+    "desc": "夜空中不时劈下的蓝白闪电。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\n(function a(){x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height);if(Math.random()<0.08){let px=c.width/2+(Math.random()-.5)*c.width*0.6;x.beginPath();x.moveTo(px,0);let y=0;while(y<300){y+=15;px+=(Math.random()-.5)*40;x.lineTo(px,y);}x.strokeStyle='#bfe9ff';x.lineWidth=2;x.shadowBlur=15;x.shadowColor='#6cf';x.stroke();}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');(function a(){if(!c.parentNode)return;x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height);if(Math.random()<0.09){let px=c.width/2+(Math.random()-.5)*c.width*0.6;x.beginPath();x.moveTo(px,0);let y=0;while(y<c.height){y+=15;px+=(Math.random()-.5)*40;x.lineTo(px,y);}x.strokeStyle='#bfe9ff';x.lineWidth=2;x.shadowBlur=15;x.shadowColor='#6cf';x.stroke();}requestAnimationFrame(a);})();return ()=>{}; }"
+  },
+  {
+    "id": "wave",
+    "icon": "🌊",
+    "group": "visual",
+    "title": "波浪线条",
+    "desc": "三条彩色正弦波交叠流动。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let t=0;\n(function a(){t+=0.05;x.clearRect(0,0,c.width,c.height);for(let w=0;w<3;w++){x.beginPath();for(let i=0;i<c.width;i++){let y=c.height/2+Math.sin(i*0.02+t+w)*30*(1+w*0.3);if(i===0)x.moveTo(i,y);else x.lineTo(i,y);}x.strokeStyle=['#ff6b9d','#4ecdc4','#ffe66d'][w];x.lineWidth=2;x.stroke();}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let t=0;(function a(){if(!c.parentNode)return;t+=0.05;x.clearRect(0,0,c.width,c.height);for(let w=0;w<3;w++){x.beginPath();for(let i=0;i<c.width;i++){let y=c.height/2+Math.sin(i*0.02+t+w)*30*(1+w*0.3);if(i===0)x.moveTo(i,y);else x.lineTo(i,y);}x.strokeStyle=['#ff6b9d','#4ecdc4','#ffe66d'][w];x.lineWidth=2;x.shadowBlur=6;x.shadowColor=x.strokeStyle;x.stroke();}requestAnimationFrame(a);})();return ()=>{}; }"
+  },
+  {
+    "id": "starfield",
+    "icon": "🌟",
+    "group": "visual",
+    "title": "星空穿梭",
+    "desc": "星辰向你迎面飞来的跃迁感。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet st=Array.from({length:120},()=>({x:(Math.random()-.5)*c.width,y:(Math.random()-.5)*c.height,z:Math.random()*2+0.1}));\n(function a(){x.fillStyle='rgba(5,5,12,0.3)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;st.forEach(s=>{s.z-=0.02;if(s.z<=0){s.z=2;s.x=(Math.random()-.5)*c.width;s.y=(Math.random()-.5)*c.height;}let px=cx+s.x/s.z,py=cy+s.y/s.z;x.beginPath();x.arc(px,py,Math.max(0.5,(2-s.z)*1.6),0,7);x.fillStyle='#fff';x.fill();});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let st=Array.from({length:120},()=>({x:(Math.random()-.5)*c.width,y:(Math.random()-.5)*c.height,z:Math.random()*2+0.1}));(function a(){if(!c.parentNode)return;x.fillStyle='rgba(5,5,12,0.3)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;st.forEach(s=>{s.z-=0.02;if(s.z<=0){s.z=2;s.x=(Math.random()-.5)*c.width;s.y=(Math.random()-.5)*c.height;}let px=cx+s.x/s.z,py=cy+s.y/s.z;x.beginPath();x.arc(px,py,Math.max(0.5,(2-s.z)*1.6),0,7);x.fillStyle='#fff';x.shadowBlur=4;x.shadowColor='#fff';x.fill();});requestAnimationFrame(a);})();return ()=>{}; }"
+  },
+  {
+    "id": "fractal",
+    "icon": "🌲",
+    "group": "visual",
+    "title": "分形树",
+    "desc": "递归生长的摇摆树枝。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let a=0;\nfunction br(lx,ly,len,ang){if(len<4)return;let ex=lx+Math.cos(ang)*len,ey=ly+Math.sin(ang)*len;x.beginPath();x.moveTo(lx,ly);x.lineTo(ex,ey);x.strokeStyle='#5d9e4f';x.lineWidth=len/8;x.stroke();br(ex,ey,len*0.7,ang-0.4+a*0.1);br(ex,ey,len*0.7,ang+0.4-a*0.1);}\n(function f(){a+=0.02;x.fillStyle='#0a1a10';x.fillRect(0,0,c.width,c.height);br(c.width/2,c.height,60,-Math.PI/2);requestAnimationFrame(f);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let a=0;function br(lx,ly,len,ang){if(len<4)return;let ex=lx+Math.cos(ang)*len,ey=ly+Math.sin(ang)*len;x.beginPath();x.moveTo(lx,ly);x.lineTo(ex,ey);x.strokeStyle='#5d9e4f';x.lineWidth=len/8;x.stroke();br(ex,ey,len*0.7,ang-0.4+a*0.1);br(ex,ey,len*0.7,ang+0.4-a*0.1);}(function f(){if(!c.parentNode)return;a+=0.02;x.fillStyle='#0a1a10';x.fillRect(0,0,c.width,c.height);br(c.width/2,c.height,60,-Math.PI/2);requestAnimationFrame(f);})();return ()=>{}; }"
+  },
+  {
+    "id": "smoke",
+    "icon": "💨",
+    "group": "particle",
+    "title": "彩色烟雾",
+    "desc": "从底部升腾扩散的梦幻烟雾。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let sm=[];setInterval(()=>sm.push({x:c.width/2+(Math.random()-.5)*40,y:c.height,r:5,v:1+Math.random(),h:Math.random()*360}),100);\n(function a(){x.fillStyle='rgba(5,5,12,0.08)';x.fillRect(0,0,c.width,c.height);sm.forEach(s=>{s.y-=s.v;s.r+=0.4;s.x+=Math.sin(s.y/20);x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fillStyle='hsla('+s.h+',80%,60%,0.15)';x.fill();});sm=sm.filter(s=>s.y>-20);requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let sm=[];const sp=setInterval(()=>sm.push({x:c.width/2+(Math.random()-.5)*40,y:c.height,r:5,v:1+Math.random(),h:Math.random()*360}),100);(function a(){if(!c.parentNode)return;x.fillStyle='rgba(5,5,12,0.08)';x.fillRect(0,0,c.width,c.height);sm.forEach(s=>{s.y-=s.v;s.r+=0.4;s.x+=Math.sin(s.y/20);x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fillStyle='hsla('+s.h+',80%,60%,0.15)';x.fill();});sm=sm.filter(s=>s.y>-20);requestAnimationFrame(a);})();return ()=>clearInterval(sp); }"
+  },
+  {
+    "id": "textwave",
+    "icon": "🌊",
+    "group": "text",
+    "title": "波浪文字",
+    "desc": "YILANA.CN 字母随波浪起伏跳动。",
+    "code": "<div id='t' style='height:300px;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:700;color:#fff'></div><script>\nconst t=document.getElementById('t');const s='YILANA.CN';let t0=0;\n(function a(){t0+=0.08;let h='';for(let i=0;i<s.length;i++){let dy=Math.sin(t0+i*0.5)*18;h+=\"<span style='display:inline-block;transform:translateY(\"+dy+\"px);color:hsl(\"+(i*40+200)+\",80%,65%)'>\"+s[i]+\"</span>\";}t.innerHTML=h;requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const t=document.createElement('div');t.style.cssText='height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700';el.appendChild(t);const s='YILANA.CN';let t0=0;(function a(){if(!t.parentNode)return;t0+=0.08;let h='';for(let i=0;i<s.length;i++){let dy=Math.sin(t0+i*0.5)*18;h+=\"<span style='display:inline-block;transform:translateY(\"+dy+\"px);color:hsl(\"+(i*40+200)+\",80%,65%)'>\"+s[i]+\"</span>\";}t.innerHTML=h;requestAnimationFrame(a);})();return ()=>{}; }"
+  },
+  {
+    "id": "danmaku",
+    "icon": "📺",
+    "group": "text",
+    "title": "弹幕文字",
+    "desc": "YILANA.CN 从右向左飞过的弹幕。",
+    "code": "<div id='b' style='position:relative;width:100%;height:300px;background:#000;overflow:hidden'></div><script>\nconst b=document.getElementById('b');function d(){const s=document.createElement('div');s.textContent='YILANA.CN';s.style.cssText='position:absolute;top:'+(Math.random()*80+10)+'%;font-size:24px;font-weight:700;color:hsl('+Math.random()*360+',80%,65%);white-space:nowrap';b.appendChild(s);let x=b.clientWidth;(function f(){x-=2;s.style.left=x+'px';if(x>-200)requestAnimationFrame(f);else s.remove();})();}setInterval(d,800);\n</script>",
+    "demo": "demo(el){ el.style.background='#000';el.style.overflow='hidden';el.style.position='relative';const sp=setInterval(()=>{const s=document.createElement('div');s.textContent='YILANA.CN';s.style.cssText='position:absolute;top:'+(Math.random()*80+10)+'%;font-size:24px;font-weight:700;color:hsl('+Math.random()*360+',80%,65%);white-space:nowrap';el.appendChild(s);let x=el.clientWidth;(function f(){x-=2;s.style.left=x+'px';if(x>-200)requestAnimationFrame(f);else s.remove();})();},800);return ()=>clearInterval(sp); }"
+  },
+  {
+    "id": "textparticles",
+    "icon": "🔤",
+    "group": "text",
+    "title": "文字粒子",
+    "desc": "粒子汇聚拼出 YILANA.CN。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nconst o=document.createElement('canvas');o.width=c.width;o.height=c.height;const ox=o.getContext('2d');\nox.fillStyle='#fff';ox.font='bold 54px sans-serif';ox.textAlign='center';ox.fillText('YILANA.CN',c.width/2,170);\nconst d=ox.getImageData(0,0,c.width,c.height).data;let tg=[];for(let y=0;y<c.height;y+=5)for(let i=0;i<c.width;i+=5){if(d[(y*c.width+i)*4+3]>128)tg.push({x:i,y:y});}\nlet ps=tg.map(p=>({x:Math.random()*c.width,y:Math.random()*c.height,tx:p.x,ty:p.y}));\n(function a(){x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height);ps.forEach(p=>{p.x+=(p.tx-p.x)*0.08;p.y+=(p.ty-p.y)*0.08;x.beginPath();x.arc(p.x,p.y,2,0,7);x.fillStyle='#4ecdc4';x.fill();});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');const o=document.createElement('canvas');o.width=c.width;o.height=c.height;const ox=o.getContext('2d');ox.fillStyle='#fff';ox.font='bold 54px sans-serif';ox.textAlign='center';ox.fillText('YILANA.CN',c.width/2,c.height/2+18);const d=ox.getImageData(0,0,c.width,c.height).data;let tg=[];for(let y=0;y<c.height;y+=5)for(let i=0;i<c.width;i+=5){if(d[(y*c.width+i)*4+3]>128)tg.push({x:i,y:y});}let ps=tg.map(p=>({x:Math.random()*c.width,y:Math.random()*c.height,tx:p.x,ty:p.y}));(function a(){if(!c.parentNode)return;x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height);ps.forEach(p=>{p.x+=(p.tx-p.x)*0.08;p.y+=(p.ty-p.y)*0.08;x.beginPath();x.arc(p.x,p.y,2,0,7);x.fillStyle='#4ecdc4';x.shadowBlur=6;x.shadowColor='#4ecdc4';x.fill();});requestAnimationFrame(a);})();return ()=>{}; }"
+  },
+  {
+    "id": "fountain",
+    "icon": "⛲",
+    "group": "particle",
+    "title": "粒子喷泉",
+    "desc": "从底部不断喷涌、受重力回落的彩色粒子。",
+    "code": "<div id='b' style='width:100%;height:300px;background:#05050c;overflow:hidden;position:relative'></div><script>\nconst b=document.getElementById('b');\nfunction sp(){for(let i=0;i<3;i++){const d=document.createElement('div');d.style.cssText='position:absolute;left:50%;bottom:0;width:6px;height:6px;border-radius:50%;background:hsl('+Math.random()*360+',90%,65%)';b.appendChild(d);let x=0,y=0,vy=-8-Math.random()*4,vx=(Math.random()-.5)*4;(function f(){vy+=0.3;x+=vx;y+=vy;d.style.transform='translate('+x+'px,'+y+'px)';if(y<0)requestAnimationFrame(f);else d.remove();})();}}\nsetInterval(sp,80);\n</script>",
+    "demo": "demo(el){ el.style.background='#05050c';el.style.overflow='hidden';el.style.position='relative';\r\n          function sp(){ for(let i=0;i<3;i++){ const d=document.createElement('div'); d.style.cssText='position:absolute;left:50%;bottom:0;width:6px;height:6px;border-radius:50%;background:hsl('+(Math.random()*360)+',90%,65%)'; el.appendChild(d); let x=0,y=0,vy=-8-Math.random()*4,vx=(Math.random()-.5)*4; (function f(){ vy+=0.3;x+=vx;y+=vy; d.style.transform='translate('+x+'px,'+y+'px)'; if(y<0)requestAnimationFrame(f); else d.remove(); })(); } }\r\n          const stop=setInterval(sp,80); return ()=>clearInterval(stop);\r\n        }"
+  },
+  {
+    "id": "fireflies",
+    "icon": "🪲",
+    "group": "particle",
+    "title": "萤火虫",
+    "desc": "夜间草丛里忽明忽暗飞舞的荧光点。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet fs=Array.from({length:40},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,ph:Math.random()*7}));\n(function a(){x.fillStyle='rgba(5,5,12,0.15)';x.fillRect(0,0,c.width,c.height);fs.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.ph+=0.05;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;let o=0.4+Math.abs(Math.sin(p.ph))*0.6;x.beginPath();x.arc(p.x,p.y,2.5,0,7);x.fillStyle='rgba(180,255,120,'+o+')';x.shadowBlur=10;x.shadowColor='#b6ff78';x.fill();});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let fs=Array.from({length:40},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,ph:Math.random()*7}));\r\n          (function a(){ if(!c.parentNode)return; x.fillStyle='rgba(5,5,12,0.15)';x.fillRect(0,0,c.width,c.height); fs.forEach(p=>{ p.x+=p.vx;p.y+=p.vy;p.ph+=0.05; if(p.x<0||p.x>c.width)p.vx*=-1; if(p.y<0||p.y>c.height)p.vy*=-1; let o=0.4+Math.abs(Math.sin(p.ph))*0.6; x.beginPath();x.arc(p.x,p.y,2.5,0,7); x.fillStyle='rgba(180,255,120,'+o+')'; x.shadowBlur=10;x.shadowColor='#b6ff78'; x.fill(); }); requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "dna",
+    "icon": "🧬",
+    "group": "particle",
+    "title": "DNA 螺旋",
+    "desc": "双链碱基对旋转上升的 DNA 结构。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let t=0;\n(function a(){t+=0.04;x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2;for(let i=0;i<40;i++){let y=i*7;let ang=t+i*0.3;let x1=cx+Math.cos(ang)*60,y1=y+30;let x2=cx+Math.cos(ang+Math.PI)*60,y2=y+30;x.beginPath();x.arc(x1,y1,3,0,7);x.fillStyle='#ff6b9d';x.fill();x.beginPath();x.arc(x2,y2,3,0,7);x.fillStyle='#4ecdc4';x.fill();if(i%4===0){x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.strokeStyle='rgba(255,255,255,0.2)';x.stroke();}}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let t=0;\r\n          (function a(){ if(!c.parentNode)return; t+=0.04; x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height); let cx=c.width/2; for(let i=0;i<40;i++){ let y=i*7; let ang=t+i*0.3; let x1=cx+Math.cos(ang)*60,y1=y+30; let x2=cx+Math.cos(ang+Math.PI)*60,y2=y+30; x.beginPath();x.arc(x1,y1,3,0,7);x.fillStyle='#ff6b9d';x.fill(); x.beginPath();x.arc(x2,y2,3,0,7);x.fillStyle='#4ecdc4';x.fill(); if(i%4===0){ x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.strokeStyle='rgba(255,255,255,0.2)';x.stroke(); } } requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "rainbowrain",
+    "icon": "🌈",
+    "group": "particle",
+    "title": "彩虹雨",
+    "desc": "彩色雨丝斜斜落下的治愈画面。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet ds=Array.from({length:100},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vy:2+Math.random()*3,h:Math.random()*360}));\n(function a(){x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height);ds.forEach(p=>{p.y+=p.vy;if(p.y>c.height){p.y=0;p.x=Math.random()*c.width;}x.fillStyle='hsl('+p.h+',80%,60%)';x.fillRect(p.x,p.y,3,12);});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let ds=Array.from({length:100},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vy:2+Math.random()*3,h:Math.random()*360}));\r\n          (function a(){ if(!c.parentNode)return; x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height); ds.forEach(p=>{ p.y+=p.vy; if(p.y>c.height){ p.y=0; p.x=Math.random()*c.width; } x.fillStyle='hsl('+p.h+',80%,60%)'; x.shadowBlur=6;x.shadowColor=x.fillStyle; x.fillRect(p.x,p.y,3,12); }); requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "tornado",
+    "icon": "🌪️",
+    "group": "particle",
+    "title": "粒子龙卷",
+    "desc": "被吸入中心的旋转粒子风柱。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let t=0;\nlet ps=Array.from({length:150},()=>({a:Math.random()*7,r:Math.random()*10,h:Math.random()*60+200}));\n(function a(){t+=0.05;x.fillStyle='rgba(5,5,12,0.15)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2;ps.forEach(p=>{p.a+=0.06;p.r+=0.3;if(p.r>90)p.r=10;let ll=(1-p.r/90)*150+50;let X=cx+Math.cos(p.a+p.r*0.05)*p.r;let Y=20+p.r*3.1;x.beginPath();x.arc(X,Y,2,0,7);x.fillStyle='hsl('+p.h+',70%,'+ll+'%)';x.fill();});requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let t=0; let ps=Array.from({length:150},()=>({a:Math.random()*7,r:Math.random()*10,h:Math.random()*60+200}));\r\n          (function a(){ if(!c.parentNode)return; t+=0.05; x.fillStyle='rgba(5,5,12,0.15)';x.fillRect(0,0,c.width,c.height); let cx=c.width/2; ps.forEach(p=>{ p.a+=0.06;p.r+=0.3; if(p.r>90)p.r=10; let ll=(1-p.r/90)*150+50; let X=cx+Math.cos(p.a+p.r*0.05)*p.r; let Y=20+p.r*3.1; x.beginPath();x.arc(X,Y,2,0,7); x.fillStyle='hsl('+p.h+',70%,'+ll+'%)'; x.fill(); }); requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "magnet",
+    "icon": "🧲",
+    "group": "interact",
+    "title": "磁吸按钮",
+    "desc": "鼠标靠近时，按钮被磁力吸过来。",
+    "code": "<div id='b' style='width:100%;height:300px;display:flex;align-items:center;justify-content:center;gap:20px'></div><script>\nconst b=document.getElementById('b');let btns=[];\nfor(let i=0;i<3;i++){const btn=document.createElement('button');btn.textContent=['A','B','C'][i];btn.style.cssText='padding:14px 28px;border-radius:14px;border:none;background:hsl('+(i*120)+',70%,62%);color:#fff;font-size:18px;font-weight:700;cursor:pointer;transition:transform 0.12s';b.appendChild(btn);btns.push(btn);}\nb.addEventListener('mousemove',e=>{btns.forEach(btn=>{let r=btn.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,d=Math.hypot(dx,dy)||1;if(d<140){let f=(140-d)/140*18;btn.style.transform='translate('+(dx/d*f)+'px,'+(dy/d*f)+'px)';}else btn.style.transform='translate(0,0)';});});\n</script>",
+    "demo": "demo(el){ el.style.display='flex';el.style.alignItems='center';el.style.justifyContent='center';el.style.gap='20px';el.style.position='relative';\r\n          let btns=[]; for(let i=0;i<3;i++){ const btn=document.createElement('button'); btn.textContent=['A','B','C'][i]; btn.style.cssText='padding:14px 28px;border-radius:14px;border:none;background:hsl('+(i*120)+',70%,62%);color:#fff;font-size:18px;font-weight:700;cursor:pointer;transition:transform 0.12s'; el.appendChild(btn); btns.push(btn); }\r\n          const mv=e=>{ btns.forEach(btn=>{ let r=btn.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,d=Math.hypot(dx,dy)||1; if(d<140){ let f=(140-d)/140*18; btn.style.transform='translate('+(dx/d*f)+'px,'+(dy/d*f)+'px)'; } else btn.style.transform='translate(0,0)'; }); };\r\n          el.addEventListener('mousemove',mv); el.addEventListener('touchmove',e=>{ const t=e.touches[0]; mv({clientX:t.clientX,clientY:t.clientY}); },{passive:true});\r\n          return ()=>{ el.removeEventListener('mousemove',mv); };\r\n        }"
+  },
+  {
+    "id": "spotlight",
+    "icon": "🔦",
+    "group": "interact",
+    "title": "聚光灯",
+    "desc": "鼠标即手电筒，照亮隐藏的文字。",
+    "code": "<div id='b' style='position:relative;width:100%;height:300px;background:#111;overflow:hidden;cursor:crosshair'><div style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;color:#ffe66d;letter-spacing:3px;pointer-events:none'>YILANA.CN</div><div id='s' style='position:absolute;inset:0;background:radial-gradient(circle 90px at var(--x,50%) var(--y,50%),transparent 0,transparent 55px,rgba(0,0,0,0.93) 120px)'></div></div><script>\nconst b=document.getElementById('b'),s=document.getElementById('s');\nb.onmousemove=e=>{let r=b.getBoundingClientRect();s.style.setProperty('--x',(e.clientX-r.left)+'px');s.style.setProperty('--y',(e.clientY-r.top)+'px');};\n</script>",
+    "demo": "demo(el){ el.style.position='relative';el.style.overflow='hidden';el.style.background='#111';el.style.cursor='crosshair';\r\n          el.innerHTML=\"<div style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;color:#ffe66d;letter-spacing:3px;pointer-events:none'>YILANA.CN</div><div id='sp' style='position:absolute;inset:0;background:radial-gradient(circle 90px at var(--x,50%) var(--y,50%),transparent 0,transparent 55px,rgba(0,0,0,0.93) 120px)'></div>\";\r\n          const s=el.querySelector('#sp');\r\n          const mv=e=>{ let r=el.getBoundingClientRect(); s.style.setProperty('--x',(e.clientX-r.left)+'px'); s.style.setProperty('--y',(e.clientY-r.top)+'px'); };\r\n          el.addEventListener('mousemove',mv); el.addEventListener('touchmove',e=>{ let r=el.getBoundingClientRect(); s.style.setProperty('--x',(e.touches[0].clientX-r.left)+'px'); s.style.setProperty('--y',(e.touches[0].clientY-r.top)+'px'); },{passive:true});\r\n          return ()=>{ el.removeEventListener('mousemove',mv); };\r\n        }"
+  },
+  {
+    "id": "scratch",
+    "icon": "🪙",
+    "group": "interact",
+    "title": "刮刮乐",
+    "desc": "拖动擦除灰色涂层，露出隐藏惊喜。",
+    "code": "<div id='b' style='position:relative;width:100%;height:300px;overflow:hidden'><div style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#4ecdc4;letter-spacing:2px'>YILANA.CN</div><canvas id='c' style='position:absolute;inset:0'></canvas></div><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nx.fillStyle='#9aa';x.fillRect(0,0,c.width,c.height);x.fillStyle='#555';x.font='16px sans-serif';x.textAlign='center';x.fillText('刮开看看 🎁',c.width/2,c.height/2);\nlet d=false;x.globalCompositeOperation='destination-out';\nc.onmousedown=()=>d=true;c.onmouseup=()=>d=false;c.onmouseleave=()=>d=false;\nc.onmousemove=e=>{if(!d)return;x.beginPath();x.arc(e.offsetX,e.offsetY,20,0,7);x.fill();};\n</script>",
+    "demo": "demo(el){ el.style.position='relative';el.style.overflow='hidden';el.style.background='#0a0a18';\r\n          el.innerHTML=\"<div style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#4ecdc4;letter-spacing:2px'>YILANA.CN</div><canvas id='scr' style='position:absolute;inset:0'></canvas>\";\r\n          const c=el.querySelector('#scr'),x=c.getContext('2d'); c.width=el.clientWidth;c.height=el.clientHeight;\r\n          x.fillStyle='#9aa';x.fillRect(0,0,c.width,c.height); x.fillStyle='#555';x.font='16px sans-serif';x.textAlign='center';x.fillText('刮开看看 🎁',c.width/2,c.height/2);\r\n          let d=false; x.globalCompositeOperation='destination-out';\r\n          c.onmousedown=()=>d=true; c.onmouseup=()=>d=false; c.onmouseleave=()=>d=false;\r\n          c.ontouchstart=()=>d=true; c.ontouchend=()=>d=false;\r\n          c.onmousemove=e=>{ if(!d)return; const r=c.getBoundingClientRect(); x.beginPath();x.arc(e.clientX-r.left,e.clientY-r.top,20,0,7);x.fill(); };\r\n          c.ontouchmove=e=>{ if(!d)return; const r=c.getBoundingClientRect(); x.beginPath();x.arc(e.touches[0].clientX-r.left,e.touches[0].clientY-r.top,20,0,7);x.fill(); };\r\n          return ()=>{ c.onmousedown=c.onmouseup=c.onmouseleave=c.ontouchstart=c.ontouchend=c.onmousemove=c.ontouchmove=null; };\r\n        }"
+  },
+  {
+    "id": "draggable",
+    "icon": "🟢",
+    "group": "interact",
+    "title": "弹性拖拽球",
+    "desc": "拖着跑，松手又弹回中心的果冻球。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let bx=c.width/2,by=c.height/2,vx=0,vy=0,drag=false;\nc.onmousedown=e=>{drag=true;bx=e.offsetX;by=e.offsetY;};c.onmousemove=e=>{if(drag){bx=e.offsetX;by=e.offsetY;}};addEventListener('mouseup',()=>drag=false);\n(function a(){if(!drag){let dx=c.width/2-bx,dy=c.height/2-by;vx+=dx*0.05;vy+=dy*0.05;vx*=0.88;vy*=0.88;bx+=vx;by+=vy;}x.clearRect(0,0,c.width,c.height);x.strokeStyle='rgba(255,255,255,0.15)';x.beginPath();x.moveTo(c.width/2,c.height/2);x.lineTo(bx,by);x.stroke();x.beginPath();x.arc(bx,by,20,0,7);x.fillStyle='#ff6b9d';x.shadowBlur=20;x.shadowColor='#ff6b9d';x.fill();requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let bx=c.width/2,by=c.height/2,vx=0,vy=0,drag=false;\r\n          c.onmousedown=e=>{drag=true;bx=e.offsetX;by=e.offsetY;};\r\n          c.onmousemove=e=>{if(drag){bx=e.offsetX;by=e.offsetY;}};\r\n          c.ontouchstart=e=>{drag=true;const r=c.getBoundingClientRect();bx=e.touches[0].clientX-r.left;by=e.touches[0].clientY-r.top;};\r\n          c.ontouchmove=e=>{if(drag){const r=c.getBoundingClientRect();bx=e.touches[0].clientX-r.left;by=e.touches[0].clientY-r.top;}};\r\n          const up=()=>drag=false; addEventListener('mouseup',up); addEventListener('touchend',up);\r\n          (function a(){ if(!c.parentNode)return; if(!drag){ let dx=c.width/2-bx,dy=c.height/2-by; vx+=dx*0.05;vy+=dy*0.05;vx*=0.88;vy*=0.88;bx+=vx;by+=vy; } x.clearRect(0,0,c.width,c.height); x.strokeStyle='rgba(255,255,255,0.15)';x.lineWidth=1;x.beginPath();x.moveTo(c.width/2,c.height/2);x.lineTo(bx,by);x.stroke(); x.beginPath();x.arc(bx,by,20,0,7);x.fillStyle='#ff6b9d';x.shadowBlur=20;x.shadowColor='#ff6b9d';x.fill(); requestAnimationFrame(a); })();\r\n          return ()=>{ removeEventListener('mouseup',up);removeEventListener('touchend',up); };\r\n        }"
+  },
+  {
+    "id": "metaball",
+    "icon": "🫠",
+    "group": "visual",
+    "title": "融合光球",
+    "desc": "相互靠近就黏在一起果冻光球。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet ms=Array.from({length:6},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2}));\n(function a(){x.fillStyle='#0a0a18';x.fillRect(0,0,c.width,c.height);ms.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;});x.fillStyle='#ff6b9d';x.filter='blur(16px)';ms.forEach(p=>{x.beginPath();x.arc(p.x,p.y,42,0,7);x.fill();});x.filter='none';requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let ms=Array.from({length:6},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2}));\r\n          (function a(){ if(!c.parentNode)return; x.fillStyle='#0a0a18';x.fillRect(0,0,c.width,c.height); ms.forEach(p=>{ p.x+=p.vx;p.y+=p.vy; if(p.x<0||p.x>c.width)p.vx*=-1; if(p.y<0||p.y>c.height)p.vy*=-1; }); x.fillStyle='#ff6b9d';x.filter='blur(16px)'; ms.forEach(p=>{ x.beginPath();x.arc(p.x,p.y,42,0,7);x.fill(); }); x.filter='none'; requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "crt",
+    "icon": "📺",
+    "group": "visual",
+    "title": "CRT 扫描线",
+    "desc": "老式显像管的绿色扫描与闪烁。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let f=0;\n(function a(){f+=0.05;x.fillStyle='#020';x.fillRect(0,0,c.width,c.height);x.strokeStyle='rgba(0,255,120,0.15)';x.lineWidth=1;for(let y=0;y<c.height;y+=4){x.beginPath();x.moveTo(0,y);x.lineTo(c.width,y);x.stroke();}x.fillStyle='rgba(0,255,120,'+(0.04+Math.abs(Math.sin(f))*0.05)+')';x.fillRect(0,0,c.width,c.height);x.fillStyle='#0f6';x.font='bold 30px monospace';x.textAlign='center';x.fillText('YILANA.CN',c.width/2,c.height/2);requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let f=0;\r\n          (function a(){ if(!c.parentNode)return; f+=0.05; x.fillStyle='#020';x.fillRect(0,0,c.width,c.height); x.strokeStyle='rgba(0,255,120,0.15)';x.lineWidth=1; for(let y=0;y<c.height;y+=4){ x.beginPath();x.moveTo(0,y);x.lineTo(c.width,y);x.stroke(); } x.fillStyle='rgba(0,255,120,'+(0.04+Math.abs(Math.sin(f))*0.05)+')';x.fillRect(0,0,c.width,c.height); x.fillStyle='#0f6';x.font='bold 30px monospace';x.textAlign='center';x.fillText('YILANA.CN',c.width/2,c.height/2); requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "tunnel",
+    "icon": "🕳️",
+    "group": "visual",
+    "title": "隧道穿梭",
+    "desc": "不断向你扑面而来的彩色光环隧道。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let t=0;\n(function a(){t+=0.05;x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;for(let i=0;i<30;i++){let r=((i*20+t*60)%600);x.beginPath();x.arc(cx,cy,r,0,7);x.strokeStyle='hsla('+((i*12+t*50)%360)+',80%,60%,'+(1-r/600)+')';x.lineWidth=2;x.stroke();}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let t=0;\r\n          (function a(){ if(!c.parentNode)return; t+=0.05; x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height); let cx=c.width/2,cy=c.height/2; for(let i=0;i<30;i++){ let r=((i*20+t*60)%600); x.beginPath();x.arc(cx,cy,r,0,7); x.strokeStyle='hsla('+((i*12+t*50)%360)+',80%,60%,'+(1-r/600)+')';x.lineWidth=2;x.stroke(); } requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "spiral",
+    "icon": "🌀",
+    "group": "visual",
+    "title": "催眠螺旋",
+    "desc": "多彩螺旋缓缓旋转，越看越困。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let t=0;\n(function a(){t+=0.01;x.clearRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;for(let i=0;i<70;i++){let ang=t+i*0.12;let r=i*4;x.beginPath();x.arc(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r,2.2,0,7);x.fillStyle='hsl('+((i*6+t*60)%360)+',80%,60%)';x.shadowBlur=4;x.shadowColor=x.fillStyle;x.fill();}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let t=0;\r\n          (function a(){ if(!c.parentNode)return; t+=0.01; x.clearRect(0,0,c.width,c.height); let cx=c.width/2,cy=c.height/2; for(let i=0;i<70;i++){ let ang=t+i*0.12; let r=i*4; x.beginPath();x.arc(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r,2.2,0,7); x.fillStyle='hsl('+((i*6+t*60)%360)+',80%,60%)'; x.shadowBlur=4;x.shadowColor=x.fillStyle; x.fill(); } requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "moire",
+    "icon": "🌐",
+    "group": "visual",
+    "title": "莫尔条纹",
+    "desc": "两组栅线交叠干涉出的流动花纹。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let t=0;\n(function a(){t+=0.01;x.fillStyle='#0a0a18';x.fillRect(0,0,c.width,c.height);x.strokeStyle='rgba(255,255,255,0.5)';x.lineWidth=2;for(let i=-c.height;i<c.width;i+=12){x.beginPath();x.moveTo(i,0);x.lineTo(i+c.height*Math.tan(t),c.height);x.stroke();}for(let i=-c.height;i<c.width;i+=12){x.beginPath();x.moveTo(i,0);x.lineTo(i+c.height*Math.tan(-t),c.height);x.stroke();}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let t=0;\r\n          (function a(){ if(!c.parentNode)return; t+=0.01; x.fillStyle='#0a0a18';x.fillRect(0,0,c.width,c.height); x.strokeStyle='rgba(255,255,255,0.5)';x.lineWidth=2; for(let i=-c.height;i<c.width;i+=12){ x.beginPath();x.moveTo(i,0);x.lineTo(i+c.height*Math.tan(t),c.height);x.stroke(); } for(let i=-c.height;i<c.width;i+=12){ x.beginPath();x.moveTo(i,0);x.lineTo(i+c.height*Math.tan(-t),c.height);x.stroke(); } requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "pulse",
+    "icon": "💗",
+    "group": "visual",
+    "title": "同心脉冲",
+    "desc": "从中心扩散开来的彩色心脏脉冲。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let t=0;\n(function a(){t+=0.03;x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;for(let i=0;i<5;i++){let r=((t*60+i*40)%200);x.beginPath();x.arc(cx,cy,r,0,7);x.strokeStyle='hsla('+((t*60+i*40)%360)+',80%,60%,'+(1-r/200)+')';x.lineWidth=3;x.stroke();}requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d'); let t=0;\r\n          (function a(){ if(!c.parentNode)return; t+=0.03; x.fillStyle='rgba(5,5,12,0.2)';x.fillRect(0,0,c.width,c.height); let cx=c.width/2,cy=c.height/2; for(let i=0;i<5;i++){ let r=((t*60+i*40)%200); x.beginPath();x.arc(cx,cy,r,0,7); x.strokeStyle='hsla('+((t*60+i*40)%360)+',80%,60%,'+(1-r/200)+')';x.lineWidth=3;x.stroke(); } requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "grain",
+    "icon": "📼",
+    "group": "visual",
+    "title": "噪点颗粒",
+    "desc": "实时生成的电视雪花噪波。",
+    "code": "<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\n(function a(){let img=x.createImageData(c.width,c.height);let d=img.data;for(let i=0;i<d.length;i+=4){let v=Math.random()*255;d[i]=v;d[i+1]=v;d[i+2]=v;d[i+3]=35;}x.putImageData(img,0,0);requestAnimationFrame(a);})();\n</script>",
+    "demo": "demo(el){ const c=makeCanvas(el),x=c.getContext('2d');\r\n          (function a(){ if(!c.parentNode)return; let img=x.createImageData(c.width,c.height); let d=img.data; for(let i=0;i<d.length;i+=4){ let v=Math.random()*255; d[i]=v;d[i+1]=v;d[i+2]=v;d[i+3]=35; } x.putImageData(img,0,0); requestAnimationFrame(a); })();\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "strokefill",
+    "icon": "🔤",
+    "group": "text",
+    "title": "描边填充字",
+    "desc": "YILANA.CN 描边与填色交替呼吸。",
+    "code": "<svg viewBox='0 0 400 120' style='width:100%;height:120px'><text x='200' y='75' text-anchor='middle' font-size='46' font-weight='700' fill='none' stroke='#4ecdc4' stroke-width='1.5' style='letter-spacing:3px'>YILANA.CN<animate attributeName='stroke-width' values='1;3;1' dur='2s' repeatCount='indefinite'/></text><text x='200' y='75' text-anchor='middle' font-size='46' font-weight='700' fill='#ff6b9d' opacity='0' style='letter-spacing:3px'>YILANA.CN<animate attributeName='opacity' values='0;1;0' dur='3s' repeatCount='indefinite'/></text></svg>",
+    "demo": "demo(el){ el.style.display='flex';el.style.alignItems='center';el.style.justifyContent='center';\r\n          el.innerHTML=\"<svg viewBox='0 0 400 120' style='width:100%;height:80%'><text x='200' y='75' text-anchor='middle' font-size='46' font-weight='700' fill='none' stroke='#4ecdc4' stroke-width='1.5' style='letter-spacing:3px'>YILANA.CN<animate attributeName='stroke-width' values='1;3;1' dur='2s' repeatCount='indefinite'/></text><text x='200' y='75' text-anchor='middle' font-size='46' font-weight='700' fill='#ff6b9d' opacity='0' style='letter-spacing:3px'>YILANA.CN<animate attributeName='opacity' values='0;1;0' dur='3s' repeatCount='indefinite'/></text></svg>\";\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "blurfocus",
+    "icon": "🌫️",
+    "group": "text",
+    "title": "模糊聚焦字",
+    "desc": "YILANA.CN 在清晰与朦胧间循环。",
+    "code": "<div id='t' style='height:300px;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:700;color:#fff;letter-spacing:4px'>YILANA.CN<style>@keyframes bf{0%,100%{filter:blur(8px);opacity:.4}50%{filter:blur(0);opacity:1}}</style></div><script>\nconst t=document.getElementById('t');t.style.animation='bf 3s ease-in-out infinite';\n</script>",
+    "demo": "demo(el){ el.innerHTML=\"<div style='height:100%;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:700;color:#fff;letter-spacing:4px'>YILANA.CN<style>@keyframes bf{0%,100%{filter:blur(8px);opacity:.4}50%{filter:blur(0);opacity:1}}</style></div>\";\r\n          el.firstChild.style.animation='bf 3s ease-in-out infinite';\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "letterflip",
+    "icon": "🔁",
+    "group": "text",
+    "title": "字母翻转",
+    "desc": "YILANA.CN 每个字母依次翻滚入场。",
+    "code": "<div id='t' style='height:300px;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;perspective:600px'></div><script>\nconst t=document.getElementById('t');const s='YILANA.CN';let h='';for(let i=0;i<s.length;i++){h+=\"<span style='display:inline-block;color:hsl(\"+(i*40)+\",80%,65%);animation:lf 2s ease-in-out infinite;animation-delay:\"+(i*0.15)+\"s'>\"+s[i]+\"</span>\";}t.innerHTML=h+\"<style>@keyframes lf{0%,100%{transform:rotateX(0)}50%{transform:rotateX(360deg)}}</style>\";\n</script>",
+    "demo": "demo(el){ const t=document.createElement('div'); t.style.cssText='height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;perspective:600px'; el.appendChild(t); const s='YILANA.CN'; let h=''; for(let i=0;i<s.length;i++){ h+=\"<span style='display:inline-block;color:hsl(\"+(i*40)+\",80%,65%);animation:lf 2s ease-in-out infinite;animation-delay:\"+(i*0.15)+\"s'>\"+s[i]+\"</span>\"; } t.innerHTML=h+\"<style>@keyframes lf{0%,100%{transform:rotateX(0)}50%{transform:rotateX(360deg)}}</style>\";\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "typingloop",
+    "icon": "🔄",
+    "group": "text",
+    "title": "打字循环",
+    "desc": "YILANA.CN 打出来又删掉，无限循环。",
+    "code": "<div id='t' style='height:300px;display:flex;align-items:center;justify-content:center;font-size:32px;color:#4ecdc4;font-weight:700'></div><script>\nconst t=document.getElementById('t');const s='YILANA.CN';let i=0,del=false;\n(function a(){if(!del){i++;if(i>s.length)del=true;}else{i--;if(i===0)del=false;}t.textContent=s.slice(0,i)+(del?'':'▋');setTimeout(a,del?80:140);})();\n</script>",
+    "demo": "demo(el){ const t=document.createElement('div'); t.style.cssText='height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;color:#4ecdc4;font-weight:700;letter-spacing:2px'; el.appendChild(t); const s='YILANA.CN'; let i=0,del=false; const id=setInterval(()=>{ if(!del){ i++; if(i>s.length)del=true; } else { i--; if(i===0)del=false; } t.textContent=s.slice(0,i)+(del?'':'▋'); }, del?80:140);\r\n          return ()=>clearInterval(id);\r\n        }"
+  },
+  {
+    "id": "mirrortext",
+    "icon": "🪞",
+    "group": "text",
+    "title": "镜像文字",
+    "desc": "YILANA.CN 在湖面投下倒影。",
+    "code": "<div style='height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#4ecdc4;letter-spacing:3px'>YILANA.CN<div style='transform:scaleY(-1);opacity:0.35;background:linear-gradient(#4ecdc4,transparent);-webkit-background-clip:text;-webkit-text-fill-color:transparent'>YILANA.CN</div></div>",
+    "demo": "demo(el){ el.innerHTML=\"<div style='height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#4ecdc4;letter-spacing:3px'>YILANA.CN<div style='transform:scaleY(-1);opacity:0.35;background:linear-gradient(#4ecdc4,transparent);-webkit-background-clip:text;-webkit-text-fill-color:transparent'>YILANA.CN</div></div>\";\r\n          return ()=>{};\r\n        }"
+  },
+  {
+    "id": "glowpulse",
+    "icon": "✨",
+    "group": "text",
+    "title": "呼吸缩放字",
+    "desc": "YILANA.CN 一呼一吸地放大发光。",
+    "code": "<h1 style='height:300px;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:700;color:#fff;letter-spacing:3px;text-shadow:0 0 10px #ffe66d;animation:gp 2s ease-in-out infinite'>YILANA.CN<style>@keyframes gp{0%,100%{transform:scale(1);text-shadow:0 0 10px #ffe66d}50%{transform:scale(1.15);text-shadow:0 0 30px #ff6b9d,0 0 50px #ff6b9d}}</style></h1>",
+    "demo": "demo(el){ el.innerHTML=\"<h1 style='height:100%;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:700;color:#fff;letter-spacing:3px;text-shadow:0 0 10px #ffe66d;animation:gp 2s ease-in-out infinite'>YILANA.CN<style>@keyframes gp{0%,100%{transform:scale(1);text-shadow:0 0 10px #ffe66d}50%{transform:scale(1.15);text-shadow:0 0 30px #ff6b9d,0 0 50px #ff6b9d}}</style></h1>\";\r\n          return ()=>{};\r\n        }"
+  }
+]

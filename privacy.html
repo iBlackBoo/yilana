@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Consent Mode v2：必须在 AdSense 脚本之前执行 -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        (function () {
+            var c = null;
+            try { c = localStorage.getItem('yilana.consent'); } catch (e) {}
+            var ads = c === 'all' ? 'granted' : 'denied';
+            gtag('consent', 'default', {
+                ad_storage: ads,
+                ad_user_data: ads,
+                ad_personalization: ads,
+                analytics_storage: 'denied',
+                functionality_storage: 'granted',
+                security_storage: 'granted',
+                wait_for_update: 500
+            });
+        })();
+    </script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6465192362290250"
+        crossorigin="anonymous"></script>
+    <title>Privacy Policy &amp; Cookies | Effect Lab</title>
+    <meta id="metaDesc" name="description" content="How Effect Lab (yilana.cn) handles data: no accounts, no uploads, server logs, local storage, and Google AdSense cookies with opt-out instructions.">
+    <link rel="canonical" href="https://yilana.cn/privacy.html">
+    <link rel="alternate" hreflang="en" href="https://yilana.cn/privacy.html">
+    <link rel="alternate" hreflang="zh-CN" href="https://yilana.cn/privacy.html?lang=zh">
+    <link rel="alternate" hreflang="x-default" href="https://yilana.cn/privacy.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="yilana.cn">
+    <meta property="og:title" content="Privacy Policy &amp; Cookies | Effect Lab">
+    <meta property="og:description" content="How Effect Lab handles data: no accounts, no uploads, server logs, local storage, and Google AdSense cookies with opt-out instructions.">
+    <meta property="og:url" content="https://yilana.cn/privacy.html">
+    <meta property="og:locale" content="en_US">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+    <!-- 语言先定：在 body 解析前写入 html[lang]，避免中文访客看到一瞬英文 -->
+    <script>
+        (function () {
+            var q = null;
+            try { q = new URLSearchParams(location.search).get('lang'); } catch (e) {}
+            var L = (q === 'en' || q === 'zh') ? q : (function () {
+                try {
+                    var s = localStorage.getItem('yilana.lang');
+                    if (s === 'en' || s === 'zh') return s;
+                } catch (e) {}
+                return /^zh\b/i.test(navigator.language || '') ? 'zh' : 'en';
+            })();
+            document.documentElement.lang = L === 'en' ? 'en' : 'zh-CN';
+        })();
+    </script>
+    <style>
+        :root{
+            --bg:#08080f; --surface:#141428; --text:#e8e8f5; --muted:#9a9ac0; --dim:#7a7a9a;
+            --accent1:#ff6b9d; --accent2:#4ecdc4; --accent3:#ffe66d; --border:rgba(255,255,255,.08);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{-webkit-text-size-adjust:100%}
+        body{
+            font-family:'Segoe UI',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+            background:radial-gradient(circle at 20% 0%,#16162e 0%,var(--bg) 55%);
+            color:var(--text); line-height:1.78; min-height:100vh; font-size:16px;
+        }
+        a{color:var(--accent2);text-decoration:none}
+        a:hover{text-decoration:underline}
+
+        /* 顶栏 */
+        .topbar{position:sticky;top:0;z-index:100;background:rgba(8,8,15,.84);
+            backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+        .topbar-inner{max-width:820px;margin:0 auto;padding:0 1.5rem;height:60px;display:flex;align-items:center;gap:1rem}
+        .brand{display:flex;align-items:center;gap:.5rem;color:var(--text);font-weight:700;letter-spacing:.03em}
+        .brand:hover{text-decoration:none}
+        .brand-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+            background:linear-gradient(135deg,var(--accent1),var(--accent2));font-size:.95rem;
+            box-shadow:0 0 14px rgba(255,107,157,.45)}
+        .topnav{margin-left:auto;font-size:.9rem}
+        .topnav a{color:var(--muted);padding:.4rem .8rem;border-radius:16px}
+        .topnav a:hover{background:rgba(255,255,255,.06);color:#fff;text-decoration:none}
+        .lang-switch{appearance:none;border:1px solid var(--border);background:rgba(255,255,255,.05);
+            color:var(--text);border-radius:18px;padding:.35rem .85rem;font-size:.82rem;font-weight:600;
+            cursor:pointer;font-family:inherit;transition:all .22s}
+        .lang-switch:hover{background:rgba(78,205,196,.15);border-color:var(--accent2);color:var(--accent2)}
+
+        /* 正文 */
+        .wrap{max-width:820px;margin:0 auto;padding:2.4rem 1.5rem 4rem}
+        .crumbs{font-size:.82rem;color:var(--dim);margin-bottom:1.2rem}
+        .crumbs a{color:var(--dim)}
+        .crumbs .sep{margin:0 .45rem;opacity:.5}
+        .doc-head{margin-bottom:2rem;padding-bottom:1.4rem;border-bottom:1px solid var(--border)}
+        h1{font-size:clamp(1.65rem,4vw,2.3rem);line-height:1.3;letter-spacing:-.01em;
+            background:linear-gradient(135deg,#fff,var(--accent2));-webkit-background-clip:text;
+            background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.6rem}
+        .updated{font-size:.84rem;color:var(--dim)}
+        .updated strong{color:var(--muted);font-weight:600}
+
+        .toc{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+            padding:1.1rem 1.35rem;margin-bottom:2.4rem}
+        .toc h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);
+            margin-bottom:.7rem;font-weight:700}
+        .toc ol{margin-left:1.2rem;font-size:.92rem;line-height:1.85}
+        .toc a{color:var(--muted)}
+        .toc a:hover{color:var(--accent2)}
+
+        h2{font-size:1.22rem;margin:2.4rem 0 .85rem;padding-left:.7rem;
+            border-left:3px solid var(--accent2);line-height:1.4;scroll-margin-top:80px}
+        h3{font-size:1rem;margin:1.5rem 0 .5rem;color:var(--accent3)}
+        p{margin-bottom:1rem;color:#c6c6de}
+        ul,ol{margin:0 0 1rem 1.3rem;color:#c6c6de}
+        li{margin-bottom:.45rem}
+        strong{color:#fff;font-weight:650}
+
+        table{width:100%;border-collapse:collapse;margin:1rem 0 1.3rem;font-size:.88rem}
+        th,td{text-align:left;padding:.6rem .75rem;border-bottom:1px solid var(--border);vertical-align:top}
+        th{color:var(--accent2);font-weight:650;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;
+            background:rgba(78,205,196,.05)}
+        td code{background:rgba(255,255,255,.07);padding:.1rem .4rem;border-radius:5px;
+            font-family:ui-monospace,Consolas,monospace;font-size:.84rem;color:var(--accent3)}
+
+        .note{background:rgba(78,205,196,.07);border:1px solid rgba(78,205,196,.22);
+            border-radius:12px;padding:.95rem 1.1rem;margin:1.2rem 0;font-size:.9rem}
+        .note p:last-child{margin-bottom:0}
+
+        .cookie-btn{appearance:none;border:1px solid rgba(78,205,196,.4);background:rgba(78,205,196,.1);
+            color:var(--accent2);border-radius:22px;padding:.55rem 1.3rem;font-size:.86rem;font-weight:650;
+            cursor:pointer;font-family:inherit;transition:all .22s;margin:.3rem 0 1rem}
+        .cookie-btn:hover{background:rgba(78,205,196,.22);border-color:var(--accent2)}
+
+        .contact{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+            padding:1.2rem 1.4rem;margin:1.2rem 0}
+        .contact p{margin-bottom:.4rem}
+
+        /* 页脚 */
+        .foot{border-top:1px solid var(--border);margin-top:3rem;padding:2.2rem 1.5rem;text-align:center;
+            color:var(--dim);font-size:.86rem}
+        .foot p{margin-bottom:.6rem;color:var(--dim)}
+        .foot-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-top:.7rem}
+        .foot-links a{color:var(--dim)}
+        .foot-links a:hover{color:var(--accent1)}
+
+        /* 语言切换（纯 CSS 控制显隐） */
+        html[lang="en"] [data-lang="zh"],
+        html[lang="zh-CN"] [data-lang="en"]{display:none}
+
+        @media (max-width:560px){
+            .wrap{padding:1.6rem 1.1rem 3rem}
+            th,td{padding:.5rem .5rem}
+            table{font-size:.82rem}
+        }
+    </style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" href="index.html"><span class="brand-icon">✨</span><span>Effect Lab</span></a>
+        <nav class="topnav"><a href="index.html#lab"><span data-lang="en">Gallery</span><span data-lang="zh">特效大厅</span></a></nav>
+        <button class="lang-switch" id="langSwitch" type="button" aria-label="Switch language">中文</button>
+    </div>
+</header>
+
+<main class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="index.html"><span data-lang="en">Effect Lab</span><span data-lang="zh">特效实验室</span></a><span class="sep">/</span>
+        <span><span data-lang="en">Privacy</span><span data-lang="zh">隐私政策</span></span>
+    </nav>
+
+    <!-- ============================ 英文版 ============================ -->
+    <article data-lang="en">
+        <div class="doc-head">
+            <h1>Privacy Policy &amp; Cookies</h1>
+            <p class="updated">Last updated: <strong>21 October 2026</strong> · Applies to <strong>yilana.cn</strong></p>
+        </div>
+
+        <nav class="toc" aria-label="Contents">
+            <h2>Contents</h2>
+            <ol>
+                <li><a href="#who">Who runs this site</a></li>
+                <li><a href="#not-collected">What we do not collect</a></li>
+                <li><a href="#logs">Server logs</a></li>
+                <li><a href="#storage">Local storage on your device</a></li>
+                <li><a href="#cookies">Cookies set by advertising</a></li>
+                <li><a href="#optout">How to opt out of personalised ads</a></li>
+                <li><a href="#consent">Your consent choices</a></li>
+                <li><a href="#thirdparty">Third-party demo code</a></li>
+                <li><a href="#rights">Your rights</a></li>
+                <li><a href="#children">Children</a></li>
+                <li><a href="#changes">Changes to this policy</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ol>
+        </nav>
+
+        <h2 id="who">1. Who runs this site</h2>
+        <p>Effect Lab (<strong>yilana.cn</strong>) is an independent, hand-built gallery of browser visual effects. Every effect on the site is written in plain JavaScript, Canvas 2D and CSS — there is no framework, no account system and no server-side database. This policy explains what data is involved when you browse the site and what choices you have.</p>
+
+        <h2 id="not-collected">2. What we do not collect</h2>
+        <p>To be explicit, because most privacy policies are not:</p>
+        <ul>
+            <li>There are <strong>no accounts, no sign-up and no login</strong>. We never ask for a name, email address or password.</li>
+            <li>There is <strong>no file upload, no comment box and no contact form</strong> that stores data on a server.</li>
+            <li>There is <strong>no newsletter</strong> and we do not build marketing profiles.</li>
+            <li>We do not sell, rent or trade personal data to anyone.</li>
+            <li>The effects run <strong>entirely inside your browser</strong>; nothing you draw, click or type into a demo is transmitted anywhere.</li>
+        </ul>
+
+        <h2 id="logs">3. Server logs</h2>
+        <p>Like any website, the server that delivers these pages records standard request data: your IP address, the date and time of the request, the page requested, the referring URL, and your browser's user-agent string. This is used only to serve pages correctly, diagnose errors and prevent abuse. Logs are retained for a short period by our hosting provider and are not combined with any other information to identify individual visitors.</p>
+        <p>The legal basis for this processing is our legitimate interest in operating a secure, working website (GDPR Art. 6(1)(f)).</p>
+
+        <h2 id="storage">4. Local storage on your device</h2>
+        <p>The site uses your browser's <code>localStorage</code> — not cookies — for two strictly functional values. These never leave your device and are not readable by other websites:</p>
+        <table>
+            <thead><tr><th>Key</th><th>Purpose</th><th>Retention</th></tr></thead>
+            <tbody>
+                <tr><td><code>yilana.lang</code></td><td>Remembers whether you chose English or Chinese so the interface does not reset on every page.</td><td>Until you clear site data</td></tr>
+                <tr><td><code>yilana.consent</code></td><td>Remembers whether you accepted or declined advertising cookies, so the banner is not shown again.</td><td>Until you clear site data</td></tr>
+            </tbody>
+        </table>
+        <p>Because these are essential for a feature you explicitly requested (language choice) and for honouring your consent decision, they do not require prior consent. You can delete them at any time through your browser's site-data settings; the site will keep working, it will simply forget your preferences.</p>
+
+        <h2 id="cookies">5. Cookies set by advertising</h2>
+        <p>This site is supported by <strong>Google AdSense</strong>. When advertising cookies are enabled by your consent, Google and its partners may set cookies to display ads, limit how often the same ad is shown, measure performance, and — where you have agreed to personalised advertising — select ads based on your previous visits to this and other websites.</p>
+        <table>
+            <thead><tr><th>Cookie</th><th>Set by</th><th>Purpose</th><th>Typical lifetime</th></tr></thead>
+            <tbody>
+                <tr><td><code>__gads</code> / <code>__gpi</code></td><td>Google</td><td>Ad delivery, frequency capping and aggregate reporting.</td><td>Up to 13 months</td></tr>
+                <tr><td><code>IDE</code> / <code>NID</code></td><td>Google</td><td>Advertising personalisation and fraud prevention.</td><td>Up to 13 months</td></tr>
+                <tr><td><code>__eoi</code></td><td>Google</td><td>Stores consent signals used to decide whether personalised ads may be served.</td><td>Up to 13 months</td></tr>
+            </tbody>
+        </table>
+        <div class="note">
+            <p><strong>Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.</strong> Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this site and/or other sites on the Internet.</p>
+            <p>Cookie names and lifetimes are controlled by Google and may change; the table above reflects common values at the time of writing.</p>
+        </div>
+
+        <h2 id="optout">6. How to opt out of personalised ads</h2>
+        <ul>
+            <li>Decline advertising cookies in the banner on this site, or reopen it with the <strong>Cookie settings</strong> button at the bottom of this page. Declining still shows ads, but they are non-personalised.</li>
+            <li><a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads Settings</a> — opt out of personalised advertising by Google.</li>
+            <li><a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info</a> (US) and <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener">Your Online Choices</a> (EU) — opt out with participating vendors.</li>
+            <li><a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener">Network Advertising Initiative</a> — further industry opt-outs.</li>
+            <li>You can also block all third-party cookies in your browser settings. The effects on this site will continue to work normally.</li>
+        </ul>
+        <p>For more information about how Google uses data on partner sites, see <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites that use our services</a>.</p>
+
+        <h2 id="consent">7. Your consent choices</h2>
+        <p>On your first visit a banner asks whether advertising cookies may be used. Advertising cookies stay <strong>off by default</strong> until you accept. We implement this with Google Consent Mode v2: before any advertising script runs, the consent state is set to <code>denied</code>, and it is only switched to <code>granted</code> after you accept.</p>
+        <p>You may withdraw or change your choice at any time — it is as easy as giving it:</p>
+        <button class="cookie-btn" type="button" onclick="window.ylConsent&&window.ylConsent.open()">Cookie settings</button>
+        <p>If you are in the EEA, the United Kingdom or Switzerland and require a Google-certified CMP for your own compliance review, note that this site uses a lightweight first-party consent banner rather than a certified CMP.</p>
+
+        <h2 id="thirdparty">8. Third-party demo code</h2>
+        <p>Part of the gallery showcases demos originally written by other developers, kept intact under the <code>/repo/</code> path and displayed inside an embedded frame. Those demos remain the work of their respective authors, and attribution links back to the original source are included in the code where available.</p>
+        <p>Some of these embedded demos load JavaScript libraries from public CDNs (for example <code>cdnjs.cloudflare.com</code> or <code>cdn.staticfile.org</code>). When such a demo runs, your browser requests those files directly from the CDN, which will see your IP address and user-agent as part of serving the request. We do not control those providers; please refer to their own privacy policies.</p>
+
+        <h2 id="rights">9. Your rights</h2>
+        <p>Depending on where you live, you may have the right to:</p>
+        <ul>
+            <li><strong>Access</strong> the personal data held about you;</li>
+            <li><strong>Rectify</strong> inaccurate data;</li>
+            <li><strong>Erase</strong> data (the "right to be forgotten");</li>
+            <li><strong>Restrict or object</strong> to processing;</li>
+            <li><strong>Data portability</strong>;</li>
+            <li><strong>Withdraw consent</strong> at any time, without affecting processing already carried out;</li>
+            <li><strong>Lodge a complaint</strong> with your local supervisory authority.</li>
+        </ul>
+        <p>In practice we hold almost no personal data: the only information tied to you is stored in your own browser and can be cleared by you directly. If you have made a request and want it actioned on the server side, use the contact address below and we will respond within 30 days.</p>
+        <p><strong>California residents (CCPA/CPRA):</strong> we do not sell or share personal information for cross-context behavioural advertising when you have declined advertising cookies, and we do not knowingly collect information from consumers under 16.</p>
+        <p><strong>China mainland users:</strong> the site processes only the technical data described above and does not transfer personal information across borders beyond ordinary website request handling.</p>
+
+        <h2 id="children">10. Children</h2>
+        <p>The site is a general-audience technical showcase and is not directed at children under 13 (or under 16 in the EEA). We do not knowingly collect personal information from children. If you believe a child has provided personal data, contact us and we will delete it.</p>
+
+        <h2 id="changes">11. Changes to this policy</h2>
+        <p>If the way the site handles data changes — for example if analytics or a comment system is added — this page will be updated and the date at the top revised. Continued use of the site after an update means you accept the revised policy.</p>
+
+        <h2 id="contact">12. Contact</h2>
+        <div class="contact">
+            <p>Questions about this policy, or a data request:</p>
+            <p><a href="mailto:fan20081218@qq.com">fan20081218@qq.com</a></p>
+            <p style="color:var(--dim);font-size:.86rem">We aim to reply within 30 days.</p>
+        </div>
+    </article>
+
+    <!-- ============================ 中文版 ============================ -->
+    <article data-lang="zh">
+        <div class="doc-head">
+            <h1>隐私政策与 Cookie 说明</h1>
+            <p class="updated">最后更新：<strong>2026 年 10 月 21 日</strong> · 适用于 <strong>yilana.cn</strong></p>
+        </div>
+
+        <nav class="toc" aria-label="目录">
+            <h2>目录</h2>
+            <ol>
+                <li><a href="#who-cn">网站运营方</a></li>
+                <li><a href="#not-collected-cn">我们不收集什么</a></li>
+                <li><a href="#logs-cn">服务器日志</a></li>
+                <li><a href="#storage-cn">保存在你设备上的本地存储</a></li>
+                <li><a href="#cookies-cn">广告 Cookie</a></li>
+                <li><a href="#optout-cn">如何关闭个性化广告</a></li>
+                <li><a href="#consent-cn">你的同意选择</a></li>
+                <li><a href="#thirdparty-cn">第三方演示代码</a></li>
+                <li><a href="#rights-cn">你的权利</a></li>
+                <li><a href="#children-cn">未成年人</a></li>
+                <li><a href="#changes-cn">政策变更</a></li>
+                <li><a href="#contact-cn">联系方式</a></li>
+            </ol>
+        </nav>
+
+        <h2 id="who-cn">1. 网站运营方</h2>
+        <p>特效实验室（<strong>yilana.cn</strong>）是一个个人独立维护的浏览器视觉特效展厅。站内所有特效均使用原生 JavaScript、Canvas 2D 与 CSS 编写，没有使用框架，没有账号系统，也没有服务端数据库。本政策说明你浏览本站时会涉及哪些数据，以及你拥有哪些选择。</p>
+
+        <h2 id="not-collected-cn">2. 我们不收集什么</h2>
+        <p>大部分隐私政策写得很含糊，这里说得明确一些：</p>
+        <ul>
+            <li><strong>没有账号、没有注册、没有登录</strong>，从不索取姓名、邮箱或密码。</li>
+            <li><strong>没有上传、没有评论区、没有会存数据的联系表单</strong>。</li>
+            <li><strong>没有邮件订阅</strong>，也不会建立营销画像。</li>
+            <li>不出售、不出租、不交换任何个人数据。</li>
+            <li>所有特效<strong>完全在你的浏览器内运行</strong>，你在演示区里的点击、绘制、输入不会被传送到任何服务器。</li>
+        </ul>
+
+        <h2 id="logs-cn">3. 服务器日志</h2>
+        <p>与所有网站一样，提供这些页面的服务器会记录标准请求信息：IP 地址、请求时间、请求的页面、来源地址（Referer）以及浏览器的 User-Agent。这些信息仅用于正确返回页面、排查错误和防止滥用，由托管服务商短期保留，不会与其他信息结合用于识别个人。</p>
+        <p>该处理的合法性基础是运营一个安全可用网站的正当利益（GDPR 第 6(1)(f) 条）。</p>
+
+        <h2 id="storage-cn">4. 保存在你设备上的本地存储</h2>
+        <p>本站使用浏览器的 <code>localStorage</code>（不是 Cookie）保存两个纯粹功能性的值。它们不会离开你的设备，其他网站也无法读取：</p>
+        <table>
+            <thead><tr><th>键名</th><th>用途</th><th>保存时长</th></tr></thead>
+            <tbody>
+                <tr><td><code>yilana.lang</code></td><td>记住你选择的是中文还是英文，避免每翻一页就重置。</td><td>直到你清除站点数据</td></tr>
+                <tr><td><code>yilana.consent</code></td><td>记住你接受还是拒绝广告 Cookie，以免反复弹出提示。</td><td>直到你清除站点数据</td></tr>
+            </tbody>
+        </table>
+        <p>由于这两项是为实现你主动请求的功能（语言选择）以及履行你的同意决定所必需，因此不需要事先征得同意。你可以随时在浏览器设置中删除它们，网站仍可正常使用，只是会忘记你的偏好。</p>
+
+        <h2 id="cookies-cn">5. 广告 Cookie</h2>
+        <p>本站通过 <strong>Google AdSense</strong> 获得收入支持。在你同意启用广告 Cookie 后，Google 及其合作伙伴可能设置 Cookie，用于展示广告、限制同一广告的展示频次、衡量广告效果；在你同意个性化广告的情况下，还会根据你此前访问本站及其他网站的记录来选择广告。</p>
+        <table>
+            <thead><tr><th>Cookie</th><th>设置方</th><th>用途</th><th>常见有效期</th></tr></thead>
+            <tbody>
+                <tr><td><code>__gads</code> / <code>__gpi</code></td><td>Google</td><td>广告投放、频次控制与汇总统计。</td><td>最长 13 个月</td></tr>
+                <tr><td><code>IDE</code> / <code>NID</code></td><td>Google</td><td>广告个性化与欺诈防范。</td><td>最长 13 个月</td></tr>
+                <tr><td><code>__eoi</code></td><td>Google</td><td>保存同意信号，用于判断是否可投放个性化广告。</td><td>最长 13 个月</td></tr>
+            </tbody>
+        </table>
+        <div class="note">
+            <p><strong>包括 Google 在内的第三方供应商会使用 Cookie，根据你此前对本站或其他网站的访问记录投放广告。</strong>Google 对广告 Cookie 的使用，使其自身及其合作伙伴能够根据你访问本站和/或互联网上其他站点的情况向你投放广告。</p>
+            <p>Cookie 名称与有效期由 Google 控制，可能发生变化；上表反映的是撰写时的常见取值。</p>
+        </div>
+
+        <h2 id="optout-cn">6. 如何关闭个性化广告</h2>
+        <ul>
+            <li>在站点横幅中选择「仅必要」拒绝广告 Cookie，或用本页底部的 <strong>Cookie 设置</strong> 按钮重新打开横幅。拒绝后仍会看到广告，但属于非个性化广告。</li>
+            <li><a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google 广告设置</a>——关闭 Google 的个性化广告。</li>
+            <li><a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info</a>（美国）与 <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener">Your Online Choices</a>（欧盟）——对参与该机制的供应商统一关闭。</li>
+            <li><a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener">Network Advertising Initiative</a>——更多行业性退订入口。</li>
+            <li>你也可以在浏览器设置中直接屏蔽全部第三方 Cookie，本站特效不受影响。</li>
+        </ul>
+        <p>关于 Google 如何在合作方站点使用数据，请参阅 <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Google 的相关说明</a>。</p>
+
+        <h2 id="consent-cn">7. 你的同意选择</h2>
+        <p>首次访问时会弹出横幅询问是否允许使用广告 Cookie。<strong>在你接受之前，广告 Cookie 默认处于关闭状态</strong>。本站使用 Google Consent Mode v2 实现：在任何广告脚本执行之前，同意状态即被设为 <code>denied</code>，只有在你点击接受后才切换为 <code>granted</code>。</p>
+        <p>你可以随时撤回或更改选择——撤回和给予同样容易：</p>
+        <button class="cookie-btn" type="button" onclick="window.ylConsent&&window.ylConsent.open()">Cookie 设置</button>
+        <p>需要说明的是：如果你位于欧洲经济区、英国或瑞士，且出于自身合规审查需要 Google 认证的 CMP，请注意本站使用的是轻量自建同意横幅，而非经 Google 认证的 CMP。</p>
+
+        <h2 id="thirdparty-cn">8. 第三方演示代码</h2>
+        <p>展厅中有一部分演示由其他开发者原始编写，以原样保留在 <code>/repo/</code> 路径下并通过内嵌框架展示。这些演示的著作权归各自作者所有，代码中保留了可用的原作者链接标注。</p>
+        <p>其中部分演示会从公共 CDN（例如 <code>cdnjs.cloudflare.com</code>、<code>cdn.staticfile.org</code>）加载 JavaScript 库。当这类演示运行时，你的浏览器会直接向该 CDN 请求文件，CDN 因此会获知你的 IP 地址与 User-Agent。我们无法控制这些服务商，请参阅其各自的隐私政策。</p>
+
+        <h2 id="rights-cn">9. 你的权利</h2>
+        <p>依据你所在地区的法律，你可能享有以下权利：</p>
+        <ul>
+            <li><strong>访问</strong>我们所持有的关于你的个人数据；</li>
+            <li><strong>更正</strong>不准确的数据；</li>
+            <li><strong>删除</strong>数据（被遗忘权）；</li>
+            <li><strong>限制或反对</strong>处理；</li>
+            <li><strong>数据可携带</strong>；</li>
+            <li><strong>随时撤回同意</strong>，且不影响撤回前已进行的处理；</li>
+            <li><strong>向当地监管机构投诉</strong>。</li>
+        </ul>
+        <p>实际上我们几乎不持有个人数据：唯一与你相关的信息存在你自己的浏览器里，你可以直接清除。如需在服务端层面处理某项请求，请使用下方联系方式，我们会在 30 天内答复。</p>
+        <p><strong>加州居民（CCPA/CPRA）：</strong>在你拒绝广告 Cookie 的情况下，我们不会为跨情境行为广告而出售或共享个人信息，也不会在明知的情况下收集 16 岁以下消费者的信息。</p>
+        <p><strong>中国大陆用户：</strong>本站仅处理上述技术性数据，除常规的网页请求处理外，不进行个人信息的跨境传输。</p>
+
+        <h2 id="children-cn">10. 未成年人</h2>
+        <p>本站是面向一般公众的技术展示站点，不面向 13 岁以下（欧洲经济区为 16 岁以下）儿童。我们不会在明知的情况下收集儿童的个人信息。如果你认为有儿童提供了个人数据，请与我们联系，我们会予以删除。</p>
+
+        <h2 id="changes-cn">11. 政策变更</h2>
+        <p>如果本站的数据处理方式发生变化——例如新增统计分析或评论系统——本页会同步更新，并修改顶部的日期。变更后继续使用本站即视为接受修订后的政策。</p>
+
+        <h2 id="contact-cn">12. 联系方式</h2>
+        <div class="contact">
+            <p>对本政策有疑问，或需要提出数据相关请求：</p>
+            <p><a href="mailto:fan20081218@qq.com">fan20081218@qq.com</a></p>
+            <p style="color:var(--dim);font-size:.86rem">我们通常在 30 天内答复。</p>
+        </div>
+    </article>
+</main>
+
+<footer class="foot">
+    <p><span data-lang="en">Effect Lab · yilana.cn — built with plain Canvas 2D and CSS, no libraries.</span><span data-lang="zh">特效实验室 · yilana.cn —— 纯 Canvas 2D 与 CSS，不依赖任何库。</span></p>
+    <p class="foot-links">
+        <a href="index.html"><span data-lang="en">Gallery</span><span data-lang="zh">特效大厅</span></a>
+        <a href="privacy.html"><span data-lang="en">Privacy</span><span data-lang="zh">隐私政策</span></a>
+        <button class="ylc-open-link" type="button" onclick="window.ylConsent&&window.ylConsent.open()"><span data-lang="en">Cookie settings</span><span data-lang="zh">Cookie 设置</span></button>
+    </p>
+</footer>
+
+<script>
+/* ===== 语言切换（与详情页同一套逻辑）===== */
+var LANG_KEY = 'yilana.lang';
+var META = {
+    en: {
+        title: 'Privacy Policy & Cookies | Effect Lab',
+        desc: 'How Effect Lab (yilana.cn) handles data: no accounts, no uploads, server logs, local storage, and Google AdSense cookies with opt-out instructions.'
+    },
+    zh: {
+        title: '隐私政策与 Cookie 说明 | 特效实验室',
+        desc: '特效实验室（yilana.cn）的数据处理说明：无账号、无上传、服务器日志、本地存储，以及 Google AdSense 的 Cookie 使用与关闭方法。'
+    }
+};
+var LANG = 'en';
+
+function detectLang() {
+    var q = null;
+    try { q = new URLSearchParams(location.search).get('lang'); } catch (e) {}
+    if (q === 'en' || q === 'zh') return q;
+    try { var s = localStorage.getItem(LANG_KEY); if (s === 'en' || s === 'zh') return s; } catch (e) {}
+    return /^zh\b/i.test(navigator.language || '') ? 'zh' : 'en';
+}
+
+function applyLang() {
+    document.documentElement.lang = LANG === 'en' ? 'en' : 'zh-CN';
+    var m = META[LANG];
+    document.title = m.title;
+    var md = document.getElementById('metaDesc'); if (md) md.setAttribute('content', m.desc);
+    var ogt = document.querySelector('meta[property="og:title"]'); if (ogt) ogt.setAttribute('content', m.title);
+    var ogd = document.querySelector('meta[property="og:description"]'); if (ogd) ogd.setAttribute('content', m.desc);
+    var ogl = document.querySelector('meta[property="og:locale"]'); if (ogl) ogl.setAttribute('content', LANG === 'en' ? 'en_US' : 'zh_CN');
+    var sw = document.getElementById('langSwitch'); if (sw) sw.textContent = LANG === 'en' ? '中文' : 'EN';
+    try {
+        var u = new URL(location.href);
+        if (LANG === 'zh') u.searchParams.set('lang', 'zh'); else u.searchParams.delete('lang');
+        history.replaceState(null, '', u.pathname + (u.search || '') + u.hash);
+    } catch (e) {}
+}
+
+LANG = detectLang();
+applyLang();
+document.getElementById('langSwitch').onclick = function () {
+    LANG = LANG === 'en' ? 'zh' : 'en';
+    try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {}
+    applyLang();
+};
+</script>
+<script src="consent.js" defer></script>
+</body>
+</html>

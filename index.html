@@ -3,8 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Consent Mode v2：必须在 AdSense 脚本之前执行 -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        (function () {
+            var c = null;
+            try { c = localStorage.getItem('yilana.consent'); } catch (e) {}
+            var ads = c === 'all' ? 'granted' : 'denied';
+            gtag('consent', 'default', {
+                ad_storage: ads,
+                ad_user_data: ads,
+                ad_personalization: ads,
+                analytics_storage: 'denied',
+                functionality_storage: 'granted',
+                security_storage: 'granted',
+                wait_for_update: 500
+            });
+        })();
+    </script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6465192362290250"
+        crossorigin="anonymous"></script>
     <title>特效实验室 · 好玩到停不下来 | yilana.cn</title>
-    <meta name="description" content="一个充满各种酷炫视觉特效和互动玩法的网页实验室，支持一键复制特效代码。点击、移动、拖拽，发现无限惊喜。">
+    <meta id="metaDesc" name="description" content="一个充满各种酷炫视觉特效和互动玩法的网页实验室，支持一键复制特效代码。点击、移动、拖拽，发现无限惊喜。">
+    <link rel="canonical" href="https://yilana.cn/">
+    <link rel="alternate" hreflang="zh-CN" href="https://yilana.cn/">
+    <link rel="alternate" hreflang="en" href="https://yilana.cn/index.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://yilana.cn/">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="yilana.cn">
+    <meta property="og:title" content="特效实验室 · 好玩到停不下来 | yilana.cn">
+    <meta property="og:description" content="一个充满各种酷炫视觉特效和互动玩法的网页实验室，支持一键复制特效代码。">
+    <meta property="og:url" content="https://yilana.cn/">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
     <style>
         :root {
@@ -61,10 +94,25 @@
             box-shadow: 0 0 18px rgba(255, 107, 157, 0.5);
         }
         .logo-domain { font-size: 0.7rem; font-weight: 400; color: var(--accent2); letter-spacing: 0.06em; margin-left: 4px; }
-        .nav-links { display: flex; gap: 0.5rem; align-items: center; }
+        .nav-links { display: flex; gap: 0.5rem; align-items: center; list-style: none; }
         .nav-links a { text-decoration: none; color: #b0b0d0; padding: 0.45rem 1rem; border-radius: 20px; font-size: 0.9rem; transition: all 0.25s; }
         .nav-links a:hover { background: rgba(255,255,255,0.06); color: #fff; }
         .nav-count { font-size: 0.78rem; color: var(--accent3); background: rgba(255,230,109,0.1); padding: 0.3rem 0.8rem; border-radius: 20px; border: 1px solid rgba(255,230,109,0.25); }
+
+        /* 语言切换 */
+        .nav-right { display: flex; align-items: center; gap: 0.8rem; }
+        .lang-switch {
+            background: rgba(108,140,255,0.12); color: var(--accent5);
+            border: 1px solid rgba(108,140,255,0.35); border-radius: 20px;
+            padding: 0.42rem 1rem; font-size: 0.85rem; font-weight: 700; font-family: inherit;
+            letter-spacing: 0.04em; cursor: pointer; transition: all 0.25s; white-space: nowrap;
+        }
+        .lang-switch:hover { background: rgba(108,140,255,0.28); color: #fff; box-shadow: 0 0 18px rgba(108,140,255,0.4); }
+        .lang-switch:active { transform: scale(0.96); }
+        html[lang="en"] body,
+        html[lang="en"] .effect-card h3 { letter-spacing: 0.01em; }
+        html[lang="en"] .hero h1 { letter-spacing: 0.02em; }
+        html[lang="en"] .effect-card p { line-height: 1.5; }
 
         /* 英雄区 */
         .hero {
@@ -142,16 +190,24 @@
         .effect-card .icon { font-size: 2.8rem; margin-bottom: 0.8rem; display: block; filter: drop-shadow(0 0 12px rgba(255,255,255,0.25)); }
         .effect-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; color: #f0f0ff; }
         .effect-card p { color: #9999bb; font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.1rem; min-height: 2.8em; }
-        .card-actions { display: flex; gap: 0.5rem; justify-content: center; }
+        .card-actions { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
         .btn-run, .btn-copy {
-            border: 1px solid var(--border); border-radius: 24px; padding: 0.5rem 1.1rem; font-size: 0.85rem; font-weight: 600;
-            cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; gap: 0.3rem;
+            border: 1px solid var(--border); border-radius: 24px; padding: 0.45rem 0.85rem; font-size: 0.81rem; font-weight: 600;
+            cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; gap: 0.25rem;
+            text-decoration: none; white-space: nowrap;
         }
         .btn-run { background: rgba(78, 205, 196, 0.12); color: var(--accent2); }
         .btn-run:hover { background: rgba(78, 205, 196, 0.25); box-shadow: 0 0 18px rgba(78,205,196,0.35); }
-        .btn-copy { background: rgba(255, 255, 255, 0.06); color: #d0d0e8; }
+        .btn-copy { background: rgba(255, 255, 255, 0.06); color: #d0d0e8; font-family: inherit; }
         .btn-copy:hover { background: rgba(255,255,255,0.14); color: #fff; }
         .btn-copy.done { background: rgba(78, 205, 196, 0.25); color: var(--accent2); border-color: var(--accent2); }
+        /* 详解入口：低强调的次级链接，和两个主操作区分开 */
+        .card-detail {
+            display: inline-block; margin-top: 0.75rem; font-size: 0.8rem;
+            color: #8e97c8; text-decoration: none; letter-spacing: 0.02em;
+            border-bottom: 1px dashed rgba(142,151,200,0.35); padding-bottom: 1px; transition: all 0.25s;
+        }
+        .card-detail:hover { color: var(--accent5); border-bottom-color: var(--accent5); }
 
         /* 弹窗 */
         .modal-overlay {
@@ -198,8 +254,9 @@
         .footer { position: relative; z-index: 1; text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); color: #666688; font-size: 0.9rem; margin-top: 2rem; }
         .footer .domain { font-weight: 700; color: var(--accent2); font-size: 1.1rem; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
         .footer-links { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin: 1rem 0; }
-        .footer-links a { color: #8888aa; text-decoration: none; transition: color 0.3s; }
-        .footer-links a:hover { color: var(--accent1); }
+        .footer-links a, .footer-links button { color: #8888aa; text-decoration: none; transition: color 0.3s; }
+        .footer-links a:hover, .footer-links button:hover { color: var(--accent1); }
+        .footer-links button { background: none; border: 0; padding: 0; font: inherit; cursor: pointer; }
 
         /* 全屏演示覆盖层 */
         .fs-overlay { position: fixed; inset: 0; z-index: 2500; background: #05050c; display: none; }
@@ -227,53 +284,57 @@
         <div class="nav-inner">
             <a href="#" class="logo">
                 <span class="icon">✨</span>
-                特效实验室
+                <span data-i18n="brand">特效实验室</span>
                 <span class="logo-domain">yilana.cn</span>
             </a>
-            <ul class="nav-links">
-                <li><a href="#lab">特效大厅</a></li>
-                <li><a href="#footer">关于</a></li>
-                <li class="nav-count" id="navCount">共 0 个特效</li>
-            </ul>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#lab" data-i18n="nav.lab">特效大厅</a></li>
+                    <li><a href="#footer" data-i18n="nav.about">关于</a></li>
+                    <li class="nav-count" id="navCount" data-i18n="nav.count">共 0 个特效</li>
+                </ul>
+                <button class="lang-switch" id="langSwitch" type="button" onclick="toggleLang()" aria-label="切换到英文">EN</button>
+            </div>
         </div>
     </nav>
 
     <header class="hero">
-        <h1>✨ 特效实验室</h1>
-        <p id="heroDesc">个可交互视觉特效，效果拉满。每个特效都能一键运行、全屏演示，并直接复制独立可运行的源码。</p>
+        <h1 data-i18n="hero.title">✨ 特效实验室</h1>
+        <p id="heroDesc" data-i18n="hero.desc">个可交互视觉特效，效果拉满。每个特效都能一键运行、全屏演示，并直接复制独立可运行的源码。</p>
         <div class="hero-btns">
-            <button class="btn-primary" onclick="document.getElementById('lab').scrollIntoView({behavior:'smooth'})">🚀 开始体验</button>
-            <button class="btn-ghost" onclick="randomEffect()">🎲 随机来一个</button>
+            <button class="btn-primary" id="heroCta" data-i18n="hero.cta" onclick="document.getElementById('lab').scrollIntoView({behavior:'smooth'})">🚀 开始体验</button>
+            <button class="btn-ghost" id="heroRandom" data-i18n="hero.random" onclick="randomEffect()">🎲 随机来一个</button>
         </div>
     </header>
 
     <div class="filters">
-        <button class="filter-btn active" data-filter="all">全部</button>
-        <button class="filter-btn" data-filter="particle">粒子</button>
-        <button class="filter-btn" data-filter="interact">互动</button>
-        <button class="filter-btn" data-filter="visual">视觉</button>
-        <button class="filter-btn" data-filter="text">文字</button>
-        <button class="filter-btn" data-filter="component">组件</button>
-        <button class="filter-btn" data-filter="game">游戏</button>
-        <input type="text" class="search-box" id="searchBox" placeholder="🔍 搜索特效…">
+        <button class="filter-btn active" data-filter="all" data-i18n="filter.all">全部</button>
+        <button class="filter-btn" data-filter="particle" data-i18n="filter.particle">粒子</button>
+        <button class="filter-btn" data-filter="interact" data-i18n="filter.interact">互动</button>
+        <button class="filter-btn" data-filter="visual" data-i18n="filter.visual">视觉</button>
+        <button class="filter-btn" data-filter="text" data-i18n="filter.text">文字</button>
+        <button class="filter-btn" data-filter="component" data-i18n="filter.component">组件</button>
+        <button class="filter-btn" data-filter="game" data-i18n="filter.game">游戏</button>
+        <input type="text" class="search-box" id="searchBox" data-i18n-ph="search.ph" placeholder="🔍 搜索特效…">
     </div>
 
     <section class="section" id="lab">
         <div class="section-header">
-            <h2>🎨 特效大厅</h2>
-            <p>点击「运行」预览，点击「复制代码」带走源码</p>
+            <h2 data-i18n="section.title">🎨 特效大厅</h2>
+            <p data-i18n="section.sub">点击「运行」预览，点击「复制代码」带走源码</p>
         </div>
         <div class="effects-grid" id="grid"></div>
     </section>
 
     <footer class="footer" id="footer">
-        <p class="domain">✨ 特效实验室 · yilana.cn</p>
+        <p class="domain" id="footerDomain" data-i18n="footer.domain">✨ 特效实验室 · yilana.cn</p>
         <div class="footer-links">
-            <a href="#lab">特效大厅</a>
-            <a href="#" onclick="randomEffect();return false;">随机特效</a>
-            <a href="#">提交创意</a>
+            <a href="#lab" data-i18n="footer.lab">特效大厅</a>
+            <a href="#" onclick="randomEffect();return false;" data-i18n="footer.random">随机特效</a>
+            <a href="privacy.html" data-i18n="footer.privacy">隐私政策</a>
+            <button type="button" onclick="window.ylConsent&&window.ylConsent.open()" data-i18n="footer.cookie">Cookie 设置</button>
         </div>
-        <p style="margin-top:0.8rem; opacity:0.5;">© 2026 特效实验室 — 让你玩到停不下来的视觉魔法</p>
+        <p style="margin-top:0.8rem; opacity:0.5;" id="footerCopy" data-i18n="footer.copy">© 2026 特效实验室 — 让你玩到停不下来的视觉魔法</p>
     </footer>
 
     <!-- 弹窗 -->
@@ -284,11 +345,11 @@
                 <button class="close-modal" onclick="closeModal()">✕</button>
             </div>
             <div class="demo-area" id="modalDemoArea"></div>
-            <p class="modal-hint" id="modalHint">在演示区中互动试试 👆</p>
+            <p class="modal-hint" data-i18n="modal.hint">在演示区中互动试试 👆</p>
             <div class="code-wrap">
                 <div class="code-bar">
-                    <span>💡 源码（可独立运行）</span>
-                    <button id="copyCodeBtn" onclick="copyModalCode()">📋 复制代码</button>
+                    <span data-i18n="modal.code">💡 源码（可独立运行）</span>
+                    <button id="copyCodeBtn" onclick="copyModalCode()" data-i18n="modal.copy">📋 复制代码</button>
                 </div>
                 <pre class="code-block" id="modalCode"></pre>
             </div>
@@ -297,13 +358,14 @@
 
     <!-- 全屏演示 -->
     <div class="fs-overlay" id="fsOverlay">
-        <button class="fs-exit" onclick="closeFullscreen()"><span class="x">✕</span> 退出全屏</button>
+        <button class="fs-exit" onclick="closeFullscreen()"><span class="x">✕</span> <span data-i18n="fs.exit">退出全屏</span></button>
         <div class="fs-stage" id="fsStage"></div>
     </div>
 
     <div class="toast" id="toast"></div>
 
     <script src="effects-repo.js"></script>
+    <script src="i18n.js"></script>
     <script>
     /* ===================== 背景粒子 ===================== */
     const bgCanvas = document.getElementById('bgCanvas');
@@ -609,8 +671,8 @@
       {
         id:'starfield', icon:'🌟', title:'星空穿梭', group:'visual',
         desc:'星辰向你迎面飞来的跃迁感。',
-        code:"<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet st=Array.from({length:120},()=>({x:(Math.random()-.5)*c.width,y:(Math.random()-.5)*c.height,z:Math.random()*2+0.1}));\n(function a(){x.fillStyle='rgba(5,5,12,0.3)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;st.forEach(s=>{s.z-=0.02;if(s.z<=0){s.z=2;s.x=(Math.random()-.5)*c.width;s.y=(Math.random()-.5)*c.height;}let px=cx+s.x/s.z,py=cy+s.y/s.z;x.beginPath();x.arc(px,py,(1-s.z)*2,0,7);x.fillStyle='#fff';x.fill();});requestAnimationFrame(a);})();\n<\/script>",
-        demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let st=Array.from({length:120},()=>({x:(Math.random()-.5)*c.width,y:(Math.random()-.5)*c.height,z:Math.random()*2+0.1}));(function a(){if(!c.parentNode)return;x.fillStyle='rgba(5,5,12,0.3)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;st.forEach(s=>{s.z-=0.02;if(s.z<=0){s.z=2;s.x=(Math.random()-.5)*c.width;s.y=(Math.random()-.5)*c.height;}let px=cx+s.x/s.z,py=cy+s.y/s.z;x.beginPath();x.arc(px,py,(1-s.z)*2,0,7);x.fillStyle='#fff';x.shadowBlur=4;x.shadowColor='#fff';x.fill();});requestAnimationFrame(a);})();return ()=>{}; }
+        code:"<canvas id='c'></canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;\nlet st=Array.from({length:120},()=>({x:(Math.random()-.5)*c.width,y:(Math.random()-.5)*c.height,z:Math.random()*2+0.1}));\n(function a(){x.fillStyle='rgba(5,5,12,0.3)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;st.forEach(s=>{s.z-=0.02;if(s.z<=0){s.z=2;s.x=(Math.random()-.5)*c.width;s.y=(Math.random()-.5)*c.height;}let px=cx+s.x/s.z,py=cy+s.y/s.z;x.beginPath();x.arc(px,py,Math.max(0.5,(2-s.z)*1.6),0,7);x.fillStyle='#fff';x.fill();});requestAnimationFrame(a);})();\n<\/script>",
+        demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let st=Array.from({length:120},()=>({x:(Math.random()-.5)*c.width,y:(Math.random()-.5)*c.height,z:Math.random()*2+0.1}));(function a(){if(!c.parentNode)return;x.fillStyle='rgba(5,5,12,0.3)';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height/2;st.forEach(s=>{s.z-=0.02;if(s.z<=0){s.z=2;s.x=(Math.random()-.5)*c.width;s.y=(Math.random()-.5)*c.height;}let px=cx+s.x/s.z,py=cy+s.y/s.z;x.beginPath();x.arc(px,py,Math.max(0.5,(2-s.z)*1.6),0,7);x.fillStyle='#fff';x.shadowBlur=4;x.shadowColor='#fff';x.fill();});requestAnimationFrame(a);})();return ()=>{}; }
       },
       {
         id:'fractal', icon:'🌲', title:'分形树', group:'visual',
@@ -864,6 +926,97 @@
     ];
     const EFFECTS = BASE_EFFECTS.concat(window.REPO_EFFECTS || []);
 
+    /* ===================== 国际化（中 / EN） ===================== */
+    const LANG_KEY = 'yilana.lang';
+    let LANG = 'zh';
+
+    // 翻译表的 key：原生用 id，仓库用 "repo:dir/file"（不受自增 id 影响）
+    function fxKey(e){
+      if(!e.repo) return e.id;
+      return 'repo:' + (e.repo.dir ? e.repo.dir + '/' + e.repo.file : e.repo.file);
+    }
+    // 取当前语言下的标题 / 描述，缺译文时回落到中文原文
+    function fxText(e){
+      if(LANG === 'en'){
+        const tr = (window.YI_FX_EN || {})[fxKey(e)];
+        if(tr) return { title: tr[0], desc: tr[1] };
+      }
+      return { title: e.title, desc: e.desc };
+    }
+    // 取 UI 文案，支持 {n} 之类的占位替换
+    function t(key, vars){
+      const pack = window.YI_UI || {};
+      const dict = pack[LANG] || pack.zh || {};
+      let s = dict[key] != null ? dict[key] : ((pack.zh || {})[key] != null ? pack.zh[key] : key);
+      if(vars) Object.keys(vars).forEach(k=>{ s = s.split('{'+k+'}').join(vars[k]); });
+      return s;
+    }
+    function detectLang(){
+      let q = null;
+      try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+      if(q === 'en' || q === 'zh') return q;
+      try{
+        const saved = localStorage.getItem(LANG_KEY);
+        if(saved === 'en' || saved === 'zh') return saved;
+      }catch(e){}
+      return /^zh\b/i.test(navigator.language || '') ? 'zh' : 'en';
+    }
+    // 同步 hreflang / canonical 与实际地址，方便分享与搜索引擎收录
+    function syncHeadLinks(){
+      if(!/^https?:$/.test(location.protocol)) return; // file:// 下跳过，canonical / hreflang 无意义
+      try{
+        const u = new URL(location.href);
+        if(LANG === 'en') u.searchParams.set('lang','en'); else u.searchParams.delete('lang');
+        const clean = u.origin + u.pathname + (LANG === 'en' ? '?lang=en' : '');
+        const can = document.querySelector('link[rel="canonical"]'); if(can) can.href = clean;
+        const alt = document.querySelectorAll('link[rel="alternate"][hreflang]');
+        alt.forEach(a=>{
+          const h = a.getAttribute('hreflang');
+          if(h === 'en') a.href = u.origin + u.pathname + '?lang=en';
+          else a.href = u.origin + u.pathname;
+        });
+        history.replaceState(null, '', u.pathname + (u.search || '') + u.hash);
+      }catch(e){}
+    }
+    function applyI18n(){
+      document.documentElement.lang = LANG === 'en' ? 'en' : 'zh-CN';
+      const vars = { n: EFFECTS.length };
+      document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t(el.dataset.i18n, vars); });
+      document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder = t(el.dataset.i18nPh); });
+      const sw = document.getElementById('langSwitch');
+      if(sw){ sw.textContent = t('lang.next'); sw.setAttribute('aria-label', t('lang.aria')); }
+      const meta = (window.YI_META || {})[LANG] || {};
+      if(meta.title){
+        document.title = meta.title;
+        document.querySelectorAll('meta[property="og:title"]').forEach(m=>m.setAttribute('content', meta.title));
+      }
+      if(meta.desc){
+        const md = document.getElementById('metaDesc'); if(md) md.setAttribute('content', meta.desc);
+        document.querySelectorAll('meta[property="og:description"]').forEach(m=>m.setAttribute('content', meta.desc));
+        document.querySelectorAll('meta[name="description"]').forEach(m=>m.setAttribute('content', meta.desc));
+      }
+      const ogLocale = document.querySelector('meta[property="og:locale"]');
+      if(ogLocale) ogLocale.setAttribute('content', LANG === 'en' ? 'en_US' : 'zh_CN');
+      syncHeadLinks();
+      // 打开着弹窗时，标题与提示同步切换
+      if(currentEffectId){
+        const e = EFFECTS.find(x=>x.id===currentEffectId);
+        if(e){
+          const lt = fxText(e);
+          const mt = document.getElementById('modalTitle'); if(mt) mt.textContent = e.icon + ' ' + lt.title;
+        }
+      }
+      const fsBtn = document.getElementById('modalFsBtn');
+      if(fsBtn) fsBtn.textContent = t('modal.fullscreen');
+    }
+    function setLang(lang){
+      LANG = (lang === 'en') ? 'en' : 'zh';
+      try{ localStorage.setItem(LANG_KEY, LANG); }catch(e){}
+      applyI18n();
+      renderCards();
+    }
+    function toggleLang(){ setLang(LANG === 'zh' ? 'en' : 'zh'); }
+
     /* ===================== 渲染卡片 ===================== */
     const grid = document.getElementById('grid');
     let currentFilter = 'all';
@@ -872,27 +1025,32 @@
       grid.innerHTML = '';
       let shown = 0;
       EFFECTS.filter(e=>{
+        const lt = fxText(e);
         const okGroup = currentFilter==='all' || e.group===currentFilter;
-        const okSearch = !q || e.title.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q);
+        // 中英双语一起参与检索，英文界面下输入中文关键词也能命中
+        const hay = (lt.title+' '+lt.desc+' '+e.title+' '+e.desc).toLowerCase();
+        const okSearch = !q || hay.includes(q);
         return okGroup && okSearch;
       }).forEach(e=>{
         shown++;
+        const lt = fxText(e);
+        // 原生 58 个有独立详解页；仓库 demo 是第三方原样文件，不生成详解页
+        const detail = e.repo ? '' :
+          '<a class="card-detail" href="effects/'+e.id+'.html">'+t('card.detail')+'</a>';
         const card = document.createElement('div'); card.className='effect-card';
         card.innerHTML =
           '<span class="icon">'+e.icon+'</span>'+
-          '<h3>'+e.title+'</h3>'+
-          '<p>'+e.desc+'</p>'+
+          '<h3>'+lt.title+'</h3>'+
+          '<p>'+lt.desc+'</p>'+
           '<div class="card-actions">'+
-            '<button class="btn-run" onclick="openEffect(\''+e.id+'\')">▶ 运行</button>'+
-            '<button class="btn-copy" onclick="copyCardCode(\''+e.id+'\', this)">📋 复制代码</button>'+
-          '</div>';
+            '<button class="btn-run" onclick="openEffect(\''+e.id+'\')">'+t('card.run')+'</button>'+
+            '<button class="btn-copy" onclick="copyCardCode(\''+e.id+'\', this)">'+t('card.copy')+'</button>'+
+          '</div>'+
+          detail;
         grid.appendChild(card);
       });
-      if(shown===0){ grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#8888aa;padding:3rem">没有找到匹配的特效 🔍</p>'; }
+      if(shown===0){ grid.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#8888aa;padding:3rem">'+t('empty')+'</p>'; }
     }
-    document.getElementById('navCount').textContent = '共 '+EFFECTS.length+' 个特效';
-    const heroDesc = document.getElementById('heroDesc');
-    if(heroDesc) heroDesc.textContent = EFFECTS.length + ' 个可交互视觉特效，效果拉满。每个特效都能一键运行、全屏演示，并直接复制独立可运行的源码。';
     document.querySelectorAll('.filter-btn').forEach(b=>b.onclick=()=>{
       document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
       b.classList.add('active'); currentFilter=b.dataset.filter; renderCards();
@@ -900,12 +1058,12 @@
     document.getElementById('searchBox').addEventListener('input', renderCards);
 
     /* ===================== 弹窗逻辑 ===================== */
-    let currentCleanup = null, currentCode = '';
+    let currentCleanup = null, currentCode = '', currentEffectId = null;
     function repoUrl(dir, file){
       const rel = dir ? dir+'/'+file : file;
       // 用 http 预览/服务器打开时，走同源 /repo/ 路径（server.js 把 /repo 映射到本地仓库），避免 file:// 跨协议被浏览器拦截
       if (location.protocol === 'file:'){
-        return 'file:///P:/github/javaScript/'+encodeURI(rel);
+        return './repo/'+rel.split('/').map(encodeURI).join('/');
       }
       return '/repo/'+rel.split('/').map(encodeURI).join('/');
     }
@@ -914,7 +1072,8 @@
       const overlay = document.getElementById('modalOverlay');
       const area = document.getElementById('modalDemoArea');
       clearEl(area); area.style.background=''; area.removeAttribute('style'); area.className='demo-area';
-      document.getElementById('modalTitle').textContent = e.icon+' '+e.title;
+      currentEffectId = e.id;
+      document.getElementById('modalTitle').textContent = e.icon+' '+fxText(e).title;
       currentCode = e.code;
       document.getElementById('modalCode').textContent = e.code;
       overlay.classList.add('active');
@@ -932,24 +1091,40 @@
       document.getElementById('modalOverlay').classList.remove('active');
       if(currentCleanup){ try{ currentCleanup(); }catch(e){} currentCleanup=null; }
       clearEl(document.getElementById('modalDemoArea'));
+      currentEffectId = null;
     }
     document.getElementById('modalOverlay').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeModal(); });
     addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeModal(); closeFullscreen(); } });
 
-    function copyModalCode(){ copyText(currentCode); toast('📋 代码已复制，粘贴即可运行'); }
-    function copyCardCode(id, btn){ const e=EFFECTS.find(x=>x.id===id); copyText(e.code); btn.classList.add('done'); btn.textContent='✓ 已复制'; toast('📋 已复制「'+e.title+'」源码'); setTimeout(()=>{ btn.classList.remove('done'); btn.textContent='📋 复制代码'; }, 1800); }
+    function copyModalCode(){ copyText(currentCode); toast(t('toast.copied')); }
+    function copyCardCode(id, btn){ const e=EFFECTS.find(x=>x.id===id); copyText(e.code); btn.classList.add('done'); btn.textContent=t('card.copied'); toast(t('toast.cardCopied', { t: fxText(e).title })); setTimeout(()=>{ btn.classList.remove('done'); btn.textContent=t('card.copy'); }, 1800); }
 
     /* ===================== 全屏演示 ===================== */
     let fsCleanup=null;
     function openFullscreen(id){ const e=EFFECTS.find(x=>x.id===id); if(!e)return; const ov=document.getElementById('fsOverlay'); const st=document.getElementById('fsStage'); clearEl(st); const frame=document.createElement('div'); frame.className='fs-frame'; st.appendChild(frame); ov.classList.add('active'); if(e.repo){ const f=document.createElement('iframe'); f.scrolling='no'; f.src=repoUrl(e.repo.dir,e.repo.file); f.style.cssText='width:100%;height:100%;border:0;display:block;background:#0b0b14'; f.onload=function(){ try{ const d=f.contentDocument||f.contentWindow.document; const b=d.body, htm=d.documentElement; const iw=Math.max(b.scrollWidth,b.offsetWidth,htm.clientWidth,htm.scrollWidth); const ih=Math.max(b.scrollHeight,b.offsetHeight,htm.clientHeight,htm.scrollHeight); const maxW=window.innerWidth*0.95; const maxH=window.innerHeight*0.9; const scale=Math.min(1, maxW/iw, maxH/ih); frame.style.width=Math.max(320, iw*scale)+'px'; frame.style.height=Math.max(240, ih*scale)+'px'; }catch(err){} }; frame.appendChild(f); fsCleanup=null; } else { fsCleanup=e.demo(frame)||null; } }
     function closeFullscreen(){ const ov=document.getElementById('fsOverlay'); ov.classList.remove('active'); if(fsCleanup){try{fsCleanup();}catch(e){} fsCleanup=null;} clearEl(document.getElementById('fsStage')); }
-    // 在弹窗内增加全屏按钮
-    (function addFsBtn(){ const bar=document.querySelector('.modal-head'); const b=document.createElement('button'); b.textContent='⛶ 全屏'; b.className='btn-copy'; b.style.marginLeft='auto'; b.onclick=()=>{ const title=document.getElementById('modalTitle').textContent; const id=EFFECTS.find(x=>(''+x.icon+' '+x.title)===title); if(id){ const cur=currentCleanup; if(cur){try{cur();}catch(e){}} clearEl(document.getElementById('modalDemoArea')); closeModal(); openFullscreen(id.id); } }; bar.appendChild(b); })();
+    // 在弹窗内增加全屏按钮（用 currentEffectId 定位，不再靠标题反查，避免切换语言后失配）
+    (function addFsBtn(){
+      const bar=document.querySelector('.modal-head');
+      const b=document.createElement('button');
+      b.id='modalFsBtn'; b.textContent=t('modal.fullscreen'); b.className='btn-copy'; b.style.marginLeft='auto';
+      b.onclick=()=>{
+        if(!currentEffectId) return;
+        const id=currentEffectId;
+        const cur=currentCleanup; if(cur){try{cur();}catch(e){}}
+        clearEl(document.getElementById('modalDemoArea'));
+        closeModal(); openFullscreen(id);
+      };
+      bar.appendChild(b);
+    })();
 
     function randomEffect(){ const e=EFFECTS[Math.floor(Math.random()*EFFECTS.length)]; openEffect(e.id); }
 
-    /* 初始化 */
+    /* 初始化：先定语言，再渲染 */
+    LANG = detectLang();
+    applyI18n();
     renderCards();
     </script>
+    <script src="consent.js" defer></script>
 </body>
 </html>

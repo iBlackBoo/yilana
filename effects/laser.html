@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" data-slug="laser">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Consent Mode v2：必须在 AdSense 脚本之前执行 -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        (function () {
+            var c = null;
+            try { c = localStorage.getItem('yilana.consent'); } catch (e) {}
+            var ads = c === 'all' ? 'granted' : 'denied';
+            gtag('consent', 'default', {
+                ad_storage: ads,
+                ad_user_data: ads,
+                ad_personalization: ads,
+                analytics_storage: 'denied',
+                functionality_storage: 'granted',
+                security_storage: 'granted',
+                wait_for_update: 500
+            });
+        })();
+    </script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6465192362290250"
+        crossorigin="anonymous"></script>
+    <title>Laser Grid — a visual effect built with plain Canvas | Effect Lab</title>
+    <meta id="metaDesc" name="description" content="Horizontal lines that get closer together as they approach the horizon — a fake 3D floor made of one loop.">
+    <link rel="canonical" href="https://yilana.cn/effects/laser.html">
+    <link rel="alternate" hreflang="en" href="https://yilana.cn/effects/laser.html">
+    <link rel="alternate" hreflang="zh-CN" href="https://yilana.cn/effects/laser.html?lang=zh">
+    <link rel="alternate" hreflang="x-default" href="https://yilana.cn/effects/laser.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="yilana.cn">
+    <meta property="og:title" content="Laser Grid — Horizontal lines that get closer together as they approach the horizon — a fake 3D floor m">
+    <meta property="og:description" content="Horizontal lines that get closer together as they approach the horizon — a fake 3D floor made of one loop.">
+    <meta property="og:url" content="https://yilana.cn/effects/laser.html">
+    <meta property="og:locale" content="en_US">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+    <link rel="stylesheet" href="detail.css">
+    <!-- 语言先定：在 body 解析前写入 html[lang]，避免中文访客看到一瞬英文 -->
+    <script>
+        (function () {
+            var q = null;
+            try { q = new URLSearchParams(location.search).get('lang'); } catch (e) {}
+            var L = (q === 'en' || q === 'zh') ? q : (function () {
+                try {
+                    var s = localStorage.getItem('yilana.lang');
+                    if (s === 'en' || s === 'zh') return s;
+                } catch (e) {}
+                return /^zh\b/i.test(navigator.language || '') ? 'zh' : 'en';
+            })();
+            document.documentElement.lang = L === 'en' ? 'en' : 'zh-CN';
+        })();
+    </script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Laser Grid — how it works","description":"Horizontal lines that get closer together as they approach the horizon — a fake 3D floor made of one loop.","inLanguage":["en","zh-CN"],"url":"https://yilana.cn/effects/laser.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://yilana.cn/effects/laser.html"},"about":{"@type":"Thing","name":"Web visual effects, Canvas 2D, Perspective projection, Modulo loop"},"isPartOf":{"@type":"WebSite","name":"Effect Lab","url":"https://yilana.cn/"},"publisher":{"@type":"Organization","name":"Effect Lab","url":"https://yilana.cn/"},"isAccessibleForFree":true}</script>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" href="../index.html"><span class="brand-icon">✨</span><span>Effect Lab</span></a>
+        <nav class="topnav">
+            <a href="../index.html#lab"><span data-lang="en">All 131 effects</span><span data-lang="zh">全部 131 个特效</span></a>
+        </nav>
+        <button class="lang-switch" id="langSwitch" type="button" aria-label="Switch language">中文</button>
+    </div>
+</header>
+
+<main class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">Effect Lab</a><span class="sep">/</span>
+        <a href="../index.html#lab"><span data-lang="en">Visual</span><span data-lang="zh">视觉</span></a><span class="sep">/</span>
+        <span class="here"><span data-lang="en">Laser Grid</span><span data-lang="zh">激光网格</span></span>
+    </nav>
+
+    <article>
+        <header class="head">
+            <div class="icon">🟦</div>
+            <h1>
+                <span data-lang="en">Laser Grid</span>
+                <span data-lang="zh">激光网格</span>
+            </h1>
+            <p class="lead">
+                <span data-lang="en">Horizontal lines that get closer together as they approach the horizon — a fake 3D floor made of one loop.</span>
+                <span data-lang="zh">横线越靠近地平线越密——一个循环就够了，是假 3D 地面。</span>
+            </p>
+            <div class="tags"><span class="tag">Canvas 2D</span><span class="tag">Perspective projection</span><span class="tag">Modulo loop</span></div>
+        </header>
+
+        <section class="stage-box" aria-label="Live demo">
+            <div class="stage-bar">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                <span class="stage-label"><span data-lang="en">Live demo</span><span data-lang="zh">实时演示</span></span>
+                <button class="restart" id="restart" type="button">
+                    <span data-lang="en">↻ Restart</span><span data-lang="zh">↻ 重新播放</span>
+                </button>
+            </div>
+            <div class="stage" id="stage"></div>
+            <p class="stage-hint">
+                <span data-lang="en">Runs live on this page. Move the pointer, click, or drag — whichever the effect listens for.</span>
+                <span data-lang="zh">就在本页实时运行。移动鼠标、点击或拖拽——看它响应哪一种。</span>
+            </p>
+        </section>
+
+        <section class="block">
+            <h2><span data-lang="en">How it works</span><span data-lang="zh">原理拆解</span></h2>
+            <p>
+                <span data-lang="en">Each line's depth z cycles 0–800 via modulo, and the projected position uses 300/(z+1): as z grows the value collapses toward zero, squeezing lines against the horizon. The vertical fan is drawn separately with fixed angles, so only the horizontal rungs actually move.</span>
+                <span data-lang="zh">每条线的深度 z 用取模在 0–800 之间循环，投影位置用 300/(z+1)：z 越大结果越趋近 0，横线就被挤向地平线。纵向的扇形是另画一遍、角度固定的，所以真正在动的只有横向的踏板。</span>
+            </p>
+        </section>
+
+        <section class="block">
+            <h2><span data-lang="en">What to change</span><span data-lang="zh">可以改的地方</span></h2>
+            <ul class="tweaks" data-lang="en"><li><span class="num">1</span><span>Change 300 to 800 for a flatter, more distant horizon.</span></li>
+            <li><span class="num">2</span><span>Add glow on every eighth rung to suggest a lit runway.</span></li></ul>
+            <ul class="tweaks" data-lang="zh"><li><span class="num">1</span><span>300 改成 800，地平线会更远、更平。</span></li>
+            <li><span class="num">2</span><span>每第八条横线加发光，就像一条点亮的跑道。</span></li></ul>
+        </section>
+
+        <section class="block">
+            <h2><span data-lang="en">Source code</span><span data-lang="zh">源码</span></h2>
+            <p class="block-note">
+                <span data-lang="en">Self-contained — paste it into any HTML file and it runs. No libraries.</span>
+                <span data-lang="zh">完全独立——粘进任意 HTML 文件就能跑，不需要任何库。</span>
+            </p>
+            <div class="code-wrap">
+                <div class="code-bar">
+                    <span>laser.html</span>
+                    <button id="copyCode" type="button"><span data-lang="en">📋 Copy</span><span data-lang="zh">📋 复制</span></button>
+                </div>
+                <pre class="code-block" id="codeBlock"></pre>
+            </div>
+        </section>
+
+        <nav class="pager">
+            <a class="pn prev" href="constellation.html"><span class="dir">← Previous</span><strong>Constellation</strong></a>
+            <a class="pn next" href="lightning.html"><span class="dir">Next →</span><strong>Lightning</strong></a>
+        </nav>
+
+        <aside class="cta">
+            <p>
+                <span data-lang="en">This is one of 131 effects in the lab — particles, text shaders, UI components and small games.</span>
+                <span data-lang="zh">这只是实验室里 131 个特效中的一个——粒子、文字、UI 组件和小游戏都有。</span>
+            </p>
+            <a class="btn" href="../index.html#lab"><span data-lang="en">Browse the full gallery →</span><span data-lang="zh">浏览全部特效 →</span></a>
+        </aside>
+    </article>
+</main>
+
+<footer class="foot">
+    <p><span data-lang="en">Effect Lab · yilana.cn — built with plain Canvas 2D and CSS, no libraries.</span><span data-lang="zh">Effect Lab · yilana.cn —— 纯 Canvas 2D 与 CSS，不依赖任何库。</span></p>
+    <p class="foot-links">
+        <a href="../index.html"><span data-lang="en">Gallery</span><span data-lang="zh">特效大厅</span></a>
+        <a href="../privacy.html"><span data-lang="en">Privacy</span><span data-lang="zh">隐私政策</span></a>
+        <button class="foot-btn" type="button" onclick="window.ylConsent&&window.ylConsent.open()"><span data-lang="en">Cookie settings</span><span data-lang="zh">Cookie 设置</span></button>
+    </p>
+</footer>
+
+<script>
+/* ===== 当前特效 ===== */
+const EFFECT_ID = "laser";
+const CODE = "<canvas id='c'><\/canvas><script>\nconst c=document.getElementById('c'),x=c.getContext('2d');c.width=innerWidth;c.height=300;let t=0;\n(function a(){t+=0.06;x.fillStyle='#04101a';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height*0.4;x.strokeStyle='rgba(78,205,196,0.6)';x.lineWidth=1;for(let i=0;i<20;i++){let z=((i*40+t*40)%800);let p=300/(z+1);x.beginPath();x.moveTo(cx-p*c.width,p*cy+cy);x.lineTo(cx+p*c.width,p*cy+cy);x.stroke();}for(let i=-10;i<=10;i++){x.beginPath();x.moveTo(cx+i*30,cy);x.lineTo(cx+i*400,300);x.stroke();}requestAnimationFrame(a);})();\n<\/script>";
+const DEMO = function demo(el){ const c=makeCanvas(el),x=c.getContext('2d');let t=0;(function a(){if(!c.parentNode)return;t+=0.06;x.fillStyle='#04101a';x.fillRect(0,0,c.width,c.height);let cx=c.width/2,cy=c.height*0.4;x.strokeStyle='rgba(78,205,196,0.6)';x.lineWidth=1;for(let i=0;i<20;i++){let z=((i*40+t*40)%800);let p=300/(z+1);x.beginPath();x.moveTo(cx-p*c.width,p*cy+cy);x.lineTo(cx+p*c.width,p*cy+cy);x.stroke();}for(let i=-10;i<=10;i++){x.beginPath();x.moveTo(cx+i*30,cy);x.lineTo(cx+i*400,c.height);x.stroke();}requestAnimationFrame(a);})();return ()=>{}; };
+const META = {
+  en: { title: "Laser Grid — a visual effect built with plain Canvas | Effect Lab", desc: "Horizontal lines that get closer together as they approach the horizon — a fake 3D floor made of one loop." },
+  zh: { title: "激光网格 · 原理与源码 | Effect Lab", desc: "横线越靠近地平线越密——一个循环就够了，是假 3D 地面。" }
+};
+
+/* ===== 与首页一致的 helper（部分 demo 依赖）===== */
+function makeCanvas(el){ const c=document.createElement('canvas'); c.width=el.clientWidth||800; c.height=el.clientHeight||380; c.style.width='100%'; c.style.height='100%'; el.appendChild(c); return c; }
+function clearEl(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+
+/* ===== 语言 ===== */
+const LANG_KEY = 'yilana.lang';
+let LANG = 'en';
+function detectLang(){
+  let q = null;
+  try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+  if(q === 'en' || q === 'zh') return q;
+  try{ const s = localStorage.getItem(LANG_KEY); if(s === 'en' || s === 'zh') return s; }catch(e){}
+  return /^zh\b/i.test(navigator.language || '') ? 'zh' : 'en';
+}
+function applyLang(){
+  document.documentElement.lang = LANG === 'en' ? 'en' : 'zh-CN';
+  const m = META[LANG];
+  document.title = m.title;
+  const md = document.getElementById('metaDesc'); if(md) md.setAttribute('content', m.desc);
+  const ogt = document.querySelector('meta[property="og:title"]'); if(ogt) ogt.setAttribute('content', m.title);
+  const ogd = document.querySelector('meta[property="og:description"]'); if(ogd) ogd.setAttribute('content', m.desc);
+  const ogl = document.querySelector('meta[property="og:locale"]'); if(ogl) ogl.setAttribute('content', LANG === 'en' ? 'en_US' : 'zh_CN');
+  const sw = document.getElementById('langSwitch'); if(sw) sw.textContent = LANG === 'en' ? '中文' : 'EN';
+  try{
+    const u = new URL(location.href);
+    if(LANG === 'zh') u.searchParams.set('lang','zh'); else u.searchParams.delete('lang');
+    history.replaceState(null, '', u.pathname + (u.search || '') + u.hash);
+  }catch(e){}
+}
+document.getElementById('langSwitch').onclick = function(){
+  LANG = LANG === 'en' ? 'zh' : 'en';
+  try{ localStorage.setItem(LANG_KEY, LANG); }catch(e){}
+  applyLang();
+};
+
+/* ===== 源码 ===== */
+document.getElementById('codeBlock').textContent = CODE;
+document.getElementById('copyCode').onclick = async function(){
+  const btn = this;
+  try{ await navigator.clipboard.writeText(CODE); }
+  catch(e){
+    const ta = document.createElement('textarea'); ta.value = CODE;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+  }
+  const old = btn.innerHTML;
+  btn.innerHTML = LANG === 'en' ? '✓ Copied' : '✓ 已复制';
+  setTimeout(() => { btn.innerHTML = old; }, 1600);
+};
+
+/* ===== 运行 demo ===== */
+const stage = document.getElementById('stage');
+let cleanup = null, pokeTimer = null;
+
+// 点击/鼠标类特效初始是空的，主动在舞台中心模拟一次鼠标事件，避免访客看到空框
+function autoPoke(){
+  const target = stage.querySelector('canvas') || stage.firstElementChild || stage;
+  const r = stage.getBoundingClientRect();
+  const x = r.left + r.width / 2, y = r.top + r.height / 2;
+  const opts = { clientX: x, clientY: y, bubbles: true, cancelable: true, view: window };
+  try{
+    target.dispatchEvent(new MouseEvent('mousemove', opts));
+    target.dispatchEvent(new MouseEvent('click', opts));
+  }catch(e){}
+}
+
+function runDemo(){
+  if(cleanup){ try{ cleanup(); }catch(e){} cleanup = null; }
+  clearTimeout(pokeTimer);
+  clearEl(stage);
+  stage.removeAttribute('style');
+  try{
+    cleanup = DEMO(stage) || null;
+    pokeTimer = setTimeout(autoPoke, 650);
+  }catch(err){
+    stage.innerHTML = '<p style="padding:2rem;color:#ff9aa2">Demo error: ' + err.message + '</p>';
+  }
+}
+document.getElementById('restart').onclick = runDemo;
+
+/* ===== 初始化 ===== */
+LANG = detectLang();
+applyLang();
+runDemo();
+</script>
+<script src="../consent.js" defer></script>
+</body>
+</html>
